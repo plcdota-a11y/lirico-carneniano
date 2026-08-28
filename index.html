@@ -9,12 +9,15 @@
 <body class="bg-stone-950 text-stone-100 min-h-screen py-10 px-4">
 
   <div class="max-w-4xl mx-auto">
+    <!-- Cabeçalho -->
     <header class="text-center mb-8">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
       <p class="text-stone-400 text-sm">Dicionário & Tradutor Romanizado • Organização Carneniana de Línguas (OCL)</p>
     </header>
 
+    <!-- Controles de Busca -->
     <div class="bg-stone-900 border border-stone-800 rounded-2xl p-4 mb-8 shadow-xl">
+      <!-- Alternador de Direção -->
       <div class="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-stone-800">
         <div class="flex items-center gap-2">
           <button 
@@ -39,11 +42,12 @@
         <span id="counter" class="text-xs text-stone-500 font-mono">Carregando...</span>
       </div>
 
+      <!-- Barra de Texto -->
       <div class="relative">
         <input 
           type="text" 
           id="search-input"
-          placeholder="Pesquisar por termo, tradução, plural ou notas de uso..." 
+          placeholder="Pesquisar por termo, tradução, classe ou notas..." 
           class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 pl-11 text-base text-stone-100 focus:outline-none focus:border-amber-400 transition"
         >
         <svg class="w-5 h-5 text-stone-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,10 +55,13 @@
         </svg>
       </div>
 
+      <!-- Filtro Dinâmico por Classe -->
       <div id="class-filters" class="flex flex-wrap gap-2 mt-4 text-xs">
-        </div>
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
     </div>
 
+    <!-- Resultados -->
     <div id="results-container" class="grid gap-4 md:grid-cols-2">
       <div class="col-span-2 text-center py-12 text-stone-500">
         Carregando vocabulário carneniano...
@@ -72,12 +79,32 @@
     const counter = document.getElementById('counter');
     const filterContainer = document.getElementById('class-filters');
 
-    // Carrega os dados do arquivo JSON externo
+    // Normaliza os dados, suportando tanto FIELD2/DICIONARIO quanto singular/traducao
+    function tratarItem(raw) {
+      const singular = (raw.singular || raw.DICIONARIO || '').trim();
+      const traducao = (raw.traducao || raw.FIELD2 || '').trim();
+      const classe = (raw.classe || raw.FIELD3 || raw.CLASE || '').trim();
+      const plural = (raw.plural || raw.FIELD4 || '').trim();
+      const pronuncia = (raw.pronuncia || raw.FIELD5 || '').trim();
+      const uso = (raw.uso || raw.FIELD6 || '').trim();
+      const ambiente = (raw.ambiente || raw.FIELD7 || '').trim();
+
+      return { singular, traducao, classe, plural, pronuncia, uso, ambiente };
+    }
+
     async function carregarDicionario() {
       try {
         const resposta = await fetch('dicionario.json');
         if (!resposta.ok) throw new Error('Não foi possível carregar dicionario.json');
-        dicionario = await resposta.json();
+        const dadosBrutos = await resposta.json();
+        
+        // Converte e filtra linhas de cabeçalho acidentais
+        dicionario = dadosBrutos
+          .map(tratarItem)
+          .filter(item => item.singular && 
+                          item.singular !== 'PALAVRA/SINGULAR' && 
+                          item.singular !== '...' &&
+                          item.singular.toLowerCase() !== 'nan');
         
         renderFilters();
         render(dicionario);
@@ -86,7 +113,7 @@
         container.innerHTML = `
           <div class="col-span-2 text-center py-12 text-amber-500 bg-stone-900 border border-amber-900/50 rounded-xl p-6">
             <p class="font-bold mb-2">Erro ao carregar o arquivo dicionario.json</p>
-            <p class="text-xs text-stone-400">Certifique-se de que o arquivo <code>dicionario.json</code> está na mesma pasta do <code>index.html</code> e sendo executado em um servidor web local ou hospedagem.</p>
+            <p class="text-xs text-stone-400">Verifique se o arquivo <code>dicionario.json</code> está na mesma pasta do <code>index.html</code> no GitHub.</p>
           </div>`;
       }
     }
@@ -96,7 +123,7 @@
     }
 
     function renderFilters() {
-      const rawClasses = dicionario.map(item => item.classe ? item.classe.trim() : '').filter(Boolean);
+      const rawClasses = dicionario.map(item => item.classe).filter(Boolean);
       const uniqueClasses = ['todos', ...new Set(rawClasses)];
 
       filterContainer.innerHTML = '<span class="text-stone-500 py-1">Classe:</span>';
@@ -137,7 +164,7 @@
         const temPronuncia = item.pronuncia && item.pronuncia.trim() !== "" && item.pronuncia !== "-";
         const tagPronuncia = temPronuncia 
           ? `<span class="text-xs text-amber-400 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">${item.pronuncia}</span>` 
-          : `<span class="text-xs text-stone-600 font-mono italic">Pronúncia padrão</span>`;
+          : `<span class="text-xs text-stone-600 font-mono italic">Pronúncia regular</span>`;
 
         card.innerHTML = `
           <div>
@@ -155,7 +182,7 @@
           <div class="pt-3 border-t border-stone-800 text-xs text-stone-400 space-y-1">
             <div class="flex justify-between items-center">
               <span><strong class="text-stone-500">Plural:</strong> ${item.plural && item.plural !== '-' ? item.plural : '—'}</span>
-              ${item.ambiente && item.ambiente !== '-' ? `<span class="text-[10px] text-stone-500 uppercase tracking-widest">${item.ambiente}</span>` : ''}
+              ${item.ambiente && item.ambiente !== '-' && item.ambiente !== 'AMBOS' ? `<span class="text-[10px] text-stone-500 uppercase tracking-widest">${item.ambiente}</span>` : ''}
             </div>
             ${item.uso ? `<p class="text-stone-500 pt-1 italic">${item.uso}</p>` : ''}
           </div>
@@ -202,7 +229,6 @@
 
     input.addEventListener('input', filterData);
 
-    // Iniciar carregamento
     carregarDicionario();
   </script>
 </body>
