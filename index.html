@@ -10,10 +10,47 @@
 
   <div class="max-w-4xl mx-auto">
     <!-- Cabeçalho -->
-    <header class="text-center mb-8">
+    <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Dicionário & Tradutor Romanizado • Organização Carneniana de Línguas (OCL)</p>
+      <p class="text-stone-400 text-sm">Dicionário, Tradutor & Modulação Verbal • OCL</p>
     </header>
+
+    <!-- Caixa Expansível de Regras Gramaticais dos Verbos -->
+    <div class="bg-stone-900/90 border border-amber-500/30 rounded-2xl p-4 mb-6 text-xs text-stone-300">
+      <div class="flex items-center justify-between cursor-pointer" onclick="toggleGrammar()">
+        <div class="flex items-center gap-2 font-bold text-amber-400 text-sm">
+          <span>⏳ Modulação do Tempo Verbal</span>
+          <span class="text-[10px] uppercase tracking-wider bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-normal">Regra Gramatical</span>
+        </div>
+        <span id="grammar-toggle-icon" class="text-stone-400 text-base font-bold">▼</span>
+      </div>
+
+      <div id="grammar-content" class="hidden mt-3 pt-3 border-t border-stone-800 space-y-2">
+        <p class="text-stone-300">
+          <strong class="text-amber-300">Regra de Ouro:</strong> Os verbos lírico-carnenianos flexionam <strong>apenas no tempo</strong> (Passado, Presente e Futuro) e são <strong>imutáveis em relação ao sujeito/número</strong> (não mudam no plural).
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2">
+          <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
+            <span class="text-amber-400 font-bold block">PASSADO (-em)</span>
+            <span class="text-stone-400 text-[11px]">Raiz + <code>em</code></span>
+            <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Ana nayem <span class="text-stone-500">(Eu vi)</span></p>
+          </div>
+          <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
+            <span class="text-amber-400 font-bold block">PRESENTE (Raiz)</span>
+            <span class="text-stone-400 text-[11px]">Forma Base</span>
+            <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Ana naya <span class="text-stone-500">(Eu vejo)</span></p>
+          </div>
+          <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
+            <span class="text-amber-400 font-bold block">FUTURO (-ra)</span>
+            <span class="text-stone-400 text-[11px]">Raiz + <code>ra</code></span>
+            <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Ana nayra <span class="text-stone-500">(Eu verei)</span></p>
+          </div>
+        </div>
+        <p class="text-stone-500 text-[11px] pt-1">
+          *Exemplo no Plural: <em>Ne Urois naya</em> (Os Reis veem) — o verbo permanece imutável.
+        </p>
+      </div>
+    </div>
 
     <!-- Controles de Busca -->
     <div class="bg-stone-900 border border-stone-800 rounded-2xl p-4 mb-8 shadow-xl">
@@ -47,7 +84,7 @@
         <input 
           type="text" 
           id="search-input"
-          placeholder="Pesquisar por termo, tradução, classe ou notas..." 
+          placeholder="Pesquisar termo, conjugação (ex: nayem, nayra), tradução ou notas..." 
           class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 pl-11 text-base text-stone-100 focus:outline-none focus:border-amber-400 transition"
         >
         <svg class="w-5 h-5 text-stone-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,7 +116,29 @@
     const counter = document.getElementById('counter');
     const filterContainer = document.getElementById('class-filters');
 
-    // Normaliza os dados, suportando tanto FIELD2/DICIONARIO quanto singular/traducao
+    function toggleGrammar() {
+      const content = document.getElementById('grammar-content');
+      const icon = document.getElementById('grammar-toggle-icon');
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        icon.textContent = '▲';
+      } else {
+        content.classList.add('hidden');
+        icon.textContent = '▼';
+      }
+    }
+
+    // Regra de derivação de tempos verbais
+    function conjugarVerbo(raiz) {
+      const r = raiz.trim();
+      // Se termina em 'a' ou 'e', remove para anexar o sufixo passado de forma limpa quando necessário
+      let passado = r.endsWith('a') ? r.slice(0, -1) + 'em' : r + 'em';
+      let presente = r;
+      let futuro = r.endsWith('a') ? r.slice(0, -1) + 'ra' : r + 'ra';
+
+      return { passado, presente, futuro };
+    }
+
     function tratarItem(raw) {
       const singular = (raw.singular || raw.DICIONARIO || '').trim();
       const traducao = (raw.traducao || raw.FIELD2 || '').trim();
@@ -89,7 +148,10 @@
       const uso = (raw.uso || raw.FIELD6 || '').trim();
       const ambiente = (raw.ambiente || raw.FIELD7 || '').trim();
 
-      return { singular, traducao, classe, plural, pronuncia, uso, ambiente };
+      const isVerbo = classe.toLowerCase().includes('verbo');
+      const conjugacoes = isVerbo ? conjugarVerbo(singular) : null;
+
+      return { singular, traducao, classe, plural, pronuncia, uso, ambiente, isVerbo, conjugacoes };
     }
 
     async function carregarDicionario() {
@@ -98,7 +160,6 @@
         if (!resposta.ok) throw new Error('Não foi possível carregar dicionario.json');
         const dadosBrutos = await resposta.json();
         
-        // Converte e filtra linhas de cabeçalho acidentais
         dicionario = dadosBrutos
           .map(tratarItem)
           .filter(item => item.singular && 
@@ -113,7 +174,7 @@
         container.innerHTML = `
           <div class="col-span-2 text-center py-12 text-amber-500 bg-stone-900 border border-amber-900/50 rounded-xl p-6">
             <p class="font-bold mb-2">Erro ao carregar o arquivo dicionario.json</p>
-            <p class="text-xs text-stone-400">Verifique se o arquivo <code>dicionario.json</code> está na mesma pasta do <code>index.html</code> no GitHub.</p>
+            <p class="text-xs text-stone-400">Verifique se o arquivo <code>dicionario.json</code> está presente no repositório.</p>
           </div>`;
       }
     }
@@ -166,22 +227,48 @@
           ? `<span class="text-xs text-amber-400 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">${item.pronuncia}</span>` 
           : `<span class="text-xs text-stone-600 font-mono italic">Pronúncia regular</span>`;
 
+        // Seção especial para verbos (Conjugação Temporal)
+        let secaoVerbal = '';
+        if (item.isVerbo && item.conjugacoes) {
+          secaoVerbal = `
+            <div class="my-3 p-2.5 bg-stone-950/80 rounded-lg border border-stone-800/80">
+              <span class="text-[10px] uppercase font-bold text-amber-400/80 tracking-wider block mb-1.5">Conjugação por Tempo (Imutável no Plural)</span>
+              <div class="grid grid-cols-3 gap-1.5 text-center text-xs">
+                <div class="bg-stone-900/90 py-1 px-1.5 rounded border border-stone-800">
+                  <span class="block text-[10px] text-stone-500 font-medium">Passado (-em)</span>
+                  <span class="font-bold text-stone-200">${item.conjugacoes.passado}</span>
+                </div>
+                <div class="bg-stone-900/90 py-1 px-1.5 rounded border border-amber-900/40">
+                  <span class="block text-[10px] text-amber-400/80 font-medium">Presente (Raiz)</span>
+                  <span class="font-bold text-amber-300">${item.conjugacoes.presente}</span>
+                </div>
+                <div class="bg-stone-900/90 py-1 px-1.5 rounded border border-stone-800">
+                  <span class="block text-[10px] text-stone-500 font-medium">Futuro (-ra)</span>
+                  <span class="font-bold text-stone-200">${item.conjugacoes.futuro}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
         card.innerHTML = `
           <div>
             <div class="flex items-center justify-between mb-2">
-              <span class="text-xs uppercase tracking-wider font-semibold text-stone-300 bg-stone-800 px-2 py-0.5 rounded">
+              <span class="text-xs uppercase tracking-wider font-semibold ${item.isVerbo ? 'bg-amber-950 text-amber-300 border border-amber-800' : 'bg-stone-800 text-stone-300'} px-2 py-0.5 rounded">
                 ${item.classe || 'Vocábulo'}
               </span>
               ${tagPronuncia}
             </div>
             
             <h2 class="text-2xl font-bold text-stone-100 mb-1">${item.singular}</h2>
-            <p class="text-amber-200/90 font-medium text-base mb-3">${item.traducao}</p>
+            <p class="text-amber-200/90 font-medium text-base mb-2">${item.traducao}</p>
+
+            ${secaoVerbal}
           </div>
           
           <div class="pt-3 border-t border-stone-800 text-xs text-stone-400 space-y-1">
             <div class="flex justify-between items-center">
-              <span><strong class="text-stone-500">Plural:</strong> ${item.plural && item.plural !== '-' ? item.plural : '—'}</span>
+              <span><strong class="text-stone-500">${item.isVerbo ? 'Plural:' : 'Plural:'}</strong> ${item.isVerbo ? '<span class="italic text-stone-500">Imutável</span>' : (item.plural && item.plural !== '-' ? item.plural : '—')}</span>
               ${item.ambiente && item.ambiente !== '-' && item.ambiente !== 'AMBOS' ? `<span class="text-[10px] text-stone-500 uppercase tracking-widest">${item.ambiente}</span>` : ''}
             </div>
             ${item.uso ? `<p class="text-stone-500 pt-1 italic">${item.uso}</p>` : ''}
@@ -196,9 +283,16 @@
 
       const filtrados = dicionario.filter(item => {
         let matchText = false;
+
+        // Inclui as conjugações no teste de busca
+        const conjText = item.conjugacoes 
+          ? `${normalizar(item.conjugacoes.passado)} ${normalizar(item.conjugacoes.futuro)}` 
+          : '';
         
         if (searchMode === 'carneniano') {
-          matchText = normalizar(item.singular).includes(query) || normalizar(item.plural).includes(query);
+          matchText = normalizar(item.singular).includes(query) || 
+                      normalizar(item.plural).includes(query) ||
+                      conjText.includes(query);
         } else if (searchMode === 'portugues') {
           matchText = normalizar(item.traducao).includes(query);
         } else {
@@ -206,7 +300,8 @@
                       normalizar(item.traducao).includes(query) ||
                       normalizar(item.plural).includes(query) ||
                       normalizar(item.uso).includes(query) ||
-                      normalizar(item.pronuncia).includes(query);
+                      normalizar(item.pronuncia).includes(query) ||
+                      conjText.includes(query);
         }
 
         const matchClass = (activeClass === 'todos') || (item.classe && item.classe.trim() === activeClass);
