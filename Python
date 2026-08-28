@@ -1,0 +1,23 @@
+import pandas as pd
+import json
+
+df_raw = pd.read_csv('Organização Carneniana de Línguas (OCL) - Língua Lírica-Carneniana - DICIONARIO.csv', header=None)
+main_dict = df_raw.iloc[2:, :7].copy()
+main_dict.columns = ['singular', 'traducao', 'classe', 'plural', 'pronuncia', 'uso', 'ambiente']
+
+verbs = main_dict[main_dict['classe'].astype(str).str.lower().str.contains('verbo', na=False)]
+print(f"Total verbos: {len(verbs)}")
+print(verbs[['singular', 'traducao', 'classe', 'uso']].head(10))
+
+Total verbos: 58
+    singular          traducao classe                                                    uso
+325     Woma             Comer  VERBO                Ação de se alimentar. (Passado: Womem).
+326      Sia             Beber  VERBO                        Ação de beber. (Passado: Siem).
+327     Mise               Jei  VERBO                      Do Copta Miste. O oposto de Maia.
+328     Raha             Lavar  VERBO                                      Ato de lavar algo
+329    Naya                Ver  VERBO                                             Ato de ver
+330      Ko               Ter   VERBO  é um verbo simples para "ter/possuir", derivado de Kw
+331      He               Cair  VERBO                                                    NaN
+332     Pola    Correr / Fluir  VERBO                Usado para pessoas, animais e líquidos.
+333    Misha  Lutar / Batalhar  VERBO                   Combate físico ou disputa de ideias.
+334     Enko            Dormir  VERBO                  Suavizado de Nkotk. Repouso profundo.
