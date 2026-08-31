@@ -12,12 +12,12 @@
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Dicionário, Tradutor & Modulação Verbal • Organização Carneniana de Línguas (OCL)</p>
+      <p class="text-stone-400 text-sm">Dicionário, Tradutor & Modulação Verbal • OCL</p>
     </header>
 
-    <!-- Regras Gramaticais dos Verbos -->
+    <!-- Regras Gramaticais dos Verbos (Retrátil) -->
     <div class="bg-stone-900/90 border border-amber-500/30 rounded-2xl p-4 mb-6 text-xs text-stone-300">
-      <div class="flex items-center justify-between cursor-pointer" onclick="toggleGrammar()">
+      <div class="flex items-center justify-between cursor-pointer" onclick="toggleSection('grammar-content', 'grammar-toggle-icon')">
         <div class="flex items-center gap-2 font-bold text-amber-400 text-sm">
           <span>⏳ Modulação do Tempo Verbal</span>
           <span class="text-[10px] uppercase tracking-wider bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-normal">Regra Gramatical</span>
@@ -49,10 +49,10 @@
       </div>
     </div>
 
-    <!-- Controles de Busca -->
+    <!-- Controles de Busca e Filtros -->
     <div class="bg-stone-900 border border-stone-800 rounded-2xl p-4 mb-8 shadow-xl">
       <!-- Alternador de Direção -->
-      <div class="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-stone-800">
+      <div class="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-stone-800 flex-wrap">
         <div class="flex items-center gap-2">
           <button 
             id="btn-both" 
@@ -73,7 +73,16 @@
             PT → Carneniano
           </button>
         </div>
-        <span id="counter" class="text-xs text-stone-500 font-mono">Carregando...</span>
+
+        <!-- Botão para Expandir Caixa de Categorias -->
+        <button 
+          onclick="toggleSection('filter-box', 'filter-toggle-icon')" 
+          class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-stone-800 border border-stone-700 hover:border-amber-400/60 text-stone-200 transition">
+          <span>🎛️ Filtros: <span id="current-filter-label" class="text-amber-400 font-bold">Todos</span></span>
+          <span id="filter-toggle-icon" class="text-[10px] text-stone-400">▼</span>
+        </button>
+
+        <span id="counter" class="text-xs text-stone-500 font-mono w-full sm:w-auto text-right">Carregando...</span>
       </div>
 
       <!-- Barra de Texto -->
@@ -81,7 +90,7 @@
         <input 
           type="text" 
           id="search-input"
-          placeholder="Pesquisar termo, conjugação (ex: nayem, nayra), significado ou notas..." 
+          placeholder="Pesquisar palavra, conjugação (ex: nayem), tradução ou notas..." 
           class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 pl-11 text-base text-stone-100 focus:outline-none focus:border-amber-400 transition"
         >
         <svg class="w-5 h-5 text-stone-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,9 +98,12 @@
         </svg>
       </div>
 
-      <!-- Filtro Dinâmico por Classe -->
-      <div id="class-filters" class="flex flex-wrap gap-2 mt-4 text-xs">
-        <!-- Renderizado dinamicamente via JS -->
+      <!-- Caixa Ocultável de Filtros de Classe -->
+      <div id="filter-box" class="hidden mt-4 pt-3 border-t border-stone-800">
+        <span class="text-xs text-stone-400 block mb-2 font-medium">Selecione uma categoria gramatical:</span>
+        <div id="macro-filters" class="flex flex-wrap gap-2 text-xs">
+          <!-- Gerado dinamicamente com as categorias unificadas -->
+        </div>
       </div>
     </div>
 
@@ -106,23 +118,41 @@
   <script>
     let dicionario = [];
     let searchMode = 'ambos';
-    let activeClass = 'todos';
+    let activeMacroCategory = 'todos';
 
     const input = document.getElementById('search-input');
     const container = document.getElementById('results-container');
     const counter = document.getElementById('counter');
-    const filterContainer = document.getElementById('class-filters');
+    const macroFilterContainer = document.getElementById('macro-filters');
+    const currentFilterLabel = document.getElementById('current-filter-label');
 
-    function toggleGrammar() {
-      const content = document.getElementById('grammar-content');
-      const icon = document.getElementById('grammar-toggle-icon');
+    // Categorias limpas e unificadas
+    const MACRO_CATEGORIES = [
+      { id: 'todos', label: 'Todos' },
+      { id: 'verbo', label: 'Verbos' },
+      { id: 'substantivo', label: 'Substantivos' },
+      { id: 'adjetivo', label: 'Adjetivos' },
+      { id: 'pronome', label: 'Pronomes & Possessivos' },
+      { id: 'conectivo', label: 'Preposições & Conjunções' },
+      { id: 'adverbio', label: 'Advérbios' },
+      { id: 'numeral', label: 'Numerais' },
+      { id: 'outros', label: 'Títulos, Expressões & Outros' }
+    ];
+
+    function toggleSection(contentId, iconId) {
+      const content = document.getElementById(contentId);
+      const icon = document.getElementById(iconId);
       if (content.classList.contains('hidden')) {
         content.classList.remove('hidden');
-        icon.textContent = '▲';
+        if (icon) icon.textContent = '▲';
       } else {
         content.classList.add('hidden');
-        icon.textContent = '▼';
+        if (icon) icon.textContent = '▼';
       }
+    }
+
+    function normalizar(texto) {
+      return (texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     }
 
     function conjugarVerbo(raiz) {
@@ -134,7 +164,7 @@
       return { passado, presente, futuro };
     }
 
-    // Parser universal que aceita QUALQUER formato de chave JSON (_1, FIELD2, traducao, etc.)
+    // Parser universal para suportar qualquer arquivo JSON
     function tratarItem(raw) {
       const singular = String(raw.singular || raw.DICIONARIO || raw['PALAVRA/SINGULAR'] || raw.palavra || raw.termo || '').trim();
       const traducao = String(raw.traducao || raw.FIELD2 || raw._1 || raw['SIGNIFICADO/TRADUÇÃO'] || raw.significado || '').trim();
@@ -144,10 +174,33 @@
       const uso = String(raw.uso || raw.FIELD6 || raw._8 || raw.USO || raw['NOTAS / ORIGEM'] || raw.NOTAS || '').trim();
       const ambiente = String(raw.ambiente || raw.FIELD7 || raw._9 || raw.AMBIENTE || '').trim();
 
-      const isVerbo = classe.toLowerCase().includes('verbo');
+      const cNorm = normalizar(classe);
+      const isVerbo = cNorm.includes('verbo');
       const conjugacoes = isVerbo ? conjugarVerbo(singular) : null;
 
-      return { singular, traducao, classe, plural, pronuncia, uso, ambiente, isVerbo, conjugacoes };
+      return { singular, traducao, classe, plural, pronuncia, uso, ambiente, isVerbo, conjugacoes, cNorm };
+    }
+
+    // Testa se a palavra pertence à macro-categoria selecionada (suporta múltiplas classes)
+    function pertenceACategoria(item, catId) {
+      if (catId === 'todos') return true;
+      const c = item.cNorm;
+
+      if (catId === 'verbo') return c.includes('verbo');
+      if (catId === 'substantivo') return c.includes('subst');
+      if (catId === 'adjetivo') return c.includes('adj');
+      if (catId === 'pronome') return c.includes('pron') || c.includes('possessiv');
+      if (catId === 'conectivo') return c.includes('prep') || c.includes('conj') || c.includes('locu') || c.includes('conect');
+      if (catId === 'adverbio') return c.includes('adv') || c.includes('nega');
+      if (catId === 'numeral') return c.includes('numeral');
+      if (catId === 'outros') {
+        return c.includes('título') || c.includes('titulo') || c.includes('honor') || 
+               c.includes('sufixo') || c.includes('interje') || c.includes('excla') || 
+               c.includes('holop') || c.includes('artigo') || c.includes('direção') || c.includes('direcao') ||
+               (!c.includes('verbo') && !c.includes('subst') && !c.includes('adj') && !c.includes('pron') && !c.includes('numeral'));
+      }
+
+      return false;
     }
 
     async function carregarDicionario() {
@@ -164,7 +217,7 @@
                           item.singular.toLowerCase() !== 'null' &&
                           item.singular.toLowerCase() !== 'nan');
         
-        renderFilters();
+        renderMacroButtons();
         render(dicionario);
       } catch (erro) {
         console.error(erro);
@@ -176,30 +229,27 @@
       }
     }
 
-    function normalizar(texto) {
-      return (texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    }
-
-    function renderFilters() {
-      const rawClasses = dicionario.map(item => item.classe).filter(Boolean);
-      const uniqueClasses = ['todos', ...new Set(rawClasses)];
-
-      filterContainer.innerHTML = '<span class="text-stone-500 py-1">Classe:</span>';
+    function renderMacroButtons() {
+      macroFilterContainer.innerHTML = '';
       
-      uniqueClasses.forEach(cls => {
+      MACRO_CATEGORIES.forEach(cat => {
         const btn = document.createElement('button');
-        btn.textContent = cls.charAt(0).toUpperCase() + cls.slice(1).toLowerCase();
-        btn.className = `px-2.5 py-1 rounded transition ${
-          activeClass === cls 
-            ? 'bg-amber-950 text-amber-300 border border-amber-800' 
-            : 'bg-stone-800/60 hover:bg-stone-800 text-stone-400'
+        btn.textContent = cat.label;
+        const isActive = (activeMacroCategory === cat.id);
+        
+        btn.className = `px-3 py-1.5 rounded-lg font-medium transition ${
+          isActive 
+            ? 'bg-amber-950 text-amber-300 border border-amber-800 shadow' 
+            : 'bg-stone-800/80 hover:bg-stone-800 text-stone-300 border border-stone-700/60'
         }`;
+        
         btn.onclick = () => {
-          activeClass = cls;
-          renderFilters();
+          activeMacroCategory = cat.id;
+          currentFilterLabel.textContent = cat.label;
+          renderMacroButtons();
           filterData();
         };
-        filterContainer.appendChild(btn);
+        macroFilterContainer.appendChild(btn);
       });
     }
 
@@ -210,7 +260,7 @@
       if (lista.length === 0) {
         container.innerHTML = `
           <div class="col-span-2 text-center py-16 text-stone-600">
-            Nenhum termo carneniano encontrado.
+            Nenhum termo carneniano encontrado para este filtro.
           </div>`;
         return;
       }
@@ -301,8 +351,8 @@
                       conjText.includes(query);
         }
 
-        const matchClass = (activeClass === 'todos') || (item.classe && item.classe.trim() === activeClass);
-        return matchText && matchClass;
+        const matchCategory = pertenceACategoria(item, activeMacroCategory);
+        return matchText && matchCategory;
       });
 
       render(filtrados);
