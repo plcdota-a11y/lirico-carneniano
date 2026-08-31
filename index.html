@@ -12,7 +12,7 @@
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Dicionário, Tradutor & Modulação Verbal • OCL</p>
+      <p class="text-stone-400 text-sm">Dicionário, Tradutor & Modulação Verbal • Organização Carneniana de Línguas (OCL)</p>
     </header>
 
     <!-- Regras Gramaticais dos Verbos (Retrátil) -->
@@ -74,7 +74,7 @@
           </button>
         </div>
 
-        <!-- Botão para Expandir Caixa de Categorias -->
+        <!-- Botão Retrátil de Categorias -->
         <button 
           onclick="toggleSection('filter-box', 'filter-toggle-icon')" 
           class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-stone-800 border border-stone-700 hover:border-amber-400/60 text-stone-200 transition">
@@ -90,7 +90,7 @@
         <input 
           type="text" 
           id="search-input"
-          placeholder="Pesquisar palavra, conjugação (ex: nayem), tradução ou notas..." 
+          placeholder="Pesquisar palavra exata, conjugação, tradução ou notas..." 
           class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 pl-11 text-base text-stone-100 focus:outline-none focus:border-amber-400 transition"
         >
         <svg class="w-5 h-5 text-stone-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,11 +98,11 @@
         </svg>
       </div>
 
-      <!-- Caixa Ocultável de Filtros de Classe -->
+      <!-- Caixa Ocultável de Filtros -->
       <div id="filter-box" class="hidden mt-4 pt-3 border-t border-stone-800">
         <span class="text-xs text-stone-400 block mb-2 font-medium">Selecione uma categoria gramatical:</span>
         <div id="macro-filters" class="flex flex-wrap gap-2 text-xs">
-          <!-- Gerado dinamicamente com as categorias unificadas -->
+          <!-- Renderizado dinamicamente -->
         </div>
       </div>
     </div>
@@ -126,7 +126,6 @@
     const macroFilterContainer = document.getElementById('macro-filters');
     const currentFilterLabel = document.getElementById('current-filter-label');
 
-    // Categorias limpas e unificadas
     const MACRO_CATEGORIES = [
       { id: 'todos', label: 'Todos' },
       { id: 'verbo', label: 'Verbos' },
@@ -152,7 +151,7 @@
     }
 
     function normalizar(texto) {
-      return (texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      return (texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
     }
 
     function conjugarVerbo(raiz) {
@@ -164,7 +163,6 @@
       return { passado, presente, futuro };
     }
 
-    // Parser universal para suportar qualquer arquivo JSON
     function tratarItem(raw) {
       const singular = String(raw.singular || raw.DICIONARIO || raw['PALAVRA/SINGULAR'] || raw.palavra || raw.termo || '').trim();
       const traducao = String(raw.traducao || raw.FIELD2 || raw._1 || raw['SIGNIFICADO/TRADUÇÃO'] || raw.significado || '').trim();
@@ -178,10 +176,28 @@
       const isVerbo = cNorm.includes('verbo');
       const conjugacoes = isVerbo ? conjugarVerbo(singular) : null;
 
-      return { singular, traducao, classe, plural, pronuncia, uso, ambiente, isVerbo, conjugacoes, cNorm };
+      // Partes de tradução normalizadas para busca rápida
+      const traducoesArray = traducao.split(/[\/,;()]/).map(t => normalizar(t)).filter(Boolean);
+
+      return { 
+        singular, 
+        traducao, 
+        classe, 
+        plural, 
+        pronuncia, 
+        uso, 
+        ambiente, 
+        isVerbo, 
+        conjugacoes, 
+        cNorm,
+        sNorm: normalizar(singular),
+        tNorm: normalizar(traducao),
+        pNorm: normalizar(plural),
+        uNorm: normalizar(uso),
+        traducoesArray
+      };
     }
 
-    // Testa se a palavra pertence à macro-categoria selecionada (suporta múltiplas classes)
     function pertenceACategoria(item, catId) {
       if (catId === 'todos') return true;
       const c = item.cNorm;
@@ -203,6 +219,47 @@
       return false;
     }
 
+    // Calcula a relevância da palavra em relação ao termo pesquisado
+    function calcularRelevancia(item, query) {
+      if (!query) return 1;
+
+      let score = 0;
+
+      // 1. Carneniano (Singular / Plural / Conjugação)
+      if (searchMode === 'carneniano' || searchMode === 'ambos') {
+        if (item.sNorm === query) score = Math.max(score, 1000);
+        else if (item.pNorm === query) score = Math.max(score, 950);
+        else if (item.conjugacoes && (normalizar(item.conjugacoes.passado) === query || normalizar(item.conjugacoes.futuro) === query)) score = Math.max(score, 900);
+        else if (item.sNorm.startsWith(query)) score = Math.max(score, 500);
+        else if (new RegExp('\\b' + query + '\\b', 'i').test(item.sNorm)) score = Math.max(score, 400);
+        else if (item.sNorm.includes(query) || item.pNorm.includes(query)) score = Math.max(score, 100);
+      }
+
+      // 2. Português (Tradução e Sinônimos)
+      if (searchMode === 'portugues' || searchMode === 'ambos') {
+        if (item.tNorm === query) {
+          score = Math.max(score, 1000);
+        } else if (item.traducoesArray.includes(query)) {
+          // Correspondência exata em uma das opções de tradução (ex: "Eu" em "Eu / Mim")
+          score = Math.max(score, 980);
+        } else if (item.tNorm.startsWith(query)) {
+          score = Math.max(score, 450);
+        } else if (new RegExp('\\b' + query + '\\b', 'i').test(item.tNorm)) {
+          score = Math.max(score, 350);
+        } else if (item.tNorm.includes(query)) {
+          score = Math.max(score, 80);
+        }
+      }
+
+      // 3. Notas / Uso / Pronúncia
+      if (searchMode === 'ambos' && score === 0) {
+        if (new RegExp('\\b' + query + '\\b', 'i').test(item.uNorm)) score = Math.max(score, 50);
+        else if (item.uNorm.includes(query)) score = Math.max(score, 20);
+      }
+
+      return score;
+    }
+
     async function carregarDicionario() {
       try {
         const resposta = await fetch('dicionario.json');
@@ -218,7 +275,7 @@
                           item.singular.toLowerCase() !== 'nan');
         
         renderMacroButtons();
-        render(dicionario);
+        filterData();
       } catch (erro) {
         console.error(erro);
         container.innerHTML = `
@@ -260,7 +317,7 @@
       if (lista.length === 0) {
         container.innerHTML = `
           <div class="col-span-2 text-center py-16 text-stone-600">
-            Nenhum termo carneniano encontrado para este filtro.
+            Nenhum termo carneniano encontrado para esta pesquisa.
           </div>`;
         return;
       }
@@ -329,33 +386,23 @@
     function filterData() {
       const query = normalizar(input.value);
 
-      const filtrados = dicionario.filter(item => {
-        let matchText = false;
+      const pontuados = [];
 
-        const conjText = item.conjugacoes 
-          ? `${normalizar(item.conjugacoes.passado)} ${normalizar(item.conjugacoes.futuro)}` 
-          : '';
-        
-        if (searchMode === 'carneniano') {
-          matchText = normalizar(item.singular).includes(query) || 
-                      normalizar(item.plural).includes(query) ||
-                      conjText.includes(query);
-        } else if (searchMode === 'portugues') {
-          matchText = normalizar(item.traducao).includes(query);
-        } else {
-          matchText = normalizar(item.singular).includes(query) ||
-                      normalizar(item.traducao).includes(query) ||
-                      normalizar(item.plural).includes(query) ||
-                      normalizar(item.uso).includes(query) ||
-                      normalizar(item.pronuncia).includes(query) ||
-                      conjText.includes(query);
+      for (let i = 0; i < dicionario.length; i++) {
+        const item = dicionario[i];
+        if (!pertenceACategoria(item, activeMacroCategory)) continue;
+
+        const score = calcularRelevancia(item, query);
+        if (score > 0) {
+          pontuados.push({ item, score });
         }
+      }
 
-        const matchCategory = pertenceACategoria(item, activeMacroCategory);
-        return matchText && matchCategory;
-      });
+      // Ordena decrescente pelo score de relevância
+      pontuados.sort((a, b) => b.score - a.score);
 
-      render(filtrados);
+      const resultadosFinais = pontuados.map(p => p.item);
+      render(resultadosFinais);
     }
 
     function setSearchMode(mode) {
