@@ -12,10 +12,10 @@
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Dicionário, Tradutor & Modulação Verbal • OCL</p>
+      <p class="text-stone-400 text-sm">Dicionário, Tradutor & Modulação Verbal • Organização Carneniana de Línguas (OCL)</p>
     </header>
 
-    <!-- Caixa Expansível de Regras Gramaticais dos Verbos -->
+    <!-- Regras Gramaticais dos Verbos -->
     <div class="bg-stone-900/90 border border-amber-500/30 rounded-2xl p-4 mb-6 text-xs text-stone-300">
       <div class="flex items-center justify-between cursor-pointer" onclick="toggleGrammar()">
         <div class="flex items-center gap-2 font-bold text-amber-400 text-sm">
@@ -46,9 +46,6 @@
             <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Ana nayra <span class="text-stone-500">(Eu verei)</span></p>
           </div>
         </div>
-        <p class="text-stone-500 text-[11px] pt-1">
-          *Exemplo no Plural: <em>Ne Urois naya</em> (Os Reis veem) — o verbo permanece imutável.
-        </p>
       </div>
     </div>
 
@@ -84,7 +81,7 @@
         <input 
           type="text" 
           id="search-input"
-          placeholder="Pesquisar termo, conjugação (ex: nayem, nayra), tradução ou notas..." 
+          placeholder="Pesquisar termo, conjugação (ex: nayem, nayra), significado ou notas..." 
           class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 pl-11 text-base text-stone-100 focus:outline-none focus:border-amber-400 transition"
         >
         <svg class="w-5 h-5 text-stone-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,10 +125,8 @@
       }
     }
 
-    // Regra de derivação de tempos verbais
     function conjugarVerbo(raiz) {
       const r = raiz.trim();
-      // Se termina em 'a' ou 'e', remove para anexar o sufixo passado de forma limpa quando necessário
       let passado = r.endsWith('a') ? r.slice(0, -1) + 'em' : r + 'em';
       let presente = r;
       let futuro = r.endsWith('a') ? r.slice(0, -1) + 'ra' : r + 'ra';
@@ -139,14 +134,15 @@
       return { passado, presente, futuro };
     }
 
+    // Parser universal que aceita QUALQUER formato de chave JSON (_1, FIELD2, traducao, etc.)
     function tratarItem(raw) {
-      const singular = (raw.singular || raw.DICIONARIO || '').trim();
-      const traducao = (raw.traducao || raw.FIELD2 || '').trim();
-      const classe = (raw.classe || raw.FIELD3 || raw.CLASE || '').trim();
-      const plural = (raw.plural || raw.FIELD4 || '').trim();
-      const pronuncia = (raw.pronuncia || raw.FIELD5 || '').trim();
-      const uso = (raw.uso || raw.FIELD6 || '').trim();
-      const ambiente = (raw.ambiente || raw.FIELD7 || '').trim();
+      const singular = String(raw.singular || raw.DICIONARIO || raw['PALAVRA/SINGULAR'] || raw.palavra || raw.termo || '').trim();
+      const traducao = String(raw.traducao || raw.FIELD2 || raw._1 || raw['SIGNIFICADO/TRADUÇÃO'] || raw.significado || '').trim();
+      const classe = String(raw.classe || raw.FIELD3 || raw._3 || raw.CLASE || raw.CLASSE || '').trim();
+      const plural = String(raw.plural || raw.FIELD4 || raw._5 || raw.PLURAL || '').trim();
+      const pronuncia = String(raw.pronuncia || raw.FIELD5 || raw._7 || raw.PRONÚNCIA || raw.PRONUNCIA || '').trim();
+      const uso = String(raw.uso || raw.FIELD6 || raw._8 || raw.USO || raw['NOTAS / ORIGEM'] || raw.NOTAS || '').trim();
+      const ambiente = String(raw.ambiente || raw.FIELD7 || raw._9 || raw.AMBIENTE || '').trim();
 
       const isVerbo = classe.toLowerCase().includes('verbo');
       const conjugacoes = isVerbo ? conjugarVerbo(singular) : null;
@@ -165,6 +161,7 @@
           .filter(item => item.singular && 
                           item.singular !== 'PALAVRA/SINGULAR' && 
                           item.singular !== '...' &&
+                          item.singular.toLowerCase() !== 'null' &&
                           item.singular.toLowerCase() !== 'nan');
         
         renderFilters();
@@ -174,7 +171,7 @@
         container.innerHTML = `
           <div class="col-span-2 text-center py-12 text-amber-500 bg-stone-900 border border-amber-900/50 rounded-xl p-6">
             <p class="font-bold mb-2">Erro ao carregar o arquivo dicionario.json</p>
-            <p class="text-xs text-stone-400">Verifique se o arquivo <code>dicionario.json</code> está presente no repositório.</p>
+            <p class="text-xs text-stone-400">Verifique se o arquivo <code>dicionario.json</code> está salvo no repositório.</p>
           </div>`;
       }
     }
@@ -222,12 +219,11 @@
         const card = document.createElement('div');
         card.className = "bg-stone-900 border border-stone-800 hover:border-amber-500/40 rounded-xl p-5 transition flex flex-col justify-between";
 
-        const temPronuncia = item.pronuncia && item.pronuncia.trim() !== "" && item.pronuncia !== "-";
+        const temPronuncia = item.pronuncia && item.pronuncia.trim() !== "" && item.pronuncia !== "-" && item.pronuncia.toLowerCase() !== "null";
         const tagPronuncia = temPronuncia 
           ? `<span class="text-xs text-amber-400 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">${item.pronuncia}</span>` 
           : `<span class="text-xs text-stone-600 font-mono italic">Pronúncia regular</span>`;
 
-        // Seção especial para verbos (Conjugação Temporal)
         let secaoVerbal = '';
         if (item.isVerbo && item.conjugacoes) {
           secaoVerbal = `
@@ -251,27 +247,29 @@
           `;
         }
 
+        const temPluralValido = item.plural && item.plural !== '-' && item.plural.toLowerCase() !== 'null';
+
         card.innerHTML = `
           <div>
             <div class="flex items-center justify-between mb-2">
               <span class="text-xs uppercase tracking-wider font-semibold ${item.isVerbo ? 'bg-amber-950 text-amber-300 border border-amber-800' : 'bg-stone-800 text-stone-300'} px-2 py-0.5 rounded">
-                ${item.classe || 'Vocábulo'}
+                ${item.classe && item.classe.toLowerCase() !== 'null' ? item.classe : 'Vocábulo'}
               </span>
               ${tagPronuncia}
             </div>
             
             <h2 class="text-2xl font-bold text-stone-100 mb-1">${item.singular}</h2>
-            <p class="text-amber-200/90 font-medium text-base mb-2">${item.traducao}</p>
+            <p class="text-amber-200/90 font-medium text-base mb-2">${item.traducao && item.traducao.toLowerCase() !== 'null' ? item.traducao : '—'}</p>
 
             ${secaoVerbal}
           </div>
           
           <div class="pt-3 border-t border-stone-800 text-xs text-stone-400 space-y-1">
             <div class="flex justify-between items-center">
-              <span><strong class="text-stone-500">${item.isVerbo ? 'Plural:' : 'Plural:'}</strong> ${item.isVerbo ? '<span class="italic text-stone-500">Imutável</span>' : (item.plural && item.plural !== '-' ? item.plural : '—')}</span>
-              ${item.ambiente && item.ambiente !== '-' && item.ambiente !== 'AMBOS' ? `<span class="text-[10px] text-stone-500 uppercase tracking-widest">${item.ambiente}</span>` : ''}
+              <span><strong class="text-stone-500">Plural:</strong> ${item.isVerbo ? '<span class="italic text-stone-500">Imutável</span>' : (temPluralValido ? item.plural : '—')}</span>
+              ${item.ambiente && item.ambiente !== '-' && item.ambiente !== 'AMBOS' && item.ambiente.toLowerCase() !== 'null' ? `<span class="text-[10px] text-stone-500 uppercase tracking-widest">${item.ambiente}</span>` : ''}
             </div>
-            ${item.uso ? `<p class="text-stone-500 pt-1 italic">${item.uso}</p>` : ''}
+            ${item.uso && item.uso !== '-' && item.uso.toLowerCase() !== 'null' ? `<p class="text-stone-500 pt-1 italic">${item.uso}</p>` : ''}
           </div>
         `;
         container.appendChild(card);
@@ -284,7 +282,6 @@
       const filtrados = dicionario.filter(item => {
         let matchText = false;
 
-        // Inclui as conjugações no teste de busca
         const conjText = item.conjugacoes 
           ? `${normalizar(item.conjugacoes.passado)} ${normalizar(item.conjugacoes.futuro)}` 
           : '';
