@@ -1,0 +1,2130 @@
+[
+  {
+    "DICIONARIO": "PALAVRA/SINGULAR",
+    "": "AMBIENTE"
+  },
+  {
+    "DICIONARIO": "Kaira",
+    "": "INFORMAL"
+  },
+  {
+    "DICIONARIO": "Nofra",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Ujai",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Amota",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Sena",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Ha ne Nutais!",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Kau",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Lēs",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Valis",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Lē",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Artē",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Ais",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Mōa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Oika",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Aia",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Huo",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Ushē",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Joma",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Shibra",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Kota",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Woma",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Sia",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "en",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Iota",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Mava",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Shira",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Shiro",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Irmão/soldado",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Sōni",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Uro",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Ura",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Heka",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Neba",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Nebti",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Jōm",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Kaia",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "To",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Maia",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Mise",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hēt",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hela",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Helaia",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Alu",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Alua",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "-k",
+    "": "FORMAL"
+  },
+  {
+    "DICIONARIO": "Kama",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Woba",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tresha",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Wota",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Ezba",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Nub",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Shima",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Bera",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Pasa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Homa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Jafa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Sura",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Bala",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tota",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Joa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Roa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Senofa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Foa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Rata",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Haka",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Raha",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Naya",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hrēra",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hala",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Satera",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Ko",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Wa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Snava",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Shomta",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Fotu",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tiwa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Soa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Sashfa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Shamna",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Psita",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Mēta",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Rêa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Ioha",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Siua",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tepia",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Klola",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Howa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tiu",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Ona",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Uoina",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Kaki",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "He",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Uonsha",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hato",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tebta",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hofa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Muia",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Emua",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Uhara",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Masa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Siu",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Rompa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Ebota",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Una",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Poua",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Rasta",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Safa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tenu",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Pola",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Misha",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Enko",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Jia",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tia",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Saja",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Sota",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Matu",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Sifa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Pa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Peka",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Pefa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Pesa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Pena",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Pura",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Pau",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Nte",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nima",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Asha",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tona",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tuna",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Etba",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hosa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Uer",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Au",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Ala",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Ea",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Jea",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Esha",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hena",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tamia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ina",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Shopa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "An",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Boka",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Eia",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Koto",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Mosha",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hona",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Loja",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hamsha",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hamata",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Mato",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Uela",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Refa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Saia",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Eshot",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Man",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Benipa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hata",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Shea",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Nuba",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hebsa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Aroma",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Shoita",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Alka",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Erpe",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Puria",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Manje",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Koia",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Mosa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hira",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hepa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hekta",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Afia",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Uma",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Mel",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Bana",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Surah",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Kem",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Ua",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Onha",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Muna",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Ka",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Kan",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Rina",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Maa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Jol",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Rasu",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Heka",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Yoma",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Kopa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Uola",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Loma",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tana",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Sita",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Faka",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Pato",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Kopo",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Baza",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Yara",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Pash",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Vela",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hiria",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Mapu",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Bra",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Vena",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Kala",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tumb",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Nipa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Pel",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Lina",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Huma",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Dira",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Mina",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Soma",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Kora",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Gria",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Lēra",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Aba",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Klo",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Koa",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Veta",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Hana",
+    "": "AMBOS"
+  },
+  {
+    "DICIONARIO": "Tami",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Wotia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Zura",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ant",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kwaý",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Zarakura",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Soka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Toba",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nuja",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Shota",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kla",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ama",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Aha",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Oma",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Shua",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Jafra",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nuna",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kahi",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ene",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nene",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Meka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nasha",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Tai",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Je",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Jora",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Lela",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kosa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Laka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mēta-Wa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mēta-Snava",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mēta-Shomta",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mēta-Fotu",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mēta-Tiwa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "...",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mēta-Psita",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Snavamē",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Shomtamē",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Fotumē",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Tiwamē",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Soamē",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sashfamē",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Shamnamē",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Psitamē",
+    "": ""
+  },
+  {
+    "DICIONARIO": "She",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sho",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sur",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kela",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hopsa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Pite",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sote",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Jaja",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Romena",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Taka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nahta",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mora",
+    "": ""
+  },
+  {
+    "DICIONARIO": "",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kina",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Suna",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Meua",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Obsha",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mera",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hapa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Wana",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Bela",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Numa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "É a aceitação do destino",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Rētia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Quando você sobrevive a algo impossível.,,Holopfrases,,-,,Reetia,O soldado escapou da flecha por um centímetro: Rētia!\",",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Lindira",
+    "": ""
+  },
+  {
+    "DICIONARIO": "(Similar à Saudade",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Senra",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Alguém por quem você morreria",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kias",
+    "": ""
+  },
+  {
+    "DICIONARIO": "A calmaria antes da tempestade.\",,Holopfrases,,-,,,Quando a floresta fica muda de repente. Shopa Kias... (Está perigoso).,",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ujē",
+    "": ""
+  },
+  {
+    "DICIONARIO": "A rendição absoluta onde você entrega sua honra ao vencedor.,,Holopfrases,,-,,Ujee,Um inimigo derrotado que não quer morrer.,",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Turia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Pula",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hira",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Plasa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sodia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kame",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Lomia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Noha",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Lola",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Toka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Botia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sela",
+    "": ""
+  },
+  {
+    "DICIONARIO": "",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Penka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nata",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Krofa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Rosha",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hopa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sina",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Un",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Han",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ke",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Bo",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nisha",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kouji",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hor",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Iouf",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Asua",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mona",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sifra",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Bula",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nefa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kaka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Shēn",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hroa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Iua",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sokia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Buna",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Laka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Traka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sema",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nif",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Stoi",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kash",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Jom",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Zaba",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kiona",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Vola",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nura",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Tiu-Hor",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kaba",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ratis",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ruka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hekaia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Lasa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kruk",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kashua",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Daruk",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Anka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "E",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Abol",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ehra",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kha",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ata",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Haja",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mena",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Tera",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hos",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Wa-Zura",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Rela",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Seko",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kajom",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Derva",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hek-an",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Uralu",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Uralua",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Holo",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Zan",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Alya",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Na",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ipa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kema",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sana",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Gema",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nuka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hota",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ta",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Jet",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hau",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Shan",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Feno",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mehti",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Rasi",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Iab",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ament",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Yaro",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Shara",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Uroto",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Tora",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kov",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mōa-Nuna",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Fas",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sira",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Gaba",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Gabato",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nahtia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hekwa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Jōmalu",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nayato",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Vora",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nasa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Lisha",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Fola",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kada",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Pira",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Zoka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Vasha",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mor",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nefua",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kalk",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Fia-Homa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mōaha",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mōasua",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mōahe",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Roayaro",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mōashara",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Howajora",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Tiujora",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Tiukouji",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Howajafa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Onahowa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Shoitatiu",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sematepia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kotatepia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kaialaka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kaiahe",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kotavalis",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Howia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Tiua",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Zabia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Aia-Joma",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mōa-Bala",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Aia-Mora",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Joa-To",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Huo-Zura",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Munto",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Moshaia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Lomsa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Huoma",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Suran",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Zaji",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Vara",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Maza",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Zava",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Tuka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Gura",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Dasha",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Tala",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ana",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ento",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nof",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nas",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sen",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Anon",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nae",
+    "": ""
+  },
+  {
+    "DICIONARIO": "En",
+    "": ""
+  },
+  {
+    "DICIONARIO": "E",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hena",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nte",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Na",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Se",
+    "": ""
+  },
+  {
+    "DICIONARIO": "An",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ku",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Je",
+    "": ""
+  },
+  {
+    "DICIONARIO": "antes de um título",
+    "": ""
+  },
+  {
+    "DICIONARIO": "funciona como O\",",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Nia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Diferente de An",
+    "": ""
+  },
+  {
+    "DICIONARIO": "(que nega verbos",
+    "": ""
+  },
+  {
+    "DICIONARIO": "-ma",
+    "": ""
+  },
+  {
+    "DICIONARIO": "(Querido Petros),Para família",
+    "": ""
+  },
+  {
+    "DICIONARIO": "(Shibra-ma).Indica que aquela pessoa é",
+    "": ""
+  },
+  {
+    "DICIONARIO": "parte de você.,",
+    "": ""
+  },
+  {
+    "DICIONARIO": "-rê",
+    "": ""
+  },
+  {
+    "DICIONARIO": "(Grande Achenar),Exclusivo para Reis",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sacerdotes ou entidades mágicas.",
+    "": ""
+  },
+  {
+    "DICIONARIO": "É mais alto que -k,",
+    "": ""
+  },
+  {
+    "DICIONARIO": "-li",
+    "": ""
+  },
+  {
+    "DICIONARIO": "ou para flertar de forma brincalhona.,",
+    "": ""
+  },
+  {
+    "DICIONARIO": "-jo",
+    "": ""
+  },
+  {
+    "DICIONARIO": "(Mestre Domenico),Para alguém que é especialista no que faz",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Reconhece a habilidade técnica.,",
+    "": ""
+  },
+  {
+    "DICIONARIO": "-nu",
+    "": ""
+  },
+  {
+    "DICIONARIO": "(Comerciante trapaceiro/irrelevante).,Para prisioneiros",
+    "": ""
+  },
+  {
+    "DICIONARIO": "ser educadamente rude",
+    "": ""
+  },
+  {
+    "DICIONARIO": "é inferior ou irrelevante.,",
+    "": ""
+  },
+  {
+    "DICIONARIO": "-k",
+    "": ""
+  },
+  {
+    "DICIONARIO": "(Sr. Petros),Respeito Padrão / Sr.,",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Pe",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Te",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ni",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ne",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ne",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Ni",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Veti",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Aia-Baza",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Noha-Mōa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kash-Aia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Panu",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Zajia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mato-Neba",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Refaia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Uela-Afia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Tota-Jom",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kora-Hēt",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Huma-Kaki",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Lina-Bala",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mina-Soma",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Dira-Ka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Mina-Jora",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Shiba",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Fota",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Zuva",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Zuvato",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Hēta",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Krofaia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Kotia",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Sita-Loma",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Uoina-Toka",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Aia-Mōa",
+    "": ""
+  },
+  {
+    "DICIONARIO": "Oika-Ushē",
+    "": ""
+  }
+]
