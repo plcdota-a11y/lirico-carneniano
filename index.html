@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dicionário Lírico Carneniano</title>
+  <title>Tradutor & Dicionário Lírico Carneniano</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-stone-950 text-stone-100 min-h-screen py-10 px-4">
@@ -12,145 +12,194 @@
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Dicionário, Tradutor & Guia Gramatical • Organização Carneniana de Línguas (OCL)</p>
+      <p class="text-stone-400 text-sm">Tradutor Sintático SVO & Dicionário Completo • Organização Carneniana de Línguas (OCL)</p>
     </header>
 
-    <!-- Guia Gramatical Retrátil (Verbos, Plural & Artigos) -->
-    <div class="bg-stone-900/90 border border-amber-500/30 rounded-2xl p-4 mb-6 text-xs text-stone-300">
-      <div class="flex items-center justify-between cursor-pointer" onclick="toggleSection('grammar-content', 'grammar-toggle-icon')">
-        <div class="flex items-center gap-2 font-bold text-amber-400 text-sm">
-          <span>📜 Guia de Regras Gramaticais (Verbos, Plural & Artigos)</span>
-          <span class="text-[10px] uppercase tracking-wider bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-normal">Gramática</span>
-        </div>
-        <span id="grammar-toggle-icon" class="text-stone-400 text-base font-bold">▼</span>
-      </div>
-
-      <div id="grammar-content" class="hidden mt-4 pt-3 border-t border-stone-800 space-y-4">
-        <!-- Seção 1: Formação de Plural -->
-        <div>
-          <h4 class="text-amber-300 font-bold text-xs uppercase tracking-wider mb-1.5">1. Formação do Plural (-is) & Artigos Definidos</h4>
-          <p class="text-stone-300 mb-2">
-            O plural dos substantivos e adjetivos é formado com a terminação <strong class="text-amber-300 font-mono">-is</strong> (ou variações como <em class="text-stone-200">-ais/-eis</em> dependendo da terminação). Os artigos definidos também flexionam, enquanto os <strong>verbos permanecem imutáveis</strong>.
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
-              <span class="text-amber-400 font-bold block">MASCULINO</span>
-              <span class="text-stone-400 text-[11px]">Singular: <code>Pe</code> | Plural: <code>Ne</code></span>
-              <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Pe Uro naya <span class="text-stone-500">(O Rei vê)</span></p>
-              <p class="text-amber-300 italic font-mono text-[11px]">Ne Urois naya <span class="text-stone-500">(Os Reis veem)</span></p>
-            </div>
-            <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
-              <span class="text-amber-400 font-bold block">FEMININO</span>
-              <span class="text-stone-400 text-[11px]">Singular: <code>Te</code> | Plural: <code>Ne</code></span>
-              <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Te Shēna <span class="text-stone-500">(A Árvore)</span></p>
-              <p class="text-amber-300 italic font-mono text-[11px]">Ne Shēnais <span class="text-stone-500">(As Árvores)</span></p>
-            </div>
-            <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
-              <span class="text-amber-400 font-bold block">NEUTRO</span>
-              <span class="text-stone-400 text-[11px]">Singular: <code>Ni</code> | Plural: <code>Ni</code></span>
-              <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Ni Iora <span class="text-stone-500">(O Rio)</span></p>
-              <p class="text-amber-300 italic font-mono text-[11px]">Ni Iorais <span class="text-stone-500">(Os Rios)</span></p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Seção 2: Tempos Verbais -->
-        <div>
-          <h4 class="text-amber-300 font-bold text-xs uppercase tracking-wider mb-1.5">2. Modulação Temporal dos Verbos</h4>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
-              <span class="text-amber-400 font-bold block">PASSADO (-em)</span>
-              <span class="text-stone-400 text-[11px]">Raiz + <code>em</code></span>
-              <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Ana nayem <span class="text-stone-500">(Eu vi)</span></p>
-            </div>
-            <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
-              <span class="text-amber-400 font-bold block">PRESENTE (Raiz)</span>
-              <span class="text-stone-400 text-[11px]">Forma Base</span>
-              <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Ana naya <span class="text-stone-500">(Eu vejo)</span></p>
-            </div>
-            <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
-              <span class="text-amber-400 font-bold block">FUTURO (-ra)</span>
-              <span class="text-stone-400 text-[11px]">Raiz + <code>ra</code></span>
-              <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Ana nayra <span class="text-stone-500">(Eu verei)</span></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Controles de Busca e Filtros -->
-    <div class="bg-stone-900 border border-stone-800 rounded-2xl p-4 mb-8 shadow-xl">
-      <!-- Alternador de Direção -->
-      <div class="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-stone-800 flex-wrap">
-        <div class="flex items-center gap-2">
-          <button 
-            id="btn-both" 
-            onclick="setSearchMode('ambos')" 
-            class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition">
-            Busca Total
-          </button>
-          <button 
-            id="btn-carnenian" 
-            onclick="setSearchMode('carneniano')" 
-            class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
-            Carneniano → PT
-          </button>
-          <button 
-            id="btn-pt" 
-            onclick="setSearchMode('portugues')" 
-            class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
-            PT → Carneniano
-          </button>
-        </div>
-
-        <!-- Botão Retrátil de Categorias -->
+    <!-- Seletor de Abas -->
+    <div class="flex justify-center mb-8">
+      <div class="inline-flex bg-stone-900 border border-stone-800 p-1 rounded-xl">
         <button 
-          onclick="toggleSection('filter-box', 'filter-toggle-icon')" 
-          class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-stone-800 border border-stone-700 hover:border-amber-400/60 text-stone-200 transition">
-          <span>🎛️ Filtros: <span id="current-filter-label" class="text-amber-400 font-bold">Todos</span></span>
-          <span id="filter-toggle-icon" class="text-[10px] text-stone-400">▼</span>
+          id="tab-btn-translator" 
+          onclick="switchTab('translator')" 
+          class="px-5 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-stone-950 transition">
+          🔄 Tradutor Sintático (SVO)
         </button>
-
-        <span id="counter" class="text-xs text-stone-500 font-mono w-full sm:w-auto text-right">Carregando...</span>
-      </div>
-
-      <!-- Barra de Texto -->
-      <div class="relative">
-        <input 
-          type="text" 
-          id="search-input"
-          placeholder="Pesquisar palavra exata, plural (ex: Urois), conjugação ou significado..." 
-          class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 pl-11 text-base text-stone-100 focus:outline-none focus:border-amber-400 transition"
-        >
-        <svg class="w-5 h-5 text-stone-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
-      </div>
-
-      <!-- Caixa Ocultável de Filtros -->
-      <div id="filter-box" class="hidden mt-4 pt-3 border-t border-stone-800">
-        <span class="text-xs text-stone-400 block mb-2 font-medium">Selecione uma categoria gramatical:</span>
-        <div id="macro-filters" class="flex flex-wrap gap-2 text-xs">
-          <!-- Renderizado dinamicamente -->
-        </div>
+        <button 
+          id="tab-btn-dictionary" 
+          onclick="switchTab('dictionary')" 
+          class="px-5 py-2 text-sm font-semibold rounded-lg text-stone-400 hover:text-stone-200 transition">
+          📖 Dicionário de Termos
+        </button>
       </div>
     </div>
 
-    <!-- Resultados -->
-    <div id="results-container" class="grid gap-4 md:grid-cols-2">
-      <div class="col-span-2 text-center py-12 text-stone-500">
-        Carregando vocabulário carneniano...
+    <!-- ABA 1: TRADUTOR SVO -->
+    <div id="section-translator" class="space-y-6">
+      <div class="bg-stone-900 border border-stone-800 rounded-2xl shadow-xl overflow-hidden">
+        
+        <!-- Barra de Controle -->
+        <div class="flex items-center justify-between px-6 py-3 border-b border-stone-800 bg-stone-900/60 flex-wrap gap-2">
+          <div class="flex items-center gap-3 font-semibold text-sm">
+            <span id="trans-source-label" class="text-amber-400">Português</span>
+            <button 
+              onclick="invertTranslationDirection()" 
+              title="Inverter direção" 
+              class="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 transition">
+              ⇄
+            </button>
+            <span id="trans-target-label" class="text-stone-300">Lírico Carneniano</span>
+          </div>
+          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">Ordem Estrita: SVO</span>
+        </div>
+
+        <!-- Caixas de Texto -->
+        <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-stone-800">
+          <div class="p-4 flex flex-col justify-between">
+            <textarea 
+              id="translator-input"
+              rows="6"
+              placeholder="Digite sua frase (ex: O amigo dele viu o lobo / Meu amigo correu para a montanha)..." 
+              class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed"
+            ></textarea>
+            <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
+              <span id="input-char-counter">0 caracteres</span>
+              <button onclick="clearTranslatorInput()" class="hover:text-amber-400">Limpar</button>
+            </div>
+          </div>
+
+          <div class="p-4 bg-stone-950/40 flex flex-col justify-between">
+            <div 
+              id="translator-output"
+              class="w-full min-h-[144px] text-amber-200 font-medium text-base leading-relaxed break-words whitespace-pre-wrap select-all">
+              <span class="text-stone-600 font-normal italic">A tradução sintática aparecerá aqui...</span>
+            </div>
+            <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
+              <span id="output-meta">Lírico Carneniano (SVO)</span>
+              <button onclick="copyTranslation()" id="copy-btn" class="hover:text-amber-400 font-medium">Copiar</button>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <!-- Caixa de Regras de Ordem -->
+      <div class="bg-stone-900/60 border border-stone-800/80 rounded-xl p-4 text-xs text-stone-400 space-y-2">
+        <p class="font-semibold text-amber-400">Estrutura Sintática Carneniana:</p>
+        <ul class="list-disc list-inside space-y-1 text-stone-400">
+          <li><strong>Possessivo Sempre Antes:</strong> <em>"Amigo dele"</em> &rarr; <code>Pefa Shibra</code> | <em>"Minha espada"</em> &rarr; <code>Pa Sifa</code>[cite: 1].</li>
+          <li><strong>Ordem SVO:</strong> Sujeito + Verbo + Objeto direto/indireto (ex: <code>Pe Uro naya Pe Uonsha</code>)[cite: 1].</li>
+          <li><strong>Imutabilidade Verbal:</strong> Os verbos marcam tempo (<em>-em</em> passado, <em>-ra</em> futuro), mas não mudam com o número do sujeito[cite: 1].</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ABA 2: DICIONÁRIO COMPLETO -->
+    <div id="section-dictionary" class="hidden space-y-6">
+      <div class="bg-stone-900/90 border border-amber-500/30 rounded-2xl p-4 text-xs text-stone-300">
+        <div class="flex items-center justify-between cursor-pointer" onclick="toggleSection('grammar-content', 'grammar-toggle-icon')">
+          <div class="flex items-center gap-2 font-bold text-amber-400 text-sm">
+            <span>📜 Guia de Regras Gramaticais</span>
+            <span class="text-[10px] uppercase tracking-wider bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-normal">Gramática</span>
+          </div>
+          <span id="grammar-toggle-icon" class="text-stone-400 text-base font-bold">▼</span>
+        </div>
+
+        <div id="grammar-content" class="hidden mt-4 pt-3 border-t border-stone-800 space-y-4">
+          <div>
+            <h4 class="text-amber-300 font-bold text-xs uppercase tracking-wider mb-1.5">1. Formação do Plural (-is) & Artigos</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
+                <span class="text-amber-400 font-bold block">MASCULINO</span>
+                <span class="text-stone-400 text-[11px]">Singular: <code>Pe</code> | Plural: <code>Ne</code></span>
+                <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Pe Uro naya <span class="text-stone-500">(O Rei vê)</span></p>
+                <p class="text-amber-300 italic font-mono text-[11px]">Ne Urois naya <span class="text-stone-500">(Os Reis veem)</span></p>
+              </div>
+              <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
+                <span class="text-amber-400 font-bold block">FEMININO</span>
+                <span class="text-stone-400 text-[11px]">Singular: <code>Te</code> | Plural: <code>Ne</code></span>
+                <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Te Shēna <span class="text-stone-500">(A Árvore)</span></p>
+                <p class="text-amber-300 italic font-mono text-[11px]">Ne Shēnais <span class="text-stone-500">(As Árvores)</span></p>
+              </div>
+              <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
+                <span class="text-amber-400 font-bold block">NEUTRO</span>
+                <span class="text-stone-400 text-[11px]">Singular: <code>Ni</code> | Plural: <code>Ni</code></span>
+                <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Ni Iora <span class="text-stone-500">(O Rio)</span></p>
+                <p class="text-amber-300 italic font-mono text-[11px]">Ni Iorais <span class="text-stone-500">(Os Rios)</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-stone-900 border border-stone-800 rounded-2xl p-4 shadow-xl">
+        <div class="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-stone-800 flex-wrap">
+          <div class="flex items-center gap-2">
+            <button 
+              id="btn-dict-both" 
+              onclick="setDictSearchMode('ambos')" 
+              class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition">
+              Busca Total
+            </button>
+            <button 
+              id="btn-dict-carnenian" 
+              onclick="setDictSearchMode('carneniano')" 
+              class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
+              Carneniano → PT
+            </button>
+            <button 
+              id="btn-dict-pt" 
+              onclick="setDictSearchMode('portugues')" 
+              class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
+              PT → Carneniano
+            </button>
+          </div>
+
+          <button 
+            onclick="toggleSection('filter-box', 'filter-toggle-icon')" 
+            class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-stone-800 border border-stone-700 hover:border-amber-400/60 text-stone-200 transition">
+            <span>🎛️ Categorias: <span id="current-filter-label" class="text-amber-400 font-bold">Todos</span></span>
+            <span id="filter-toggle-icon" class="text-[10px] text-stone-400">▼</span>
+          </button>
+
+          <span id="counter" class="text-xs text-stone-500 font-mono w-full sm:w-auto text-right">Carregando...</span>
+        </div>
+
+        <div class="relative">
+          <input 
+            type="text" 
+            id="dict-search-input"
+            placeholder="Pesquisar termo exato, plural, significado..." 
+            class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 pl-11 text-base text-stone-100 focus:outline-none focus:border-amber-400 transition"
+          >
+          <svg class="w-5 h-5 text-stone-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+
+        <div id="filter-box" class="hidden mt-4 pt-3 border-t border-stone-800">
+          <span class="text-xs text-stone-400 block mb-2 font-medium">Categorias:</span>
+          <div id="macro-filters" class="flex flex-wrap gap-2 text-xs"></div>
+        </div>
+      </div>
+
+      <div id="results-container" class="grid gap-4 md:grid-cols-2"></div>
     </div>
   </div>
 
   <script>
     let dicionario = [];
-    let searchMode = 'ambos';
+    let dictSearchMode = 'ambos';
     let activeMacroCategory = 'todos';
+    let translationDirection = 'pt-to-carn';
 
-    const input = document.getElementById('search-input');
-    const container = document.getElementById('results-container');
+    const translatorInput = document.getElementById('translator-input');
+    const translatorOutput = document.getElementById('translator-output');
+    const inputCharCounter = document.getElementById('input-char-counter');
+    const transSourceLabel = document.getElementById('trans-source-label');
+    const transTargetLabel = document.getElementById('trans-target-label');
+    const copyBtn = document.getElementById('copy-btn');
+
+    const dictInput = document.getElementById('dict-search-input');
+    const resultsContainer = document.getElementById('results-container');
     const counter = document.getElementById('counter');
     const macroFilterContainer = document.getElementById('macro-filters');
     const currentFilterLabel = document.getElementById('current-filter-label');
@@ -166,6 +215,25 @@
       { id: 'numeral', label: 'Numerais' },
       { id: 'outros', label: 'Títulos, Expressões & Outros' }
     ];
+
+    function switchTab(tab) {
+      const secTranslator = document.getElementById('section-translator');
+      const secDictionary = document.getElementById('section-dictionary');
+      const btnTranslator = document.getElementById('tab-btn-translator');
+      const btnDictionary = document.getElementById('tab-btn-dictionary');
+
+      if (tab === 'translator') {
+        secTranslator.classList.remove('hidden');
+        secDictionary.classList.add('hidden');
+        btnTranslator.className = "px-5 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
+        btnDictionary.className = "px-5 py-2 text-sm font-semibold rounded-lg text-stone-400 hover:text-stone-200 transition";
+      } else {
+        secTranslator.classList.add('hidden');
+        secDictionary.classList.remove('hidden');
+        btnDictionary.className = "px-5 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
+        btnTranslator.className = "px-5 py-2 text-sm font-semibold rounded-lg text-stone-400 hover:text-stone-200 transition";
+      }
+    }
 
     function toggleSection(contentId, iconId) {
       const content = document.getElementById(contentId);
@@ -188,7 +256,6 @@
       let passado = r.endsWith('a') ? r.slice(0, -1) + 'em' : r + 'em';
       let presente = r;
       let futuro = r.endsWith('a') ? r.slice(0, -1) + 'ra' : r + 'ra';
-
       return { passado, presente, futuro };
     }
 
@@ -196,8 +263,6 @@
       const s = singular.trim();
       if (!s || s === '-' || s === '...') return '-';
       if (s.endsWith('is')) return s;
-      if (s.endsWith('a')) return s + 'is';
-      if (s.endsWith('o') || s.endsWith('e') || s.endsWith('i') || s.endsWith('u')) return s + 'is';
       return s + 'is';
     }
 
@@ -214,7 +279,6 @@
       const isVerbo = cNorm.includes('verbo');
       const isSubstOuAdj = cNorm.includes('subst') || cNorm.includes('adj');
 
-      // Se for substantivo/adjetivo e o plural estiver vazio, infere o plural regular (-is)
       if (isSubstOuAdj && (!plural || plural === '-' || plural.toLowerCase() === 'null')) {
         plural = gerarPluralPadrao(singular);
       }
@@ -241,122 +305,275 @@
       };
     }
 
-    function pertenceACategoria(item, catId) {
-      if (catId === 'todos') return true;
-      const c = item.cNorm;
+    // ==========================================
+    // REORGANIZAÇÃO SINTÁTICA SVO & POSSESSIVOS
+    // ==========================================
+    const POSSESSIVOS_MAP = {
+      'dele': 'Pefa',
+      'dela': 'Pesa',
+      'meu': 'Pa',
+      'minha': 'Pa',
+      'meus': 'Pa',
+      'minhas': 'Pa',
+      'teu': 'Peka',
+      'tua': 'Peka',
+      'teus': 'Peka',
+      'tuas': 'Peka',
+      'seu': 'Peka',
+      'sua': 'Peka',
+      'seus': 'Peka',
+      'suas': 'Peka',
+      'nosso': 'Pena',
+      'nossa': 'Pena',
+      'nossos': 'Pena',
+      'nossas': 'Pena',
+      'deles': 'Pau',
+      'delas': 'Pau'
+    };
 
-      if (catId === 'verbo') return c.includes('verbo');
-      if (catId === 'substantivo') return c.includes('subst');
-      if (catId === 'adjetivo') return c.includes('adj');
-      if (catId === 'pronome') return c.includes('pron') || c.includes('possessiv');
-      if (catId === 'conectivo') return c.includes('prep') || c.includes('conj') || c.includes('locu') || c.includes('conect');
-      if (catId === 'adverbio') return c.includes('adv') || c.includes('nega');
-      if (catId === 'numeral') return c.includes('numeral');
-      if (catId === 'outros') {
-        return c.includes('título') || c.includes('titulo') || c.includes('honor') || 
-               c.includes('sufixo') || c.includes('interje') || c.includes('excla') || 
-               c.includes('holop') || c.includes('artigo') || c.includes('direção') || c.includes('direcao') ||
-               (!c.includes('verbo') && !c.includes('subst') && !c.includes('adj') && !c.includes('pron') && !c.includes('numeral'));
-      }
+    // Converte sintaxe de pós-posse portuguesa ("amigo dele") para pré-posse Carneniana ("Pefa Shibra")
+    function reordenarSintaxeSVO(textoPt) {
+      let mod = textoPt;
 
-      return false;
+      // Substitui "o/a amigo(a) dele(a)" por "Pefa amigo"
+      mod = mod.replace(/\b(o|a|os|as|um|uma)?\s*([a-zA-ZÀ-ÿ]+)\s+(dele|dela|deles|delas)\b/gi, (match, art, substantivo, posse) => {
+        const pronPoss = POSSESSIVOS_MAP[normalizar(posse)] || 'Pefa';
+        return `${pronPoss} ${substantivo}`;
+      });
+
+      // Substitui "meu/minha/nosso amigo" garantindo possessivo à frente
+      mod = mod.replace(/\b(o|a|os|as)?\s*(meu|minha|meus|minhas|teu|tua|teus|tuas|seu|sua|nosso|nossa|nossos|nossas)\s+([a-zA-ZÀ-ÿ]+)\b/gi, (match, art, posse, substantivo) => {
+        const pronPoss = POSSESSIVOS_MAP[normalizar(posse)] || 'Pa';
+        return `${pronPoss} ${substantivo}`;
+      });
+
+      return mod;
     }
 
-    function calcularRelevancia(item, query) {
-      if (!query) return 1;
+    let translationMapPtToCarn = [];
+    let translationMapCarnToPt = [];
 
-      let score = 0;
+    function buildTranslationMaps() {
+      const ptList = [];
+      const carnList = [];
 
-      // Carneniano (Singular, Plural, Conjugação)
-      if (searchMode === 'carneniano' || searchMode === 'ambos') {
-        if (item.sNorm === query) score = Math.max(score, 1000);
-        else if (item.pNorm === query) score = Math.max(score, 980);
-        else if (item.conjugacoes && (normalizar(item.conjugacoes.passado) === query || normalizar(item.conjugacoes.futuro) === query)) score = Math.max(score, 950);
-        else if (item.sNorm.startsWith(query)) score = Math.max(score, 500);
-        else if (new RegExp('\\b' + query + '\\b', 'i').test(item.sNorm)) score = Math.max(score, 400);
-        else if (item.sNorm.includes(query) || item.pNorm.includes(query)) score = Math.max(score, 100);
-      }
+      const regrasGramaticais = [
+        { pt: 'o', carn: 'Pe', prioridade: 6 },
+        { pt: 'a', carn: 'Te', prioridade: 6 },
+        { pt: 'os', carn: 'Ne', prioridade: 6 },
+        { pt: 'as', carn: 'Ne', prioridade: 6 },
+        { pt: 'um', carn: 'Un', prioridade: 6 },
+        { pt: 'uma', carn: 'Un', prioridade: 6 },
+        { pt: 'uns', carn: 'Han', prioridade: 6 },
+        { pt: 'alguns', carn: 'Han', prioridade: 6 },
+        { pt: 'eu', carn: 'Ana', prioridade: 10 },
+        { pt: 'voce', carn: 'Ento', prioridade: 10 },
+        { pt: 'tu', carn: 'Ento', prioridade: 10 },
+        { pt: 'ele', carn: 'Nof', prioridade: 10 },
+        { pt: 'ela', carn: 'Nas', prioridade: 10 },
+        { pt: 'nos', carn: 'Anon', prioridade: 10 },
+        { pt: 'eles', carn: 'Nae', prioridade: 10 },
+        { pt: 'elas', carn: 'Nae', prioridade: 10 },
+        { pt: 'meu', carn: 'Pa', prioridade: 9 },
+        { pt: 'minha', carn: 'Pa', prioridade: 9 },
+        { pt: 'teu', carn: 'Peka', prioridade: 9 },
+        { pt: 'tua', carn: 'Peka', prioridade: 9 },
+        { pt: 'dele', carn: 'Pefa', prioridade: 9 },
+        { pt: 'dela', carn: 'Pesa', prioridade: 9 },
+        { pt: 'nosso', carn: 'Pena', prioridade: 9 },
+        { pt: 'nossa', carn: 'Pena', prioridade: 9 },
+        { pt: 'deles', carn: 'Pau', prioridade: 9 },
+        { pt: 'delas', carn: 'Pau', prioridade: 9 },
+        { pt: 'em', carn: 'En', prioridade: 7 },
+        { pt: 'no', carn: 'En', prioridade: 7 },
+        { pt: 'na', carn: 'En', prioridade: 7 },
+        { pt: 'para', carn: 'E', prioridade: 7 },
+        { pt: 'com', carn: 'Hena', prioridade: 7 },
+        { pt: 'e', carn: 'Au', prioridade: 7 },
+        { pt: 'mas', carn: 'Ala', prioridade: 7 },
+        { pt: 'ou', carn: 'Ea', prioridade: 7 }
+      ];
 
-      // Português (Tradução e Sinônimos)
-      if (searchMode === 'portugues' || searchMode === 'ambos') {
-        if (item.tNorm === query) {
-          score = Math.max(score, 1000);
-        } else if (item.traducoesArray.includes(query)) {
-          score = Math.max(score, 980);
-        } else if (item.tNorm.startsWith(query)) {
-          score = Math.max(score, 450);
-        } else if (new RegExp('\\b' + query + '\\b', 'i').test(item.tNorm)) {
-          score = Math.max(score, 350);
-        } else if (item.tNorm.includes(query)) {
-          score = Math.max(score, 80);
+      regrasGramaticais.forEach(r => {
+        ptList.push({ key: r.pt, target: r.carn, len: r.pt.length, prioridade: r.prioridade });
+        carnList.push({ key: normalizar(r.carn), target: r.pt, len: r.carn.length, prioridade: r.prioridade });
+      });
+
+      dicionario.forEach(item => {
+        const sNorm = item.sNorm;
+
+        // Carneniano -> PT
+        carnList.push({ key: sNorm, target: item.traducoesArray[0] || item.traducao, len: sNorm.length, prioridade: 1 });
+        if (item.plural && item.plural !== '-') {
+          carnList.push({ key: item.pNorm, target: (item.traducoesArray[0] || item.traducao) + 's', len: item.pNorm.length, prioridade: 2 });
         }
-      }
+        if (item.isVerbo && item.conjugacoes) {
+          carnList.push({ key: normalizar(item.conjugacoes.passado), target: item.singular + ' (passado)', len: item.conjugacoes.passado.length, prioridade: 3 });
+          carnList.push({ key: normalizar(item.conjugacoes.futuro), target: item.singular + ' (futuro)', len: item.conjugacoes.futuro.length, prioridade: 3 });
+        }
 
-      // Notas e Contexto
-      if (searchMode === 'ambos' && score === 0) {
-        if (new RegExp('\\b' + query + '\\b', 'i').test(item.uNorm)) score = Math.max(score, 50);
-        else if (item.uNorm.includes(query)) score = Math.max(score, 20);
-      }
+        // PT -> Carneniano
+        item.traducoesArray.forEach(tr => {
+          const cleanTr = normalizar(tr.replace(/^(um|uma|o|a|os|as|de|para)\s+/g, ''));
+          if (cleanTr) {
+            ptList.push({ key: cleanTr, target: item.singular, len: cleanTr.length, prioridade: 1 });
+            
+            if (item.isVerbo && item.conjugacoes) {
+              ptList.push({ key: cleanTr + 'u', target: item.conjugacoes.passado, len: cleanTr.length + 1, prioridade: 3 });
+              ptList.push({ key: cleanTr + 'ra', target: item.conjugacoes.futuro, len: cleanTr.length + 2, prioridade: 3 });
+            }
+          }
+        });
+      });
 
-      return score;
+      ptList.sort((a, b) => b.len - a.len || b.prioridade - a.prioridade);
+      carnList.sort((a, b) => b.len - a.len || b.prioridade - a.prioridade);
+
+      translationMapPtToCarn = ptList;
+      translationMapCarnToPt = carnList;
     }
 
-    async function carregarDicionario() {
-      try {
-        const resposta = await fetch('dicionario.json');
-        if (!resposta.ok) throw new Error('Não foi possível carregar dicionario.json');
-        const dadosBrutos = await resposta.json();
-        
-        dicionario = dadosBrutos
-          .map(tratarItem)
-          .filter(item => item.singular && 
-                          item.singular !== 'PALAVRA/SINGULAR' && 
-                          item.singular !== '...' &&
-                          item.singular.toLowerCase() !== 'null' &&
-                          item.singular.toLowerCase() !== 'nan');
-        
-        renderMacroButtons();
-        filterData();
-      } catch (erro) {
-        console.error(erro);
-        container.innerHTML = `
-          <div class="col-span-2 text-center py-12 text-amber-500 bg-stone-900 border border-amber-900/50 rounded-xl p-6">
-            <p class="font-bold mb-2">Erro ao carregar o arquivo dicionario.json</p>
-            <p class="text-xs text-stone-400">Verifique se o arquivo <code>dicionario.json</code> está salvo no repositório.</p>
-          </div>`;
-      }
+    function translateText(text, direction) {
+      if (!text || !text.trim()) return '';
+
+      // Se for PT -> Carneniano, reestrutura para a sintaxe SVO canônica
+      const formattedInput = direction === 'pt-to-carn' ? reordenarSintaxeSVO(text) : text;
+
+      const lines = formattedInput.split('\n');
+      const translatedLines = lines.map(line => {
+        if (!line.trim()) return '';
+
+        const tokens = line.split(/([,.;:!?()"\s]+)/);
+        const activeMap = direction === 'pt-to-carn' ? translationMapPtToCarn : translationMapCarnToPt;
+
+        let result = [];
+        let i = 0;
+
+        while (i < tokens.length) {
+          const rawToken = tokens[i];
+          const isSeparator = /^[,.;:!?()"\s]+$/.test(rawToken);
+
+          if (isSeparator) {
+            result.push(rawToken);
+            i++;
+            continue;
+          }
+
+          let matched = false;
+          for (let span = 5; span >= 1; span -= 2) {
+            if (i + span <= tokens.length) {
+              const phraseTokens = [];
+              for (let k = 0; k < span; k += 2) phraseTokens.push(tokens[i + k]);
+              const phraseNorm = normalizar(phraseTokens.join(' '));
+
+              const found = activeMap.find(entry => entry.key === phraseNorm);
+              if (found) {
+                result.push(found.target);
+                i += span;
+                matched = true;
+                break;
+              }
+            }
+          }
+
+          if (!matched) {
+            result.push(rawToken);
+            i++;
+          }
+        }
+
+        return result.join('');
+      });
+
+      return translatedLines.join('\n');
     }
 
+    function handleTranslatorInput() {
+      const text = translatorInput.value;
+      inputCharCounter.textContent = `${text.length} ${text.length === 1 ? 'caractere' : 'caracteres'}`;
+
+      if (!text.trim()) {
+        translatorOutput.innerHTML = '<span class="text-stone-600 font-normal italic">A tradução sintática aparecerá aqui...</span>';
+        return;
+      }
+
+      const translated = translateText(text, translationDirection);
+      translatorOutput.textContent = translated;
+    }
+
+    function invertTranslationDirection() {
+      if (translationDirection === 'pt-to-carn') {
+        translationDirection = 'carn-to-pt';
+        transSourceLabel.textContent = "Lírico Carneniano";
+        transSourceLabel.className = "text-amber-400";
+        transTargetLabel.textContent = "Português";
+        transTargetLabel.className = "text-stone-300";
+        translatorInput.placeholder = "Digite em Lírico Carneniano (ex: Pe Uro womem en aia)...";
+      } else {
+        translationDirection = 'pt-to-carn';
+        transSourceLabel.textContent = "Português";
+        transSourceLabel.className = "text-amber-400";
+        transTargetLabel.textContent = "Lírico Carneniano";
+        transTargetLabel.className = "text-stone-300";
+        translatorInput.placeholder = "Digite sua frase em português (ex: O amigo dele viu o lobo)...";
+      }
+
+      const currentOut = translatorOutput.textContent;
+      if (currentOut && !currentOut.includes('aparecerá aqui')) {
+        translatorInput.value = currentOut;
+      }
+      handleTranslatorInput();
+    }
+
+    function clearTranslatorInput() {
+      translatorInput.value = '';
+      handleTranslatorInput();
+    }
+
+    function copyTranslation() {
+      const text = translatorOutput.textContent;
+      if (!text || text.includes('aparecerá aqui')) return;
+
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.textContent = 'Copiado!';
+        copyBtn.className = 'text-amber-400 font-bold';
+        setTimeout(() => {
+          copyBtn.textContent = 'Copiar';
+          copyBtn.className = 'hover:text-amber-400 font-medium';
+        }, 2000);
+      });
+    }
+
+    // ==========================================
+    // FUNÇÕES DO DICIONÁRIO
+    // ==========================================
     function renderMacroButtons() {
       macroFilterContainer.innerHTML = '';
-      
       MACRO_CATEGORIES.forEach(cat => {
         const btn = document.createElement('button');
         btn.textContent = cat.label;
         const isActive = (activeMacroCategory === cat.id);
-        
         btn.className = `px-3 py-1.5 rounded-lg font-medium transition ${
           isActive 
             ? 'bg-amber-950 text-amber-300 border border-amber-800 shadow' 
             : 'bg-stone-800/80 hover:bg-stone-800 text-stone-300 border border-stone-700/60'
         }`;
-        
         btn.onclick = () => {
           activeMacroCategory = cat.id;
           currentFilterLabel.textContent = cat.label;
           renderMacroButtons();
-          filterData();
+          filterDictData();
         };
         macroFilterContainer.appendChild(btn);
       });
     }
 
-    function render(lista) {
-      container.innerHTML = '';
+    function renderDictCards(lista) {
+      resultsContainer.innerHTML = '';
       counter.textContent = `${lista.length} ${lista.length === 1 ? 'termo' : 'termos'}`;
 
       if (lista.length === 0) {
-        container.innerHTML = `
+        resultsContainer.innerHTML = `
           <div class="col-span-2 text-center py-16 text-stone-600">
             Nenhum termo carneniano encontrado para esta pesquisa.
           </div>`;
@@ -420,40 +637,101 @@
             ${item.uso && item.uso !== '-' && item.uso.toLowerCase() !== 'null' ? `<p class="text-stone-500 pt-1 italic">${item.uso}</p>` : ''}
           </div>
         `;
-        container.appendChild(card);
+        resultsContainer.appendChild(card);
       });
     }
 
-    function filterData() {
-      const query = normalizar(input.value);
+    function filterDictData() {
+      const query = normalizar(dictInput.value);
       const pontuados = [];
 
       for (let i = 0; i < dicionario.length; i++) {
         const item = dicionario[i];
         if (!pertenceACategoria(item, activeMacroCategory)) continue;
 
-        const score = calcularRelevancia(item, query);
-        if (score > 0) {
-          pontuados.push({ item, score });
+        let score = 0;
+        if (!query) score = 1;
+        else {
+          if (dictSearchMode === 'carneniano' || dictSearchMode === 'ambos') {
+            if (item.sNorm === query) score = Math.max(score, 1000);
+            else if (item.pNorm === query) score = Math.max(score, 980);
+            else if (item.sNorm.startsWith(query)) score = Math.max(score, 500);
+            else if (item.sNorm.includes(query) || item.pNorm.includes(query)) score = Math.max(score, 100);
+          }
+          if (dictSearchMode === 'portugues' || dictSearchMode === 'ambos') {
+            if (item.tNorm === query) score = Math.max(score, 1000);
+            else if (item.traducoesArray.includes(query)) score = Math.max(score, 980);
+            else if (item.tNorm.startsWith(query)) score = Math.max(score, 450);
+            else if (item.tNorm.includes(query)) score = Math.max(score, 80);
+          }
         }
+
+        if (score > 0) pontuados.push({ item, score });
       }
 
       pontuados.sort((a, b) => b.score - a.score);
-      render(pontuados.map(p => p.item));
+      renderDictCards(pontuados.map(p => p.item));
     }
 
-    function setSearchMode(mode) {
-      searchMode = mode;
-      ['btn-both', 'btn-carnenian', 'btn-pt'].forEach(id => {
+    function setDictSearchMode(mode) {
+      dictSearchMode = mode;
+      ['btn-dict-both', 'btn-dict-carnenian', 'btn-dict-pt'].forEach(id => {
         document.getElementById(id).className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition";
       });
-      if (mode === 'ambos') document.getElementById('btn-both').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
-      if (mode === 'carneniano') document.getElementById('btn-carnenian').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
-      if (mode === 'portugues') document.getElementById('btn-pt').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
-      filterData();
+      if (mode === 'ambos') document.getElementById('btn-dict-both').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
+      if (mode === 'carneniano') document.getElementById('btn-dict-carnenian').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
+      if (mode === 'portugues') document.getElementById('btn-dict-pt').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
+      filterDictData();
     }
 
-    input.addEventListener('input', filterData);
+    function pertenceACategoria(item, catId) {
+      if (catId === 'todos') return true;
+      const c = item.cNorm;
+      if (catId === 'verbo') return c.includes('verbo');
+      if (catId === 'substantivo') return c.includes('subst');
+      if (catId === 'adjetivo') return c.includes('adj');
+      if (catId === 'pronome') return c.includes('pron') || c.includes('possessiv');
+      if (catId === 'conectivo') return c.includes('prep') || c.includes('conj') || c.includes('locu') || c.includes('conect');
+      if (catId === 'adverbio') return c.includes('adv') || c.includes('nega');
+      if (catId === 'numeral') return c.includes('numeral');
+      if (catId === 'outros') {
+        return c.includes('título') || c.includes('titulo') || c.includes('honor') || 
+               c.includes('sufixo') || c.includes('interje') || c.includes('excla') || 
+               c.includes('holop') || c.includes('artigo') || c.includes('direção') || c.includes('direcao') ||
+               (!c.includes('verbo') && !c.includes('subst') && !c.includes('adj') && !c.includes('pron') && !c.includes('numeral'));
+      }
+      return false;
+    }
+
+    async function carregarDicionario() {
+      try {
+        const resposta = await fetch('dicionario.json');
+        if (!resposta.ok) throw new Error('Não foi possível carregar dicionario.json');
+        const dadosBrutos = await resposta.json();
+        
+        dicionario = dadosBrutos
+          .map(tratarItem)
+          .filter(item => item.singular && 
+                          item.singular !== 'PALAVRA/SINGULAR' && 
+                          item.singular !== '...' &&
+                          item.singular.toLowerCase() !== 'null' &&
+                          item.singular.toLowerCase() !== 'nan');
+        
+        buildTranslationMaps();
+        renderMacroButtons();
+        filterDictData();
+      } catch (erro) {
+        console.error(erro);
+        resultsContainer.innerHTML = `
+          <div class="col-span-2 text-center py-12 text-amber-500 bg-stone-900 border border-amber-900/50 rounded-xl p-6">
+            <p class="font-bold mb-2">Erro ao carregar o arquivo dicionario.json</p>
+            <p class="text-xs text-stone-400">Verifique se o arquivo <code>dicionario.json</code> está salvo no repositório.</p>
+          </div>`;
+      }
+    }
+
+    translatorInput.addEventListener('input', handleTranslatorInput);
+    dictInput.addEventListener('input', filterDictData);
 
     carregarDicionario();
   </script>
