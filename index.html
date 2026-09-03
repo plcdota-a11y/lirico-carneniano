@@ -16,7 +16,7 @@
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Tradutor SVO Avançado & Dicionário (1500+ Termos) • OCL</p>
+      <p class="text-stone-400 text-sm">Tradutor Avançado (SVO & Numerais Automáticos) • OCL</p>
     </header>
 
     <!-- Seletor de Abas -->
@@ -26,7 +26,7 @@
           id="tab-btn-translator" 
           onclick="switchTab('translator')" 
           class="px-5 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-stone-950 transition">
-          🔄 Tradutor Sintático (SVO)
+          🔄 Tradutor Sintático
         </button>
         <button 
           id="tab-btn-dictionary" 
@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <!-- ABA 1: TRADUTOR SVO -->
+    <!-- ABA 1: TRADUTOR -->
     <div id="section-translator" class="space-y-6">
       <div class="bg-stone-900 border border-stone-800 rounded-2xl shadow-xl overflow-hidden">
         
@@ -52,7 +52,7 @@
             </button>
             <span id="trans-target-label" class="text-stone-300">Lírico Carneniano</span>
           </div>
-          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">Ordem Estrita: SVO</span>
+          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">Motor Ativo: Gramática + Numerais</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-stone-800">
@@ -60,7 +60,7 @@
             <textarea 
               id="translator-input"
               rows="6"
-              placeholder="Digite sua frase. O sistema segue a ordem SVO e reconhece imperativos (ex: Venha me abençoar, agora)..." 
+              placeholder="Digite sua frase. Experimente digitar números (ex: 81, 110, 2026) para ver a conversão matemática automática..." 
               class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed"
             ></textarea>
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
@@ -76,19 +76,20 @@
               <span class="text-stone-600 font-normal italic">A tradução inteligente aparecerá aqui...</span>
             </div>
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
-              <span id="output-meta">Lírico Carneniano (SVO)</span>
+              <span id="output-meta">Lírico Carneniano</span>
               <button onclick="copyTranslation()" id="copy-btn" class="hover:text-amber-400 font-medium">Copiar</button>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Dicas Rápidas Tradutor -->
       <div class="bg-stone-900/60 border border-stone-800/80 rounded-xl p-4 text-xs text-stone-400 space-y-2">
-        <p class="font-semibold text-amber-400">Estrutura Sintática & Flexões Automáticas:</p>
+        <p class="font-semibold text-amber-400">O que o Motor Inteligente faz?</p>
         <ul class="list-disc list-inside space-y-1 text-stone-400">
-          <li><strong>Regra SVO Direta:</strong> Pronomes oblíquos do português (ex: "me abençoar") são invertidos internamente ("abençoar me") para garantir a gramática carneniana.</li>
-          <li><strong>Possessivo Sempre Antes:</strong> <em>"Amigo dele"</em> &rarr; <code>Pefa Shibra</code>.</li>
-          <li><strong>Modos Verbais:</strong> O motor reconhece indicativo, subjuntivo (<em>venha</em>, <em>abençoe</em>), particípio e gerúndio.</li>
+          <li><strong>Números Automáticos:</strong> Digite numerais (ex: <code>101</code>) e ele construirá <code>She-Wa</code> usando a base matemática da língua.</li>
+          <li><strong>Regra SVO Direta:</strong> Pronomes oblíquos (ex: "me abençoar") são invertidos ("abençoar me") para manter a sintaxe.</li>
+          <li><strong>Flexão de Verbos:</strong> Identifica modos verbais e tempos no português aplicando as terminações carnenianas (<em>-em, -ra</em>).</li>
         </ul>
       </div>
     </div>
@@ -252,7 +253,89 @@
       return (texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
     }
 
-    // Geração de Tempo Verbal no Lírico Carneniano
+    // ==========================================
+    // CÉREBRO MATEMÁTICO: GERAÇÃO DE NÚMEROS
+    // ==========================================
+    
+    // Converte de algarismo (ex: "81") para Lírico Carneniano ("Shamnamē-Wa")
+    function numeroParaCarneniano(numStr) {
+      let n = parseInt(numStr, 10);
+      if (isNaN(n)) return numStr;
+      if (n === 0) return "Sur";
+
+      const unidades = ["", "Wa", "Snava", "Shomta", "Fotu", "Tiwa", "Soa", "Sashfa", "Shamna", "Psita"];
+      const dezenas = ["", "Mēta", "Snavamē", "Shomtamē", "Fotumē", "Tiwamē", "Soamē", "Sashfamē", "Shamnamē", "Psitamē"];
+
+      let partes = [];
+
+      let milhar = Math.floor(n / 1000);
+      n = n % 1000;
+      let centena = Math.floor(n / 100);
+      n = n % 100;
+      let dezena = Math.floor(n / 10);
+      let unidade = n % 10;
+
+      if (milhar > 0) {
+        if (milhar === 1) partes.push("Sho");
+        else partes.push(unidades[milhar] + "-Sho");
+      }
+
+      if (centena > 0) {
+        if (centena === 1) partes.push("She");
+        else partes.push(unidades[centena] + "-She");
+      }
+
+      if (dezena > 0) {
+        partes.push(dezenas[dezena]);
+      }
+
+      if (unidade > 0) {
+        partes.push(unidades[unidade]);
+      }
+
+      return partes.join("-");
+    }
+
+    // Engenharia Reversa: De "She-Mēta" para "110"
+    function carnenianoParaNumero(str) {
+      const map = {
+        "sur": 0, "wa": 1, "snava": 2, "shomta": 3, "fotu": 4, "tiwa": 5,
+        "soa": 6, "sashfa": 7, "shamna": 8, "psita": 9,
+        "mēta": 10, "meta": 10, "snavamē": 20, "snavame": 20, "shomtamē": 30, "shomtame": 30,
+        "fotumē": 40, "fotume": 40, "tiwamē": 50, "tiwame": 50, "soamē": 60, "soame": 60,
+        "sashfamē": 70, "sashfame": 70, "shamnamē": 80, "shamname": 80, "psitamē": 90, "psitame": 90,
+        "she": 100, "sho": 1000
+      };
+      
+      let parts = str.toLowerCase().split('-');
+      let total = 0;
+      let temp = 0;
+      let isValid = true;
+
+      for (let i = 0; i < parts.length; i++) {
+        let p = parts[i];
+        if (!(p in map)) {
+          isValid = false;
+          break;
+        }
+        let val = map[p];
+        
+        if (val === 100 || val === 1000) {
+          if (temp === 0) temp = 1;
+          total += temp * val;
+          temp = 0;
+        } else {
+          temp += val;
+        }
+      }
+      total += temp;
+      
+      return isValid ? total.toString() : null;
+    }
+
+    // ==========================================
+    // GRAMÁTICA BÁSICA & VERBOS
+    // ==========================================
     function conjugarVerbo(raiz) {
       const r = raiz.trim();
       let passado = r.endsWith('a') ? r.slice(0, -1) + 'em' : r + 'em';
@@ -261,7 +344,6 @@
       return { passado, presente, futuro };
     }
 
-    // Regras Automáticas de Plural de Português
     function gerarPluralPt(palavra) {
       const p = palavra.trim();
       if (p.endsWith('ao')) return p.slice(0, -2) + 'oes';
@@ -279,9 +361,6 @@
       return s + 'is';
     }
 
-    // ==========================================
-    // MOTOR AVANÇADO DE FLEXÃO VERBAL EM PORTUGUÊS
-    // ==========================================
     function gerarConjugacoesPt(verboNormalizado) {
       const res = { present: [verboNormalizado], past: [], future: [] };
       const v = verboNormalizado;
@@ -317,7 +396,6 @@
         return res;
       }
 
-      // Regulares (com Subjuntivo, Particípio e Gerúndio incluídos)
       if (v.endsWith('ar')) {
         const stem = v.slice(0, -2);
         res.present.push(stem+'o', stem+'as', stem+'a', stem+'amos', stem+'ais', stem+'am', stem+'e', stem+'es', stem+'emos', stem+'eis', stem+'em', stem+'ando');
@@ -381,7 +459,7 @@
 
     function reordenarSintaxeSVO(textoPt) {
       let mod = textoPt;
-      // Trata os possessivos
+      
       mod = mod.replace(/\b(o|a|os|as|um|uma)?\s*([a-zA-ZÀ-ÿ]+)\s+(dele|dela|deles|delas)\b/gi, (match, art, substantivo, posse) => {
         const pronPoss = POSSESSIVOS_MAP[normalizar(posse)] || 'Pefa';
         return `${pronPoss} ${substantivo}`;
@@ -391,7 +469,7 @@
         return `${pronPoss} ${substantivo}`;
       });
 
-      // GARANTE A ORDEM SVO DESLOCANDO OS PRONOMES OBLÍQUOS PARA O FIM DO VERBO ("me abençoar" -> "abençoar me")
+      // ORDEM SVO: Joga os pronomes oblíquos para depois da palavra (ex: "me abençoar" -> "abençoar me")
       mod = mod.replace(/\b(me|te|se|nos|vos)\s+([a-zA-ZÀ-ÿ]+)\b/gi, "$2 $1");
       
       return mod;
@@ -404,7 +482,6 @@
       const ptList = [];
       const carnList = [];
 
-      // Mapeamentos Estritos de Alta Prioridade
       const regrasBase = [
         { pt: 'o', carn: 'Pe', prioridade: 6 },
         { pt: 'a', carn: 'Te', prioridade: 6 },
@@ -423,10 +500,11 @@
         { pt: 'ti', carn: 'Ento', prioridade: 10 },
         { pt: 'ele', carn: 'Nof', prioridade: 10 },
         { pt: 'ela', carn: 'Nas', prioridade: 10 },
-        { pt: 'nos', carn: 'Anon', prioridade: 10 },
+        { pt: 'nos', carn: 'Anon', prioridade: 10 }, // Pronome Oblíquo e Sujeito
+        { pt: 'vos', carn: 'Anon', prioridade: 10 }, // Simplificando Vos para Nós (Anon) para evitar buracos
         { pt: 'eles', carn: 'Nae', prioridade: 10 },
         { pt: 'elas', carn: 'Nae', prioridade: 10 },
-        { pt: 'que', carn: 'Ke', prioridade: 9 }, // Resolve o conflito do Asha ("O que")
+        { pt: 'que', carn: 'Ke', prioridade: 9 }, 
         { pt: 'em', carn: 'En', prioridade: 7 },
         { pt: 'no', carn: 'En', prioridade: 7 },
         { pt: 'na', carn: 'En', prioridade: 7 },
@@ -441,7 +519,7 @@
       dicionario.forEach(item => {
         const sNorm = item.sNorm;
 
-        // Construção: Carneniano -> PT
+        // Carneniano -> PT
         carnList.push({ key: sNorm, target: item.traducoesArray[0] || item.traducao, len: sNorm.length, prioridade: 1 });
         if (item.plural && item.plural !== '-') {
           carnList.push({ key: item.pNorm, target: (item.traducoesArray[0] || item.traducao) + 's', len: item.pNorm.length, prioridade: 2 });
@@ -451,22 +529,18 @@
           carnList.push({ key: normalizar(item.conjugacoes.futuro), target: item.singular + ' (futuro)', len: item.conjugacoes.futuro.length, prioridade: 3 });
         }
 
-        // Construção: PT -> Carneniano
+        // PT -> Carneniano
         item.traducoesArray.forEach(tr => {
           const cleanTr = normalizar(tr.replace(/^(um|uma|o|a|os|as|de|para)\s+/g, ''));
           if (cleanTr) {
             if (item.isVerbo && item.conjugacoes) {
-              // Aplica o motor de flexão verbal de português para o Carneniano!
               const ptConjs = gerarConjugacoesPt(cleanTr);
-              
               ptConjs.present.forEach(w => ptList.push({ key: w, target: item.conjugacoes.presente, len: w.length, prioridade: 3 }));
               ptConjs.past.forEach(w => ptList.push({ key: w, target: item.conjugacoes.passado, len: w.length, prioridade: 3 }));
               ptConjs.future.forEach(w => ptList.push({ key: w, target: item.conjugacoes.futuro, len: w.length, prioridade: 3 }));
             } else {
-              // Cadastra o termo em português
               ptList.push({ key: cleanTr, target: item.singular, len: cleanTr.length, prioridade: 1 });
               
-              // Cadastra também o Plural de Português apontando para o Plural Carneniano (Ex: deuses -> Nutais)
               const ptPlural = gerarPluralPt(cleanTr);
               if (item.plural && item.plural !== '-') {
                 ptList.push({ key: ptPlural, target: item.plural, len: ptPlural.length, prioridade: 2 });
@@ -489,8 +563,8 @@
       if (!text || !text.trim()) return '';
 
       const formattedInput = direction === 'pt-to-carn' ? reordenarSintaxeSVO(text) : text;
-
       const lines = formattedInput.split('\n');
+
       const translatedLines = lines.map(line => {
         if (!line.trim()) return '';
 
@@ -508,6 +582,21 @@
             result.push(rawToken);
             i++;
             continue;
+          }
+
+          // CÉREBRO DOS NÚMEROS AQUI
+          if (direction === 'pt-to-carn' && /^\d+$/.test(rawToken)) {
+            result.push(numeroParaCarneniano(rawToken));
+            i++;
+            continue;
+          }
+          if (direction === 'carn-to-pt') {
+            let numParsed = carnenianoParaNumero(rawToken);
+            if (numParsed !== null && rawToken.includes('-')) {
+              result.push(numParsed);
+              i++;
+              continue;
+            }
           }
 
           let matched = false;
@@ -570,7 +659,7 @@
         transSourceLabel.className = "text-amber-400";
         transTargetLabel.textContent = "Lírico Carneniano";
         transTargetLabel.className = "text-stone-300";
-        translatorInput.placeholder = "Digite sua frase (ex: os deuses te abençoem)...";
+        translatorInput.placeholder = "Digite sua frase (ex: Venha me abençoar, agora)...";
       }
 
       const currentOut = translatorOutput.textContent;
