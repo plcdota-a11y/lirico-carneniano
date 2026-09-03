@@ -12,7 +12,7 @@
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Tradutor SVO Inteligente (Reconhecimento Verbal) & Dicionário • OCL</p>
+      <p class="text-stone-400 text-sm">Tradutor SVO Inteligente & Dicionário (1500+ Termos) • OCL</p>
     </header>
 
     <!-- Seletor de Abas -->
@@ -56,7 +56,7 @@
             <textarea 
               id="translator-input"
               rows="6"
-              placeholder="Digite sua frase. Os verbos flexionados (ex: somos, foram, lutei) serão convertidos automaticamente..." 
+              placeholder="Digite sua frase. Os verbos flexionados (ex: fomos, lutei, verá) serão convertidos automaticamente..." 
               class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed"
             ></textarea>
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
@@ -80,7 +80,7 @@
       </div>
 
       <div class="bg-stone-900/60 border border-stone-800/80 rounded-xl p-4 text-xs text-stone-400 space-y-2">
-        <p class="font-semibold text-amber-400">Estrutura Sintática & Flexões:</p>
+        <p class="font-semibold text-amber-400">Estrutura Sintática & Flexões Automáticas:</p>
         <ul class="list-disc list-inside space-y-1 text-stone-400">
           <li><strong>O Motor de Verbos:</strong> O sistema reconhece <em>sou, é, são</em> e converte para <code>Ina</code>; <em>fui, foi, fomos</em> converte para <code>Inem</code> (Passado).</li>
           <li><strong>Possessivo Sempre Antes:</strong> <em>"Amigo dele"</em> &rarr; <code>Pefa Shibra</code>.</li>
@@ -164,7 +164,7 @@
           <input 
             type="text" 
             id="dict-search-input"
-            placeholder="Pesquisar termo exato, plural, significado..." 
+            placeholder="Pesquisar termo exato (ex: Eu), plural, ou conjugação..." 
             class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 pl-11 text-base text-stone-100 focus:outline-none focus:border-amber-400 transition"
           >
           <svg class="w-5 h-5 text-stone-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,7 +173,7 @@
         </div>
 
         <div id="filter-box" class="hidden mt-4 pt-3 border-t border-stone-800">
-          <span class="text-xs text-stone-400 block mb-2 font-medium">Categorias:</span>
+          <span class="text-xs text-stone-400 block mb-2 font-medium">Categorias Adaptadas:</span>
           <div id="macro-filters" class="flex flex-wrap gap-2 text-xs"></div>
         </div>
       </div>
@@ -270,7 +270,7 @@
       const res = { present: [verboNormalizado], past: [], future: [] };
       const v = verboNormalizado;
 
-      // Irregulares Essenciais
+      // Irregulares Comuns
       if (v === 'ser') {
         res.present.push('sou', 'es', 'e', 'somos', 'sois', 'sao');
         res.past.push('fui', 'foste', 'foi', 'fomos', 'fostes', 'foram', 'era', 'eramos', 'eram');
@@ -426,7 +426,6 @@
       const ptList = [];
       const carnList = [];
 
-      // Regras manuais com alta prioridade para garantir "Eu" antes de variações, artigos e pronomes
       const regrasBase = [
         { pt: 'o', carn: 'Pe', prioridade: 6 },
         { pt: 'a', carn: 'Te', prioridade: 6 },
@@ -473,9 +472,7 @@
           const cleanTr = normalizar(tr.replace(/^(um|uma|o|a|os|as|de|para)\s+/g, ''));
           if (cleanTr) {
             if (item.isVerbo && item.conjugacoes) {
-              // Aplica o motor de flexão verbal de português para o Carneniano!
               const ptConjs = gerarConjugacoesPt(cleanTr);
-              
               ptConjs.present.forEach(w => ptList.push({ key: w, target: item.conjugacoes.presente, len: w.length, prioridade: 3 }));
               ptConjs.past.forEach(w => ptList.push({ key: w, target: item.conjugacoes.passado, len: w.length, prioridade: 3 }));
               ptConjs.future.forEach(w => ptList.push({ key: w, target: item.conjugacoes.futuro, len: w.length, prioridade: 3 }));
@@ -527,12 +524,10 @@
 
               const found = activeMap.find(entry => entry.key === phraseNorm);
               if (found) {
-                // Preserva maiúsculas no início da frase
                 let targetText = found.target;
                 if (phraseTokens[0] && phraseTokens[0][0] === phraseTokens[0][0].toUpperCase()) {
                   targetText = targetText.charAt(0).toUpperCase() + targetText.slice(1);
                 }
-
                 result.push(targetText);
                 i += span;
                 matched = true;
@@ -610,7 +605,7 @@
     }
 
     // ==========================================
-    // FUNÇÕES DO DICIONÁRIO
+    // BUSCA DE RELEVÂNCIA MÁXIMA & DICIONÁRIO
     // ==========================================
     function renderMacroButtons() {
       macroFilterContainer.innerHTML = '';
@@ -658,7 +653,7 @@
         if (item.isVerbo && item.conjugacoes) {
           secaoVerbal = `
             <div class="my-3 p-2.5 bg-stone-950/80 rounded-lg border border-stone-800/80">
-              <span class="text-[10px] uppercase font-bold text-amber-400/80 tracking-wider block mb-1.5">Conjugação por Tempo (Imutável no Plural)</span>
+              <span class="text-[10px] uppercase font-bold text-amber-400/80 tracking-wider block mb-1.5">Conjugação por Tempo</span>
               <div class="grid grid-cols-3 gap-1.5 text-center text-xs">
                 <div class="bg-stone-900/90 py-1 px-1.5 rounded border border-stone-800">
                   <span class="block text-[10px] text-stone-500 font-medium">Passado (-em)</span>
@@ -717,6 +712,7 @@
         let score = 0;
         if (!query) score = 1;
         else {
+          // MOTOR DE RELEVÂNCIA EXATA: "Eu" recebe 1000, "Adeus" recebe 80.
           if (dictSearchMode === 'carneniano' || dictSearchMode === 'ambos') {
             if (item.sNorm === query) score = Math.max(score, 1000);
             else if (item.pNorm === query) score = Math.max(score, 980);
@@ -734,6 +730,7 @@
         if (score > 0) pontuados.push({ item, score });
       }
 
+      // Ordena decrescente: pontuação mais alta ("Eu") aparece no topo!
       pontuados.sort((a, b) => b.score - a.score);
       renderDictCards(pontuados.map(p => p.item));
     }
@@ -753,8 +750,8 @@
       if (catId === 'todos') return true;
       const c = item.cNorm;
       if (catId === 'verbo') return c.includes('verbo');
-      if (catId === 'substantivo') return c.includes('subst');
-      if (catId === 'adjetivo') return c.includes('adj');
+      if (catId === 'substantivo') return c.includes('subst') || c.includes('substantivo');
+      if (catId === 'adjetivo') return c.includes('adj') || c.includes('adjetivo');
       if (catId === 'pronome') return c.includes('pron') || c.includes('possessiv');
       if (catId === 'conectivo') return c.includes('prep') || c.includes('conj') || c.includes('locu') || c.includes('conect');
       if (catId === 'adverbio') return c.includes('adv') || c.includes('nega');
@@ -763,7 +760,8 @@
         return c.includes('título') || c.includes('titulo') || c.includes('honor') || 
                c.includes('sufixo') || c.includes('interje') || c.includes('excla') || 
                c.includes('holop') || c.includes('artigo') || c.includes('direção') || c.includes('direcao') ||
-               (!c.includes('verbo') && !c.includes('subst') && !c.includes('adj') && !c.includes('pron') && !c.includes('numeral'));
+               c.includes('expressão') || c.includes('expressao') || c.includes('masc.') || c.includes('fem.') || c.includes('neutro') ||
+               (!c.includes('verbo') && !c.includes('subst') && !c.includes('adj') && !c.includes('pron') && !c.includes('numeral') && !c.includes('adv') && !c.includes('prep') && !c.includes('conj') && !c.includes('locu') && !c.includes('nega') && !c.includes('possessiv'));
       }
       return false;
     }
