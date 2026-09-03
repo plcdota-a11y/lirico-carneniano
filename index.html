@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tradutor & Dicionário Lírico Carneniano</title>
+  
+  <!-- Ícone do seu site! -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-stone-950 text-stone-100 min-h-screen py-10 px-4">
@@ -56,7 +60,7 @@
             <textarea 
               id="translator-input"
               rows="6"
-              placeholder="Digite sua frase. O sistema reconhece subjuntivos (abençoem), pronomes oblíquos (me, te) e plurais (deuses)..." 
+              placeholder="Digite sua frase. O sistema segue a ordem SVO e reconhece imperativos (ex: Venha me abençoar, agora)..." 
               class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed"
             ></textarea>
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
@@ -82,9 +86,9 @@
       <div class="bg-stone-900/60 border border-stone-800/80 rounded-xl p-4 text-xs text-stone-400 space-y-2">
         <p class="font-semibold text-amber-400">Estrutura Sintática & Flexões Automáticas:</p>
         <ul class="list-disc list-inside space-y-1 text-stone-400">
-          <li><strong>Modos Verbais:</strong> O motor reconhece indicativo (<em>vê</em>), subjuntivo (<em>abençoem</em>), particípio (<em>amado</em>) e gerúndio (<em>correndo</em>).</li>
+          <li><strong>Regra SVO Direta:</strong> Pronomes oblíquos do português (ex: "me abençoar") são invertidos internamente ("abençoar me") para garantir a gramática carneniana.</li>
           <li><strong>Possessivo Sempre Antes:</strong> <em>"Amigo dele"</em> &rarr; <code>Pefa Shibra</code>.</li>
-          <li><strong>Pronomes Oblíquos:</strong> <em>"te", "me", "nos"</em> são traduzidos corretamente para suas raízes (<em>Ento, Ana, Anon</em>).</li>
+          <li><strong>Modos Verbais:</strong> O motor reconhece indicativo, subjuntivo (<em>venha</em>, <em>abençoe</em>), particípio e gerúndio.</li>
         </ul>
       </div>
     </div>
@@ -257,7 +261,7 @@
       return { passado, presente, futuro };
     }
 
-    // Regras Automáticas de Plural de Português (deus -> deuses, leão -> leões)
+    // Regras Automáticas de Plural de Português
     function gerarPluralPt(palavra) {
       const p = palavra.trim();
       if (p.endsWith('ao')) return p.slice(0, -2) + 'oes';
@@ -283,46 +287,49 @@
       const v = verboNormalizado;
 
       if (v === 'ser') {
-        res.present.push('sou', 'es', 'e', 'somos', 'sois', 'sao', 'seja', 'sejamos', 'sejam', 'sendo');
-        res.past.push('fui', 'foste', 'foi', 'fomos', 'fostes', 'foram', 'era', 'eramos', 'eram', 'sido');
+        res.present.push('sou', 'es', 'e', 'somos', 'sois', 'sao', 'seja', 'sejas', 'sejamos', 'sejais', 'sejam', 'sendo');
+        res.past.push('fui', 'foste', 'foi', 'fomos', 'fostes', 'foram', 'era', 'eras', 'eramos', 'eram', 'sido');
         res.future.push('serei', 'seras', 'sera', 'seremos', 'sereis', 'serao');
         return res;
       }
       if (v === 'estar') {
-        res.present.push('estou', 'estas', 'esta', 'estamos', 'estais', 'estao', 'esteja', 'estejam', 'estando');
+        res.present.push('estou', 'estas', 'esta', 'estamos', 'estais', 'estao', 'esteja', 'estejas', 'estejam', 'estejamos', 'estando');
         res.past.push('estive', 'esteve', 'estivemos', 'estiveram', 'estava', 'estavam', 'estado');
         res.future.push('estarei', 'estara', 'estaremos', 'estarao');
         return res;
       }
       if (v === 'ir') {
-        res.present.push('vou', 'vais', 'vai', 'vamos', 'vao', 'va', 'vamos', 'vao', 'indo');
+        res.present.push('vou', 'vais', 'vai', 'vamos', 'vao', 'va', 'vas', 'vam', 'indo');
         res.past.push('fui', 'foi', 'fomos', 'foram', 'ia', 'iam', 'ido');
         res.future.push('irei', 'ira', 'iremos', 'irao');
         return res;
       }
       if (v === 'ver') {
-        res.present.push('vejo', 'ves', 've', 'vemos', 'veem', 'veja', 'vejam', 'vendo');
-        res.past.push('vi', 'viu', 'vimos', 'viram', 'via', 'viam', 'visto');
+        res.present.push('vejo', 'ves', 've', 'vemos', 'veem', 'veja', 'vejas', 'vejam', 'vejamos', 'vendo');
+        res.past.push('vi', 'viste', 'viu', 'vimos', 'viram', 'via', 'vias', 'viam', 'viamos', 'visto');
         res.future.push('verei', 'vera', 'veremos', 'verao');
         return res;
       }
+      if (v === 'vir') {
+        res.present.push('venho', 'vens', 'vem', 'vimos', 'vindes', 'venha', 'venhas', 'venham', 'venhamos', 'vindo');
+        res.past.push('vim', 'vieste', 'veio', 'viemos', 'vieram', 'vinha', 'vinhas', 'vinhamos', 'vinham');
+        res.future.push('virei', 'viras', 'vira', 'viremos', 'virao');
+        return res;
+      }
 
-      // Regulares (com Subjuntivo, Particípio e Gerúndio incluídos!)
+      // Regulares (com Subjuntivo, Particípio e Gerúndio incluídos)
       if (v.endsWith('ar')) {
         const stem = v.slice(0, -2);
-        // Ind: -o, -as, -a / Subj: -e, -es, -em / Ger: -ando
         res.present.push(stem+'o', stem+'as', stem+'a', stem+'amos', stem+'ais', stem+'am', stem+'e', stem+'es', stem+'emos', stem+'eis', stem+'em', stem+'ando');
         res.past.push(stem+'ei', stem+'aste', stem+'ou', stem+'aram', stem+'ava', stem+'avam', stem+'avamos', stem+'ado', stem+'ados', stem+'ada', stem+'adas');
         res.future.push(stem+'arei', stem+'ara', stem+'aras', stem+'aremos', stem+'arao');
       } else if (v.endsWith('er')) {
         const stem = v.slice(0, -2);
-        // Ind: -o, -es, -e / Subj: -a, -as, -am / Ger: -endo
         res.present.push(stem+'o', stem+'es', stem+'e', stem+'emos', stem+'eis', stem+'em', stem+'a', stem+'as', stem+'amos', stem+'ais', stem+'am', stem+'endo');
         res.past.push(stem+'i', stem+'este', stem+'eu', stem+'eram', stem+'ia', stem+'iam', stem+'iamos', stem+'ido', stem+'idos', stem+'ida', stem+'idas');
         res.future.push(stem+'erei', stem+'era', stem+'eras', stem+'eremos', stem+'erao');
       } else if (v.endsWith('ir')) {
         const stem = v.slice(0, -2);
-        // Ind: -o, -es, -e / Subj: -a, -as, -am / Ger: -indo
         res.present.push(stem+'o', stem+'es', stem+'e', stem+'imos', stem+'is', stem+'em', stem+'a', stem+'as', stem+'amos', stem+'ais', stem+'am', stem+'indo');
         res.past.push(stem+'i', stem+'iste', stem+'iu', stem+'iram', stem+'ia', stem+'iam', stem+'iamos', stem+'ido', stem+'idos', stem+'ida', stem+'idas');
         res.future.push(stem+'irei', stem+'ira', stem+'iras', stem+'iremos', stem+'irao');
@@ -374,6 +381,7 @@
 
     function reordenarSintaxeSVO(textoPt) {
       let mod = textoPt;
+      // Trata os possessivos
       mod = mod.replace(/\b(o|a|os|as|um|uma)?\s*([a-zA-ZÀ-ÿ]+)\s+(dele|dela|deles|delas)\b/gi, (match, art, substantivo, posse) => {
         const pronPoss = POSSESSIVOS_MAP[normalizar(posse)] || 'Pefa';
         return `${pronPoss} ${substantivo}`;
@@ -382,6 +390,10 @@
         const pronPoss = POSSESSIVOS_MAP[normalizar(posse)] || 'Pa';
         return `${pronPoss} ${substantivo}`;
       });
+
+      // GARANTE A ORDEM SVO DESLOCANDO OS PRONOMES OBLÍQUOS PARA O FIM DO VERBO ("me abençoar" -> "abençoar me")
+      mod = mod.replace(/\b(me|te|se|nos|vos)\s+([a-zA-ZÀ-ÿ]+)\b/gi, "$2 $1");
+      
       return mod;
     }
 
@@ -444,7 +456,9 @@
           const cleanTr = normalizar(tr.replace(/^(um|uma|o|a|os|as|de|para)\s+/g, ''));
           if (cleanTr) {
             if (item.isVerbo && item.conjugacoes) {
+              // Aplica o motor de flexão verbal de português para o Carneniano!
               const ptConjs = gerarConjugacoesPt(cleanTr);
+              
               ptConjs.present.forEach(w => ptList.push({ key: w, target: item.conjugacoes.presente, len: w.length, prioridade: 3 }));
               ptConjs.past.forEach(w => ptList.push({ key: w, target: item.conjugacoes.passado, len: w.length, prioridade: 3 }));
               ptConjs.future.forEach(w => ptList.push({ key: w, target: item.conjugacoes.futuro, len: w.length, prioridade: 3 }));
