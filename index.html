@@ -12,7 +12,7 @@
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Tradutor Sintático SVO & Dicionário Completo • Organização Carneniana de Línguas (OCL)</p>
+      <p class="text-stone-400 text-sm">Tradutor SVO Inteligente (Reconhecimento Verbal) & Dicionário • OCL</p>
     </header>
 
     <!-- Seletor de Abas -->
@@ -37,7 +37,6 @@
     <div id="section-translator" class="space-y-6">
       <div class="bg-stone-900 border border-stone-800 rounded-2xl shadow-xl overflow-hidden">
         
-        <!-- Barra de Controle -->
         <div class="flex items-center justify-between px-6 py-3 border-b border-stone-800 bg-stone-900/60 flex-wrap gap-2">
           <div class="flex items-center gap-3 font-semibold text-sm">
             <span id="trans-source-label" class="text-amber-400">Português</span>
@@ -52,13 +51,12 @@
           <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">Ordem Estrita: SVO</span>
         </div>
 
-        <!-- Caixas de Texto -->
         <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-stone-800">
           <div class="p-4 flex flex-col justify-between">
             <textarea 
               id="translator-input"
               rows="6"
-              placeholder="Digite sua frase (ex: O amigo dele viu o lobo / Meu amigo correu para a montanha)..." 
+              placeholder="Digite sua frase. Os verbos flexionados (ex: somos, foram, lutei) serão convertidos automaticamente..." 
               class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed"
             ></textarea>
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
@@ -71,7 +69,7 @@
             <div 
               id="translator-output"
               class="w-full min-h-[144px] text-amber-200 font-medium text-base leading-relaxed break-words whitespace-pre-wrap select-all">
-              <span class="text-stone-600 font-normal italic">A tradução sintática aparecerá aqui...</span>
+              <span class="text-stone-600 font-normal italic">A tradução inteligente aparecerá aqui...</span>
             </div>
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
               <span id="output-meta">Lírico Carneniano (SVO)</span>
@@ -81,13 +79,12 @@
         </div>
       </div>
 
-      <!-- Caixa de Regras de Ordem -->
       <div class="bg-stone-900/60 border border-stone-800/80 rounded-xl p-4 text-xs text-stone-400 space-y-2">
-        <p class="font-semibold text-amber-400">Estrutura Sintática Carneniana:</p>
+        <p class="font-semibold text-amber-400">Estrutura Sintática & Flexões:</p>
         <ul class="list-disc list-inside space-y-1 text-stone-400">
-          <li><strong>Possessivo Sempre Antes:</strong> <em>"Amigo dele"</em> &rarr; <code>Pefa Shibra</code> | <em>"Minha espada"</em> &rarr; <code>Pa Sifa</code>[cite: 1].</li>
-          <li><strong>Ordem SVO:</strong> Sujeito + Verbo + Objeto direto/indireto (ex: <code>Pe Uro naya Pe Uonsha</code>)[cite: 1].</li>
-          <li><strong>Imutabilidade Verbal:</strong> Os verbos marcam tempo (<em>-em</em> passado, <em>-ra</em> futuro), mas não mudam com o número do sujeito[cite: 1].</li>
+          <li><strong>O Motor de Verbos:</strong> O sistema reconhece <em>sou, é, são</em> e converte para <code>Ina</code>; <em>fui, foi, fomos</em> converte para <code>Inem</code> (Passado).</li>
+          <li><strong>Possessivo Sempre Antes:</strong> <em>"Amigo dele"</em> &rarr; <code>Pefa Shibra</code>.</li>
+          <li><strong>Imutabilidade Verbal:</strong> Os verbos carnenianos marcam tempo (<em>-em</em>, <em>-ra</em>), mas não mudam no plural.</li>
         </ul>
       </div>
     </div>
@@ -266,6 +263,108 @@
       return s + 'is';
     }
 
+    // ==========================================
+    // MOTOR DE FLEXÃO DE VERBOS EM PORTUGUÊS
+    // ==========================================
+    function gerarConjugacoesPt(verboNormalizado) {
+      const res = { present: [verboNormalizado], past: [], future: [] };
+      const v = verboNormalizado;
+
+      // Irregulares Essenciais
+      if (v === 'ser') {
+        res.present.push('sou', 'es', 'e', 'somos', 'sois', 'sao');
+        res.past.push('fui', 'foste', 'foi', 'fomos', 'fostes', 'foram', 'era', 'eramos', 'eram');
+        res.future.push('serei', 'seras', 'sera', 'seremos', 'sereis', 'serao');
+        return res;
+      }
+      if (v === 'estar') {
+        res.present.push('estou', 'estas', 'esta', 'estamos', 'estais', 'estao');
+        res.past.push('estive', 'estiveste', 'esteve', 'estivemos', 'estiveram', 'estava', 'estavamos', 'estavam');
+        res.future.push('estarei', 'estaras', 'estara', 'estaremos', 'estarao');
+        return res;
+      }
+      if (v === 'ter') {
+        res.present.push('tenho', 'tens', 'tem', 'temos', 'tendes');
+        res.past.push('tive', 'tiveste', 'teve', 'tivemos', 'tiveram', 'tinha', 'tinhamos', 'tinham');
+        res.future.push('terei', 'teras', 'tera', 'teremos', 'terao');
+        return res;
+      }
+      if (v === 'ir') {
+        res.present.push('vou', 'vais', 'vai', 'vamos', 'ides', 'vao');
+        res.past.push('fui', 'foste', 'foi', 'fomos', 'foram', 'ia', 'iamos', 'iam');
+        res.future.push('irei', 'iras', 'ira', 'iremos', 'irao');
+        return res;
+      }
+      if (v === 'ver') {
+        res.present.push('vejo', 'ves', 've', 'vemos', 'vedes', 'veem');
+        res.past.push('vi', 'viste', 'viu', 'vimos', 'viram', 'via', 'viamos', 'viam');
+        res.future.push('verei', 'veras', 'vera', 'veremos', 'verao');
+        return res;
+      }
+      if (v === 'vir') {
+        res.present.push('venho', 'vens', 'vem', 'vimos', 'vindes');
+        res.past.push('vim', 'vieste', 'veio', 'viemos', 'vieram', 'vinha', 'vinhamos', 'vinham');
+        res.future.push('virei', 'viras', 'vira', 'viremos', 'virao');
+        return res;
+      }
+      if (v === 'fazer') {
+        res.present.push('faco', 'fazes', 'faz', 'fazemos', 'fazeis', 'fazem');
+        res.past.push('fiz', 'fizeste', 'fez', 'fizemos', 'fizeram', 'fazia', 'faziamos', 'faziam');
+        res.future.push('farei', 'faras', 'fara', 'faremos', 'farao');
+        return res;
+      }
+      if (v === 'dizer') {
+        res.present.push('digo', 'dizes', 'diz', 'dizemos', 'dizeis', 'dizem');
+        res.past.push('disse', 'disseste', 'dissemos', 'disseram', 'dizia', 'diziamos', 'diziam');
+        res.future.push('direi', 'diras', 'dira', 'diremos', 'dirao');
+        return res;
+      }
+      if (v === 'saber') {
+        res.present.push('sei', 'sabes', 'sabe', 'sabemos', 'sabeis', 'sabem');
+        res.past.push('soube', 'soubeste', 'soubemos', 'souberam', 'sabia', 'sabiamos', 'sabiam');
+        res.future.push('saberei', 'saberas', 'sabera', 'saberemos', 'saberao');
+        return res;
+      }
+      if (v === 'poder') {
+        res.present.push('posso', 'podes', 'pode', 'podemos', 'podeis', 'podem');
+        res.past.push('pude', 'pudeste', 'pudemos', 'puderam', 'podia', 'podiamos', 'podiam');
+        res.future.push('poderei', 'poderas', 'podera', 'poderemos', 'poderao');
+        return res;
+      }
+      if (v === 'dar') {
+        res.present.push('dou', 'das', 'da', 'damos', 'dais', 'dao');
+        res.past.push('dei', 'deste', 'deu', 'demos', 'deram', 'dava', 'davamos', 'davam');
+        res.future.push('darei', 'daras', 'dara', 'daremos', 'darao');
+        return res;
+      }
+      if (v === 'querer') {
+        res.present.push('quero', 'queres', 'quer', 'queremos', 'quereis', 'querem');
+        res.past.push('quis', 'quiseste', 'quisemos', 'quiseram', 'queria', 'queriamos', 'queriam');
+        res.future.push('quererei', 'quereras', 'querera', 'quereremos', 'quererao');
+        return res;
+      }
+
+      // Regulares
+      if (v.endsWith('ar')) {
+        const stem = v.slice(0, -2);
+        res.present.push(stem+'o', stem+'as', stem+'a', stem+'amos', stem+'ais', stem+'am');
+        res.past.push(stem+'ei', stem+'aste', stem+'ou', stem+'amos', stem+'aram', stem+'ava', stem+'avam', stem+'avamos');
+        res.future.push(stem+'arei', stem+'ara', stem+'aras', stem+'aremos', stem+'arao');
+      } else if (v.endsWith('er')) {
+        const stem = v.slice(0, -2);
+        res.present.push(stem+'o', stem+'es', stem+'e', stem+'emos', stem+'eis', stem+'em');
+        res.past.push(stem+'i', stem+'este', stem+'eu', stem+'emos', stem+'eram', stem+'ia', stem+'iam', stem+'iamos');
+        res.future.push(stem+'erei', stem+'era', stem+'eras', stem+'eremos', stem+'erao');
+      } else if (v.endsWith('ir')) {
+        const stem = v.slice(0, -2);
+        res.present.push(stem+'o', stem+'es', stem+'e', stem+'imos', stem+'is', stem+'em');
+        res.past.push(stem+'i', stem+'iste', stem+'iu', stem+'imos', stem+'iram', stem+'ia', stem+'iam', stem+'iamos');
+        res.future.push(stem+'irei', stem+'ira', stem+'iras', stem+'iremos', stem+'irao');
+      }
+
+      return res;
+    }
+
     function tratarItem(raw) {
       const singular = String(raw.singular || raw.DICIONARIO || raw['PALAVRA/SINGULAR'] || raw.palavra || raw.termo || '').trim();
       const traducao = String(raw.traducao || raw.FIELD2 || raw._1 || raw['SIGNIFICADO/TRADUÇÃO'] || raw.significado || '').trim();
@@ -287,16 +386,7 @@
       const traducoesArray = traducao.split(/[\/,;()]/).map(t => normalizar(t)).filter(Boolean);
 
       return { 
-        singular, 
-        traducao, 
-        classe, 
-        plural, 
-        pronuncia, 
-        uso, 
-        ambiente, 
-        isVerbo, 
-        conjugacoes, 
-        cNorm,
+        singular, traducao, classe, plural, pronuncia, uso, ambiente, isVerbo, conjugacoes, cNorm,
         sNorm: normalizar(singular),
         tNorm: normalizar(traducao),
         pNorm: normalizar(plural),
@@ -306,47 +396,26 @@
     }
 
     // ==========================================
-    // REORGANIZAÇÃO SINTÁTICA SVO & POSSESSIVOS
+    // SVO & MAPAS DE TRADUÇÃO
     // ==========================================
     const POSSESSIVOS_MAP = {
-      'dele': 'Pefa',
-      'dela': 'Pesa',
-      'meu': 'Pa',
-      'minha': 'Pa',
-      'meus': 'Pa',
-      'minhas': 'Pa',
-      'teu': 'Peka',
-      'tua': 'Peka',
-      'teus': 'Peka',
-      'tuas': 'Peka',
-      'seu': 'Peka',
-      'sua': 'Peka',
-      'seus': 'Peka',
-      'suas': 'Peka',
-      'nosso': 'Pena',
-      'nossa': 'Pena',
-      'nossos': 'Pena',
-      'nossas': 'Pena',
-      'deles': 'Pau',
-      'delas': 'Pau'
+      'dele': 'Pefa', 'dela': 'Pesa', 'deles': 'Pau', 'delas': 'Pau',
+      'meu': 'Pa', 'minha': 'Pa', 'meus': 'Pa', 'minhas': 'Pa',
+      'teu': 'Peka', 'tua': 'Peka', 'teus': 'Peka', 'tuas': 'Peka',
+      'seu': 'Peka', 'sua': 'Peka', 'seus': 'Peka', 'suas': 'Peka',
+      'nosso': 'Pena', 'nossa': 'Pena', 'nossos': 'Pena', 'nossas': 'Pena'
     };
 
-    // Converte sintaxe de pós-posse portuguesa ("amigo dele") para pré-posse Carneniana ("Pefa Shibra")
     function reordenarSintaxeSVO(textoPt) {
       let mod = textoPt;
-
-      // Substitui "o/a amigo(a) dele(a)" por "Pefa amigo"
       mod = mod.replace(/\b(o|a|os|as|um|uma)?\s*([a-zA-ZÀ-ÿ]+)\s+(dele|dela|deles|delas)\b/gi, (match, art, substantivo, posse) => {
         const pronPoss = POSSESSIVOS_MAP[normalizar(posse)] || 'Pefa';
         return `${pronPoss} ${substantivo}`;
       });
-
-      // Substitui "meu/minha/nosso amigo" garantindo possessivo à frente
       mod = mod.replace(/\b(o|a|os|as)?\s*(meu|minha|meus|minhas|teu|tua|teus|tuas|seu|sua|nosso|nossa|nossos|nossas)\s+([a-zA-ZÀ-ÿ]+)\b/gi, (match, art, posse, substantivo) => {
         const pronPoss = POSSESSIVOS_MAP[normalizar(posse)] || 'Pa';
         return `${pronPoss} ${substantivo}`;
       });
-
       return mod;
     }
 
@@ -357,7 +426,8 @@
       const ptList = [];
       const carnList = [];
 
-      const regrasGramaticais = [
+      // Regras manuais com alta prioridade para garantir "Eu" antes de variações, artigos e pronomes
+      const regrasBase = [
         { pt: 'o', carn: 'Pe', prioridade: 6 },
         { pt: 'a', carn: 'Te', prioridade: 6 },
         { pt: 'os', carn: 'Ne', prioridade: 6 },
@@ -374,27 +444,13 @@
         { pt: 'nos', carn: 'Anon', prioridade: 10 },
         { pt: 'eles', carn: 'Nae', prioridade: 10 },
         { pt: 'elas', carn: 'Nae', prioridade: 10 },
-        { pt: 'meu', carn: 'Pa', prioridade: 9 },
-        { pt: 'minha', carn: 'Pa', prioridade: 9 },
-        { pt: 'teu', carn: 'Peka', prioridade: 9 },
-        { pt: 'tua', carn: 'Peka', prioridade: 9 },
-        { pt: 'dele', carn: 'Pefa', prioridade: 9 },
-        { pt: 'dela', carn: 'Pesa', prioridade: 9 },
-        { pt: 'nosso', carn: 'Pena', prioridade: 9 },
-        { pt: 'nossa', carn: 'Pena', prioridade: 9 },
-        { pt: 'deles', carn: 'Pau', prioridade: 9 },
-        { pt: 'delas', carn: 'Pau', prioridade: 9 },
         { pt: 'em', carn: 'En', prioridade: 7 },
         { pt: 'no', carn: 'En', prioridade: 7 },
         { pt: 'na', carn: 'En', prioridade: 7 },
-        { pt: 'para', carn: 'E', prioridade: 7 },
-        { pt: 'com', carn: 'Hena', prioridade: 7 },
-        { pt: 'e', carn: 'Au', prioridade: 7 },
-        { pt: 'mas', carn: 'Ala', prioridade: 7 },
-        { pt: 'ou', carn: 'Ea', prioridade: 7 }
+        { pt: 'para', carn: 'E', prioridade: 7 }
       ];
 
-      regrasGramaticais.forEach(r => {
+      regrasBase.forEach(r => {
         ptList.push({ key: r.pt, target: r.carn, len: r.pt.length, prioridade: r.prioridade });
         carnList.push({ key: normalizar(r.carn), target: r.pt, len: r.carn.length, prioridade: r.prioridade });
       });
@@ -416,11 +472,15 @@
         item.traducoesArray.forEach(tr => {
           const cleanTr = normalizar(tr.replace(/^(um|uma|o|a|os|as|de|para)\s+/g, ''));
           if (cleanTr) {
-            ptList.push({ key: cleanTr, target: item.singular, len: cleanTr.length, prioridade: 1 });
-            
             if (item.isVerbo && item.conjugacoes) {
-              ptList.push({ key: cleanTr + 'u', target: item.conjugacoes.passado, len: cleanTr.length + 1, prioridade: 3 });
-              ptList.push({ key: cleanTr + 'ra', target: item.conjugacoes.futuro, len: cleanTr.length + 2, prioridade: 3 });
+              // Aplica o motor de flexão verbal de português para o Carneniano!
+              const ptConjs = gerarConjugacoesPt(cleanTr);
+              
+              ptConjs.present.forEach(w => ptList.push({ key: w, target: item.conjugacoes.presente, len: w.length, prioridade: 3 }));
+              ptConjs.past.forEach(w => ptList.push({ key: w, target: item.conjugacoes.passado, len: w.length, prioridade: 3 }));
+              ptConjs.future.forEach(w => ptList.push({ key: w, target: item.conjugacoes.futuro, len: w.length, prioridade: 3 }));
+            } else {
+              ptList.push({ key: cleanTr, target: item.singular, len: cleanTr.length, prioridade: 1 });
             }
           }
         });
@@ -436,7 +496,6 @@
     function translateText(text, direction) {
       if (!text || !text.trim()) return '';
 
-      // Se for PT -> Carneniano, reestrutura para a sintaxe SVO canônica
       const formattedInput = direction === 'pt-to-carn' ? reordenarSintaxeSVO(text) : text;
 
       const lines = formattedInput.split('\n');
@@ -468,7 +527,13 @@
 
               const found = activeMap.find(entry => entry.key === phraseNorm);
               if (found) {
-                result.push(found.target);
+                // Preserva maiúsculas no início da frase
+                let targetText = found.target;
+                if (phraseTokens[0] && phraseTokens[0][0] === phraseTokens[0][0].toUpperCase()) {
+                  targetText = targetText.charAt(0).toUpperCase() + targetText.slice(1);
+                }
+
+                result.push(targetText);
                 i += span;
                 matched = true;
                 break;
@@ -493,7 +558,7 @@
       inputCharCounter.textContent = `${text.length} ${text.length === 1 ? 'caractere' : 'caracteres'}`;
 
       if (!text.trim()) {
-        translatorOutput.innerHTML = '<span class="text-stone-600 font-normal italic">A tradução sintática aparecerá aqui...</span>';
+        translatorOutput.innerHTML = '<span class="text-stone-600 font-normal italic">A tradução inteligente aparecerá aqui...</span>';
         return;
       }
 
@@ -515,7 +580,7 @@
         transSourceLabel.className = "text-amber-400";
         transTargetLabel.textContent = "Lírico Carneniano";
         transTargetLabel.className = "text-stone-300";
-        translatorInput.placeholder = "Digite sua frase em português (ex: O amigo dele viu o lobo)...";
+        translatorInput.placeholder = "Digite sua frase (ex: os reis foram para a montanha)...";
       }
 
       const currentOut = translatorOutput.textContent;
