@@ -16,7 +16,7 @@
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Tradutor por Organização Carneniana de Línguas (OCL) </p>
+      <p class="text-stone-400 text-sm">Tradutor Avançado (SVO & Numerais Automáticos) • OCL</p>
     </header>
 
     <!-- Seletor de Abas -->
@@ -256,8 +256,6 @@
     // ==========================================
     // CÉREBRO MATEMÁTICO: GERAÇÃO DE NÚMEROS
     // ==========================================
-    
-    // Converte de algarismo (ex: "81") para Lírico Carneniano ("Shamnamē-Wa")
     function numeroParaCarneniano(numStr) {
       let n = parseInt(numStr, 10);
       if (isNaN(n)) return numStr;
@@ -296,7 +294,6 @@
       return partes.join("-");
     }
 
-    // Engenharia Reversa: De "She-Mēta" para "110"
     function carnenianoParaNumero(str) {
       const map = {
         "sur": 0, "wa": 1, "snava": 2, "shomta": 3, "fotu": 4, "tiwa": 5,
@@ -396,6 +393,20 @@
         return res;
       }
 
+      // CORREÇÃO: "ler" e "rir" não podem seguir as regras de -er e -ir regulares.
+      if (v === 'ler') {
+        res.present.push('leio', 'les', 'le', 'lemos', 'ledes', 'leem', 'leia', 'leias', 'leiamos', 'leiam', 'lendo');
+        res.past.push('li', 'leste', 'leu', 'lemos', 'leram', 'lia', 'lias', 'liamos', 'liam', 'lido');
+        res.future.push('lerei', 'leras', 'lera', 'leremos', 'lerao');
+        return res;
+      }
+      if (v === 'rir') {
+        res.present.push('rio', 'ris', 'ri', 'rimos', 'rides', 'riem', 'ria', 'rias', 'riamos', 'riam', 'rindo');
+        res.past.push('ri', 'riste', 'riu', 'rimos', 'riram', 'ria', 'rias', 'riamos', 'riam', 'rido');
+        res.future.push('rirei', 'riras', 'rira', 'riremos', 'rirao');
+        return res;
+      }
+
       if (v.endsWith('ar')) {
         const stem = v.slice(0, -2);
         res.present.push(stem+'o', stem+'as', stem+'a', stem+'amos', stem+'ais', stem+'am', stem+'e', stem+'es', stem+'emos', stem+'eis', stem+'em', stem+'ando');
@@ -428,29 +439,7 @@
       const cNorm = normalizar(classe);
       const isVerbo = cNorm.includes('verbo');
       const isSubstOuAdj = cNorm.includes('subst') || cNorm.includes('adj');
-if (v === 'vir') {
-        res.present.push('venho', 'vens', 'vem', 'vimos', 'vindes', 'venha', 'venhas', 'venham', 'venhamos', 'vindo');
-        res.past.push('vim', 'vieste', 'veio', 'viemos', 'vieram', 'vinha', 'vinhas', 'vinhamos', 'vinham');
-        res.future.push('virei', 'viras', 'vira', 'viremos', 'virao');
-        return res;
-      }
-      
-      // NOVA CORREÇÃO: Impedir que "Ler" gere "la" e "Rir" gere "ra" por acidente
-      if (v === 'ler') {
-        res.present.push('leio', 'les', 'le', 'lemos', 'ledes', 'leem', 'leia', 'leias', 'leiamos', 'leiam', 'lendo');
-        res.past.push('li', 'leste', 'leu', 'lemos', 'leram', 'lia', 'lias', 'liamos', 'liam', 'lido');
-        res.future.push('lerei', 'leras', 'lera', 'leremos', 'lerao');
-        return res;
-      }
-      if (v === 'rir') {
-        res.present.push('rio', 'ris', 'ri', 'rimos', 'rides', 'riem', 'ria', 'rias', 'riamos', 'riam', 'rindo');
-        res.past.push('ri', 'riste', 'riu', 'rimos', 'riram', 'ria', 'rias', 'riamos', 'riam', 'rido');
-        res.future.push('rirei', 'riras', 'rira', 'riremos', 'rirao');
-        return res;
-      }
 
-      // Regulares (com Subjuntivo, Particípio e Gerúndio incluídos)
-      if (v.endsWith('ar')) {
       if (isSubstOuAdj && (!plural || plural === '-' || plural.toLowerCase() === 'null')) {
         plural = gerarPluralPadrao(singular);
       }
@@ -522,8 +511,8 @@ if (v === 'vir') {
         { pt: 'ti', carn: 'Ento', prioridade: 10 },
         { pt: 'ele', carn: 'Nof', prioridade: 10 },
         { pt: 'ela', carn: 'Nas', prioridade: 10 },
-        { pt: 'nos', carn: 'Anon', prioridade: 10 }, // Pronome Oblíquo e Sujeito
-        { pt: 'vos', carn: 'Anon', prioridade: 10 }, // Simplificando Vos para Nós (Anon) para evitar buracos
+        { pt: 'nos', carn: 'Anon', prioridade: 10 },
+        { pt: 'vos', carn: 'Anon', prioridade: 10 },
         { pt: 'eles', carn: 'Nae', prioridade: 10 },
         { pt: 'elas', carn: 'Nae', prioridade: 10 },
         { pt: 'que', carn: 'Ke', prioridade: 9 }, 
@@ -606,7 +595,6 @@ if (v === 'vir') {
             continue;
           }
 
-          // CÉREBRO DOS NÚMEROS AQUI
           if (direction === 'pt-to-carn' && /^\d+$/.test(rawToken)) {
             result.push(numeroParaCarneniano(rawToken));
             i++;
