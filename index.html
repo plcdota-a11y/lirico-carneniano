@@ -15,7 +15,7 @@
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Tradutor SVO, Numerais & Motor Fonético (1500+ Termos) • Organização Carneniana de Línguas (OCL)</p>
+      <p class="text-stone-400 text-sm">Tradutor SVO, Numerais & Motor Fonético (1500+ Termos) • OCL</p>
     </header>
 
     <!-- Seletor de Abas -->
@@ -261,7 +261,7 @@
           indexTonica = 0; 
         }
 
-        // Hifenização Simples Carneniana (V-CV ou hiatos específicos)
+        // Hifenização Simples Carneniana
         let silabada = p.replace(/([aeiouāēōūäëöàèìòùáéíóúy])([bcdfghjklmnpqrstvwxz]+)([aeiouāēōūäëöàèìòùáéíóúy])/gi, '$1-$2$3');
         silabada = silabada.replace(/([iu])([aeiouāēōūäëöàèìòùáéíóúy])/gi, '$1-$2'); // Ex: Si-u
         
@@ -273,7 +273,7 @@
         
         let silabaAlvo = silabas[targetIndex];
         
-        // Aplica o acento agudo se a sílaba ainda não tiver um diacrítico especial (macron/trema)
+        // Aplica o acento agudo se a sílaba ainda não tiver um diacrítico especial
         if (!/[āēōūäëöàèìòùáéíóú]/.test(silabaAlvo)) {
             silabas[targetIndex] = silabaAlvo.replace(/([aeiou])/i, (match) => {
                 const mapa = {'a':'á', 'e':'é', 'i':'í', 'o':'ó', 'u':'ú', 'A':'Á', 'E':'É', 'I':'Í', 'O':'Ó', 'U':'Ú'};
@@ -497,26 +497,18 @@
     // ==========================================
     // SVO & MAPAS DE TRADUÇÃO
     // ==========================================
-    const POSSESSIVOS_MAP = {
-      'dele': 'Pefa', 'dela': 'Pesa', 'deles': 'Pau', 'delas': 'Pau',
-      'meu': 'Pa', 'minha': 'Pa', 'meus': 'Pa', 'minhas': 'Pa',
-      'teu': 'Peka', 'tua': 'Peka', 'teus': 'Peka', 'tuas': 'Peka',
-      'seu': 'Peka', 'sua': 'Peka', 'seus': 'Peka', 'suas': 'Peka',
-      'nosso': 'Pena', 'nossa': 'Pena', 'nossos': 'Pena', 'nossas': 'Pena'
-    };
-
     function reordenarSintaxeSVO(textoPt) {
       let mod = textoPt;
       
+      // Essa modificação mantém os possessivos em português para não causar Dupla Tradução
       mod = mod.replace(/\b(o|a|os|as|um|uma)?\s*([a-zA-ZÀ-ÿ]+)\s+(dele|dela|deles|delas)\b/gi, (match, art, substantivo, posse) => {
-        const pronPoss = POSSESSIVOS_MAP[normalizar(posse)] || 'Pefa';
-        return `${pronPoss} ${substantivo}`;
+        return `${posse} ${substantivo}`;
       });
       mod = mod.replace(/\b(o|a|os|as)?\s*(meu|minha|meus|minhas|teu|tua|teus|tuas|seu|sua|nosso|nossa|nossos|nossas)\s+([a-zA-ZÀ-ÿ]+)\b/gi, (match, art, posse, substantivo) => {
-        const pronPoss = POSSESSIVOS_MAP[normalizar(posse)] || 'Pa';
-        return `${pronPoss} ${substantivo}`;
+        return `${posse} ${substantivo}`;
       });
 
+      // ORDEM SVO: Joga os pronomes oblíquos para depois da palavra (ex: "me abençoar" -> "abençoar me")
       mod = mod.replace(/\b(me|te|se|nos|vos)\s+([a-zA-ZÀ-ÿ]+)\b/gi, "$2 $1");
       
       return mod;
@@ -555,7 +547,29 @@
         { pt: 'em', carn: 'En', prioridade: 7 },
         { pt: 'no', carn: 'En', prioridade: 7 },
         { pt: 'na', carn: 'En', prioridade: 7 },
-        { pt: 'para', carn: 'E', prioridade: 7 }
+        { pt: 'para', carn: 'E', prioridade: 7 },
+        
+        // Possessivos em Português (Protegidos contra o erro de Dupla Tradução)
+        { pt: 'meu', carn: 'Pa', prioridade: 10 },
+        { pt: 'minha', carn: 'Pa', prioridade: 10 },
+        { pt: 'meus', carn: 'Pa', prioridade: 10 },
+        { pt: 'minhas', carn: 'Pa', prioridade: 10 },
+        { pt: 'teu', carn: 'Peka', prioridade: 10 },
+        { pt: 'tua', carn: 'Peka', prioridade: 10 },
+        { pt: 'teus', carn: 'Peka', prioridade: 10 },
+        { pt: 'tuas', carn: 'Peka', prioridade: 10 },
+        { pt: 'seu', carn: 'Peka', prioridade: 10 },
+        { pt: 'sua', carn: 'Peka', prioridade: 10 },
+        { pt: 'seus', carn: 'Peka', prioridade: 10 },
+        { pt: 'suas', carn: 'Peka', prioridade: 10 },
+        { pt: 'nosso', carn: 'Pena', prioridade: 10 },
+        { pt: 'nossa', carn: 'Pena', prioridade: 10 },
+        { pt: 'nossos', carn: 'Pena', prioridade: 10 },
+        { pt: 'nossas', carn: 'Pena', prioridade: 10 },
+        { pt: 'dele', carn: 'Pefa', prioridade: 10 },
+        { pt: 'dela', carn: 'Pesa', prioridade: 10 },
+        { pt: 'deles', carn: 'Pau', prioridade: 10 },
+        { pt: 'delas', carn: 'Pau', prioridade: 10 }
       ];
 
       regrasBase.forEach(r => {
@@ -566,6 +580,7 @@
       dicionario.forEach(item => {
         const sNorm = item.sNorm;
 
+        // Carneniano -> PT
         carnList.push({ key: sNorm, target: item.traducoesArray[0] || item.traducao, len: sNorm.length, prioridade: 1 });
         if (item.plural && item.plural !== '-') {
           carnList.push({ key: item.pNorm, target: (item.traducoesArray[0] || item.traducao) + 's', len: item.pNorm.length, prioridade: 2 });
@@ -575,6 +590,7 @@
           carnList.push({ key: normalizar(item.conjugacoes.futuro), target: item.singular + ' (futuro)', len: item.conjugacoes.futuro.length, prioridade: 3 });
         }
 
+        // PT -> Carneniano
         item.traducoesArray.forEach(tr => {
           const cleanTr = normalizar(tr.replace(/^(um|uma|o|a|os|as|de|para)\s+/g, ''));
           if (cleanTr) {
@@ -696,14 +712,14 @@
         transSourceLabel.className = "text-amber-400";
         transTargetLabel.textContent = "Português";
         transTargetLabel.className = "text-stone-300";
-        translatorInput.placeholder = "Digite em Lírico Carneniano (ex: Pe Uro womem en aia)...";
+        translatorInput.placeholder = "Digite em Lírico Carneniano (ex: Pa Shibra womem en aia)...";
       } else {
         translationDirection = 'pt-to-carn';
         transSourceLabel.textContent = "Português";
         transSourceLabel.className = "text-amber-400";
         transTargetLabel.textContent = "Lírico Carneniano";
         transTargetLabel.className = "text-stone-300";
-        translatorInput.placeholder = "Digite sua frase...";
+        translatorInput.placeholder = "Digite sua frase (ex: meu pé está doendo)...";
       }
 
       const currentOut = translatorOutput.textContent;
