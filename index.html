@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tradutor & Dicionário Lírico Carneniano</title>
   
-  <!-- Ícone do seu site! -->
   <link rel="icon" type="image/png" href="favicon.png">
   
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,7 +15,7 @@
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Tradutor Avançado (SVO & Numerais Automáticos) • Organização Carneniana de Línguas (OCL)</p>
+      <p class="text-stone-400 text-sm">Tradutor SVO, Numerais & Motor Fonético (1500+ Termos) • Organização Carneniana de Línguas (OCL)</p>
     </header>
 
     <!-- Seletor de Abas -->
@@ -52,7 +51,7 @@
             </button>
             <span id="trans-target-label" class="text-stone-300">Lírico Carneniano</span>
           </div>
-          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">Motor Ativo: Gramática + Numerais</span>
+          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">Motor Ativo: SVO + Verbos</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-stone-800">
@@ -60,7 +59,7 @@
             <textarea 
               id="translator-input"
               rows="6"
-              placeholder="Digite sua frase. Experimente digitar números (ex: 81, 110, 2026) para ver a conversão matemática automática..." 
+              placeholder="Digite sua frase para traduzir..." 
               class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed"
             ></textarea>
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
@@ -82,51 +81,37 @@
           </div>
         </div>
       </div>
-
-      <!-- Dicas Rápidas Tradutor -->
-      <div class="bg-stone-900/60 border border-stone-800/80 rounded-xl p-4 text-xs text-stone-400 space-y-2">
-        <p class="font-semibold text-amber-400">O que o Motor Inteligente faz?</p>
-        <ul class="list-disc list-inside space-y-1 text-stone-400">
-          <li><strong>Números Automáticos:</strong> Digite numerais (ex: <code>101</code>) e ele construirá <code>She-Wa</code> usando a base matemática da língua.</li>
-          <li><strong>Regra SVO Direta:</strong> Pronomes oblíquos (ex: "me abençoar") são invertidos ("abençoar me") para manter a sintaxe.</li>
-          <li><strong>Flexão de Verbos:</strong> Identifica modos verbais e tempos no português aplicando as terminações carnenianas (<em>-em, -ra</em>).</li>
-        </ul>
-      </div>
     </div>
 
     <!-- ABA 2: DICIONÁRIO COMPLETO -->
     <div id="section-dictionary" class="hidden space-y-6">
+      
+      <!-- Guia Fonético -->
       <div class="bg-stone-900/90 border border-amber-500/30 rounded-2xl p-4 text-xs text-stone-300">
         <div class="flex items-center justify-between cursor-pointer" onclick="toggleSection('grammar-content', 'grammar-toggle-icon')">
           <div class="flex items-center gap-2 font-bold text-amber-400 text-sm">
-            <span>📜 Guia de Regras Gramaticais</span>
-            <span class="text-[10px] uppercase tracking-wider bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-normal">Gramática</span>
+            <span>🗣️ Guia de Pronúncia e Tonicidade</span>
+            <span class="text-[10px] uppercase tracking-wider bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-normal">Fonética</span>
           </div>
           <span id="grammar-toggle-icon" class="text-stone-400 text-base font-bold">▼</span>
         </div>
 
         <div id="grammar-content" class="hidden mt-4 pt-3 border-t border-stone-800 space-y-4">
-          <div>
-            <h4 class="text-amber-300 font-bold text-xs uppercase tracking-wider mb-1.5">1. Formação do Plural (-is) & Artigos</h4>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
-                <span class="text-amber-400 font-bold block">MASCULINO</span>
-                <span class="text-stone-400 text-[11px]">Singular: <code>Pe</code> | Plural: <code>Ne</code></span>
-                <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Pe Uro naya <span class="text-stone-500">(O Rei vê)</span></p>
-                <p class="text-amber-300 italic font-mono text-[11px]">Ne Urois naya <span class="text-stone-500">(Os Reis veem)</span></p>
-              </div>
-              <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
-                <span class="text-amber-400 font-bold block">FEMININO</span>
-                <span class="text-stone-400 text-[11px]">Singular: <code>Te</code> | Plural: <code>Ne</code></span>
-                <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Te Shēna <span class="text-stone-500">(A Árvore)</span></p>
-                <p class="text-amber-300 italic font-mono text-[11px]">Ne Shēnais <span class="text-stone-500">(As Árvores)</span></p>
-              </div>
-              <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
-                <span class="text-amber-400 font-bold block">NEUTRO</span>
-                <span class="text-stone-400 text-[11px]">Singular: <code>Ni</code> | Plural: <code>Ni</code></span>
-                <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Ni Iora <span class="text-stone-500">(O Rio)</span></p>
-                <p class="text-amber-300 italic font-mono text-[11px]">Ni Iorais <span class="text-stone-500">(Os Rios)</span></p>
-              </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
+              <span class="text-amber-400 font-bold block">🟢 Iniciais Fortes</span>
+              <span class="text-stone-400 text-[11px]">Consoantes fortes (P, S, R, TR, GE, Q). A sílaba inicial "explode".</span>
+              <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Sifa &rarr; SÍ-fa</p>
+            </div>
+            <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
+              <span class="text-amber-400 font-bold block">🔴 Finais Fortes</span>
+              <span class="text-stone-400 text-[11px]">Iniciais com vogal fechada (I, U). A palavra ganha força no final.</span>
+              <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Ujai &rarr; U-JÁI</p>
+            </div>
+            <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
+              <span class="text-amber-400 font-bold block">🟡 A Regra de Conflito</span>
+              <span class="text-stone-400 text-[11px]">Consoante forte seguida de I/U desloca a força para o final.</span>
+              <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Pura &rarr; Pu-RÁ</p>
             </div>
           </div>
         </div>
@@ -156,10 +141,10 @@
           </div>
 
           <button 
-            onclick="toggleSection('filter-box', 'filter-toggle-icon')" 
+            onclick="toggleSection('filter-box', 'filter-toggle-icon-cat')" 
             class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-stone-800 border border-stone-700 hover:border-amber-400/60 text-stone-200 transition">
             <span>🎛️ Categorias: <span id="current-filter-label" class="text-amber-400 font-bold">Todos</span></span>
-            <span id="filter-toggle-icon" class="text-[10px] text-stone-400">▼</span>
+            <span id="filter-toggle-icon-cat" class="text-[10px] text-stone-400">▼</span>
           </button>
 
           <span id="counter" class="text-xs text-stone-500 font-mono w-full sm:w-auto text-right">Carregando...</span>
@@ -251,6 +236,53 @@
 
     function normalizar(texto) {
       return (texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    }
+
+    // ==========================================
+    // MOTOR FONÉTICO E ACENTUAÇÃO AUTOMÁTICA
+    // ==========================================
+    function gerarPronunciaAutomatica(singular) {
+      if (!singular || singular === '-' || singular.includes(' ')) return singular;
+      
+      return singular.split('-').map(p => {
+        let lowerP = p.toLowerCase();
+        let indexTonica = 0; 
+        
+        // Regra 2: Finais Fortes (Vogal Fechada no Início)
+        if (lowerP.startsWith('i') || lowerP.startsWith('u')) {
+          indexTonica = 1; 
+        } 
+        // Regra de Conflito: Consoante Forte + Vogal Fechada
+        else if (/^(p|s|r|tr|ge|q)[iu]/i.test(lowerP)) {
+          indexTonica = 1; 
+        } 
+        // Regra 1: Iniciais Fortes (P, S, R, TR, GE, Q) e Padrão Carneniano
+        else {
+          indexTonica = 0; 
+        }
+
+        // Hifenização Simples Carneniana (V-CV ou hiatos específicos)
+        let silabada = p.replace(/([aeiouāēōūäëöàèìòùáéíóúy])([bcdfghjklmnpqrstvwxz]+)([aeiouāēōūäëöàèìòùáéíóúy])/gi, '$1-$2$3');
+        silabada = silabada.replace(/([iu])([aeiouāēōūäëöàèìòùáéíóúy])/gi, '$1-$2'); // Ex: Si-u
+        
+        let silabas = silabada.split('-');
+        
+        // Define a sílaba tônica alvo
+        let targetIndex = (indexTonica === 0) ? 0 : (silabas.length - 1);
+        if(targetIndex >= silabas.length) targetIndex = silabas.length - 1;
+        
+        let silabaAlvo = silabas[targetIndex];
+        
+        // Aplica o acento agudo se a sílaba ainda não tiver um diacrítico especial (macron/trema)
+        if (!/[āēōūäëöàèìòùáéíóú]/.test(silabaAlvo)) {
+            silabas[targetIndex] = silabaAlvo.replace(/([aeiou])/i, (match) => {
+                const mapa = {'a':'á', 'e':'é', 'i':'í', 'o':'ó', 'u':'ú', 'A':'Á', 'E':'É', 'I':'Í', 'O':'Ó', 'U':'Ú'};
+                return mapa[match] || match;
+            });
+        }
+        
+        return silabas.join('-');
+      }).join('-');
     }
 
     // ==========================================
@@ -393,7 +425,6 @@
         return res;
       }
 
-      // CORREÇÃO: "ler" e "rir" não podem seguir as regras de -er e -ir regulares.
       if (v === 'ler') {
         res.present.push('leio', 'les', 'le', 'lemos', 'ledes', 'leem', 'leia', 'leias', 'leiamos', 'leiam', 'lendo');
         res.past.push('li', 'leste', 'leu', 'lemos', 'leram', 'lia', 'lias', 'liamos', 'liam', 'lido');
@@ -432,7 +463,7 @@
       const traducao = String(raw.traducao || raw.FIELD2 || raw._1 || raw['SIGNIFICADO/TRADUÇÃO'] || raw.significado || '').trim();
       const classe = String(raw.classe || raw.FIELD3 || raw._3 || raw.CLASE || raw.CLASSE || '').trim();
       let plural = String(raw.plural || raw.FIELD4 || raw._5 || raw.PLURAL || '').trim();
-      const pronuncia = String(raw.pronuncia || raw.FIELD5 || raw._7 || raw.PRONÚNCIA || raw.PRONUNCIA || '').trim();
+      let pronuncia = String(raw.pronuncia || raw.FIELD5 || raw._7 || raw.PRONÚNCIA || raw.PRONUNCIA || '').trim();
       const uso = String(raw.uso || raw.FIELD6 || raw._8 || raw.USO || raw['NOTAS / ORIGEM'] || raw.NOTAS || '').trim();
       const ambiente = String(raw.ambiente || raw.FIELD7 || raw._9 || raw.AMBIENTE || '').trim();
 
@@ -443,12 +474,18 @@
       if (isSubstOuAdj && (!plural || plural === '-' || plural.toLowerCase() === 'null')) {
         plural = gerarPluralPadrao(singular);
       }
+      
+      let isAutoPronuncia = false;
+      if (!pronuncia || pronuncia === '-' || pronuncia.toLowerCase() === 'null') {
+        pronuncia = gerarPronunciaAutomatica(singular);
+        isAutoPronuncia = true;
+      }
 
       const conjugacoes = isVerbo ? conjugarVerbo(singular) : null;
       const traducoesArray = traducao.split(/[\/,;()]/).map(t => normalizar(t)).filter(Boolean);
 
       return { 
-        singular, traducao, classe, plural, pronuncia, uso, ambiente, isVerbo, conjugacoes, cNorm,
+        singular, traducao, classe, plural, pronuncia, isAutoPronuncia, uso, ambiente, isVerbo, conjugacoes, cNorm,
         sNorm: normalizar(singular),
         tNorm: normalizar(traducao),
         pNorm: normalizar(plural),
@@ -480,7 +517,6 @@
         return `${pronPoss} ${substantivo}`;
       });
 
-      // ORDEM SVO: Joga os pronomes oblíquos para depois da palavra (ex: "me abençoar" -> "abençoar me")
       mod = mod.replace(/\b(me|te|se|nos|vos)\s+([a-zA-ZÀ-ÿ]+)\b/gi, "$2 $1");
       
       return mod;
@@ -511,8 +547,8 @@
         { pt: 'ti', carn: 'Ento', prioridade: 10 },
         { pt: 'ele', carn: 'Nof', prioridade: 10 },
         { pt: 'ela', carn: 'Nas', prioridade: 10 },
-        { pt: 'nos', carn: 'Anon', prioridade: 10 },
-        { pt: 'vos', carn: 'Anon', prioridade: 10 },
+        { pt: 'nos', carn: 'Anon', prioridade: 10 }, 
+        { pt: 'vos', carn: 'Anon', prioridade: 10 }, 
         { pt: 'eles', carn: 'Nae', prioridade: 10 },
         { pt: 'elas', carn: 'Nae', prioridade: 10 },
         { pt: 'que', carn: 'Ke', prioridade: 9 }, 
@@ -530,7 +566,6 @@
       dicionario.forEach(item => {
         const sNorm = item.sNorm;
 
-        // Carneniano -> PT
         carnList.push({ key: sNorm, target: item.traducoesArray[0] || item.traducao, len: sNorm.length, prioridade: 1 });
         if (item.plural && item.plural !== '-') {
           carnList.push({ key: item.pNorm, target: (item.traducoesArray[0] || item.traducao) + 's', len: item.pNorm.length, prioridade: 2 });
@@ -540,7 +575,6 @@
           carnList.push({ key: normalizar(item.conjugacoes.futuro), target: item.singular + ' (futuro)', len: item.conjugacoes.futuro.length, prioridade: 3 });
         }
 
-        // PT -> Carneniano
         item.traducoesArray.forEach(tr => {
           const cleanTr = normalizar(tr.replace(/^(um|uma|o|a|os|as|de|para)\s+/g, ''));
           if (cleanTr) {
@@ -669,7 +703,7 @@
         transSourceLabel.className = "text-amber-400";
         transTargetLabel.textContent = "Lírico Carneniano";
         transTargetLabel.className = "text-stone-300";
-        translatorInput.placeholder = "Digite sua frase (ex: Venha me abençoar, agora)...";
+        translatorInput.placeholder = "Digite sua frase...";
       }
 
       const currentOut = translatorOutput.textContent;
@@ -739,8 +773,12 @@
         card.className = "bg-stone-900 border border-stone-800 hover:border-amber-500/40 rounded-xl p-5 transition flex flex-col justify-between";
 
         const temPronuncia = item.pronuncia && item.pronuncia.trim() !== "" && item.pronuncia !== "-" && item.pronuncia.toLowerCase() !== "null";
+        
+        // Ícone mágico para pronúncias geradas automaticamente
+        const pronunciaIcon = item.isAutoPronuncia ? ' <span title="Acentuação gerada automaticamente" class="text-[10px]">✨</span>' : '';
+        
         const tagPronuncia = temPronuncia 
-          ? `<span class="text-xs text-amber-400 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">${item.pronuncia}</span>` 
+          ? `<span class="text-xs text-amber-400 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">${item.pronuncia}${pronunciaIcon}</span>` 
           : `<span class="text-xs text-stone-600 font-mono italic">Pronúncia regular</span>`;
 
         let secaoVerbal = '';
