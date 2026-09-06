@@ -7,7 +7,6 @@
   
   <link rel="icon" type="image/png" href="favicon.png">
   
-  <!-- IMPORTAÇÃO DA SUA FONTE E CSS VERTICAL -->
   <style>
     @font-face {
       font-family: 'Carneniana';
@@ -20,17 +19,16 @@
       font-family: 'Carneniana', sans-serif;
     }
 
-    /* Regra Mágica para o Alfabeto Carneniano */
     .escrita-vertical {
-      writing-mode: vertical-lr; /* De cima para baixo, da esquerda para a direita */
-      text-orientation: upright; /* Mantém as letras em pé */
-      max-height: 300px; /* Limite de altura antes de quebrar para a próxima coluna */
+      writing-mode: vertical-lr; 
+      text-orientation: upright; 
+      max-height: 300px; 
       display: inline-flex;
       flex-wrap: wrap;
-      gap: 1.0rem; /* Espaço entre as colunas */
-      padding: 10px;
-      border-left: 4px solid #f59e0b; /* Uma linha dourada para dar estilo */
-      background-color: rgba(28, 25, 23, 0.5); /* Fundo escuro sutil */
+      gap: 1.0rem; 
+      padding: 08px;
+      border-left: 4px solid #f59e0b; 
+      background-color: rgba(28, 25, 23, 0.5); 
       border-radius: 8px;
       margin-bottom: 1rem;
     }
@@ -384,7 +382,7 @@
     }
 
     // ==========================================
-    // GRAMÁTICA BÁSICA & VERBOS
+    // GRAMÁTICA BÁSICA & VERBOS 
     // ==========================================
     function conjugarVerbo(raiz) {
       const r = raiz.trim();
@@ -427,6 +425,12 @@
         res.future.push('estarei', 'estara', 'estaremos', 'estarao');
         return res;
       }
+      if (v === 'ter') {
+        res.present.push('tenho', 'tens', 'tem', 'temos', 'tendes', 'tenham', 'tendo');
+        res.past.push('tive', 'tiveste', 'teve', 'tivemos', 'tiveram', 'tinha', 'tinhas', 'tinhamos', 'tinham', 'tido');
+        res.future.push('terei', 'teras', 'tera', 'teremos', 'terao');
+        return res;
+      }
       if (v === 'ir') {
         res.present.push('vou', 'vais', 'vai', 'vamos', 'vao', 'va', 'vas', 'vam', 'indo');
         res.past.push('fui', 'foi', 'fomos', 'foram', 'ia', 'iam', 'ido');
@@ -443,6 +447,42 @@
         res.present.push('venho', 'vens', 'vem', 'vimos', 'vindes', 'venha', 'venhas', 'venham', 'venhamos', 'vindo');
         res.past.push('vim', 'vieste', 'veio', 'viemos', 'vieram', 'vinha', 'vinhas', 'vinhamos', 'vinham');
         res.future.push('virei', 'viras', 'vira', 'viremos', 'virao');
+        return res;
+      }
+      if (v === 'fazer') {
+        res.present.push('faco', 'fazes', 'faz', 'fazemos', 'fazeis', 'fazem', 'faca', 'facas', 'facamos', 'facam', 'fazendo');
+        res.past.push('fiz', 'fizeste', 'fez', 'fizemos', 'fizeram', 'fazia', 'fazias', 'faziamos', 'faziam', 'feito');
+        res.future.push('farei', 'faras', 'fara', 'faremos', 'farao');
+        return res;
+      }
+      if (v === 'dizer') {
+        res.present.push('digo', 'dizes', 'diz', 'dizemos', 'dizeis', 'dizem', 'diga', 'digas', 'digamos', 'digam', 'dizendo');
+        res.past.push('disse', 'disseste', 'disse', 'dissemos', 'disseram', 'dizia', 'dizias', 'diziamos', 'diziam', 'dito');
+        res.future.push('direi', 'diras', 'dira', 'diremos', 'dirao');
+        return res;
+      }
+      if (v === 'saber') {
+        res.present.push('sei', 'sabes', 'sabe', 'sabemos', 'sabeis', 'sabem', 'saiba', 'saibas', 'saibamos', 'saibam', 'sabendo');
+        res.past.push('soube', 'soubeste', 'soube', 'soubemos', 'souberam', 'sabia', 'sabias', 'sabiamos', 'sabiam', 'sabido');
+        res.future.push('saberei', 'saberas', 'sabera', 'saberemos', 'saberao');
+        return res;
+      }
+      if (v === 'poder') {
+        res.present.push('posso', 'podes', 'pode', 'podemos', 'podeis', 'podem', 'possa', 'possas', 'possamos', 'possam', 'podendo');
+        res.past.push('pude', 'pudeste', 'pode', 'pudemos', 'puderam', 'podia', 'podias', 'podiamos', 'podiam', 'podido');
+        res.future.push('poderei', 'poderas', 'podera', 'poderemos', 'poderao');
+        return res;
+      }
+      if (v === 'dar') {
+        res.present.push('dou', 'das', 'da', 'damos', 'dais', 'dao', 'de', 'des', 'demos', 'deis', 'deem', 'dando');
+        res.past.push('dei', 'deste', 'deu', 'demos', 'deram', 'dava', 'davas', 'davamos', 'davam', 'dado');
+        res.future.push('darei', 'daras', 'dara', 'daremos', 'darao');
+        return res;
+      }
+      if (v === 'querer') {
+        res.present.push('quero', 'queres', 'quer', 'queremos', 'quereis', 'querem', 'queira', 'queiras', 'queiramos', 'queiram', 'querendo');
+        res.past.push('quis', 'quiseste', 'quis', 'quisemos', 'quiseram', 'queria', 'querias', 'queriamos', 'queriam', 'querido');
+        res.future.push('quererei', 'quereras', 'querera', 'quereremos', 'quererao');
         return res;
       }
 
@@ -536,6 +576,7 @@
         return `${posse} ${substantivo}`;
       });
 
+      // Essa regra joga os pronomes oblíquos para DEPOIS do verbo
       mod = mod.replace(/\b(me|te|se|nos|vos)\s+([a-zA-ZÀ-ÿ]+)\b/gi, "$2 $1");
       
       return mod;
@@ -558,19 +599,38 @@
         { pt: 'uns', carn: 'Han', prioridade: 6 },
         { pt: 'alguns', carn: 'Han', prioridade: 6 },
         { pt: 'eu', carn: 'Ana', prioridade: 10 },
-        { pt: 'mim', carn: 'Ana', prioridade: 10 },
-        { pt: 'me', carn: 'Ana', prioridade: 10 },
+        { pt: 'mim', carn: 'Ani', prioridade: 10 },
+        { pt: 'me', carn: 'Ani', prioridade: 10 },
         { pt: 'voce', carn: 'Ento', prioridade: 10 },
         { pt: 'tu', carn: 'Ento', prioridade: 10 },
-        { pt: 'te', carn: 'Ento', prioridade: 10 },
-        { pt: 'ti', carn: 'Ento', prioridade: 10 },
+        { pt: 'te', carn: 'Enti', prioridade: 10 },
+        { pt: 'ti', carn: 'Enti', prioridade: 10 },
         { pt: 'ele', carn: 'Nof', prioridade: 10 },
         { pt: 'ela', carn: 'Nas', prioridade: 10 },
         { pt: 'nos', carn: 'Anon', prioridade: 10 }, 
         { pt: 'vos', carn: 'Anon', prioridade: 10 }, 
         { pt: 'eles', carn: 'Nae', prioridade: 10 },
         { pt: 'elas', carn: 'Nae', prioridade: 10 },
+        
+        // REGRAS DE CONTEXTO ESPECÍFICO AQUI:
+        { pt: 'alem disso', carn: 'Auha', prioridade: 25 },
+        { pt: 'e tambem', carn: 'Auha', prioridade: 25 },
+        { pt: 'mais longe que', carn: 'Ehro', prioridade: 25 },
+        { pt: 'alem de', carn: 'Ehro', prioridade: 20 },
+        { pt: 'alem', carn: 'Ehro', prioridade: 15 },
+        { pt: 'como', carn: 'Hos', prioridade: 100 }, 
         { pt: 'que', carn: 'Ke', prioridade: 9 }, 
+        { pt: 'deusa', carn: 'Nuta', prioridade: 20 },
+        { pt: 'deusas', carn: 'Nutais', prioridade: 20 },
+        { pt: 'deus', carn: 'Nuta', prioridade: 20 },
+        { pt: 'deuses', carn: 'Nutais', prioridade: 20 },
+        { pt: 'as coisas', carn: 'Ni metois', prioridade: 25 },
+        { pt: 'a coisa', carn: 'Ni meta', prioridade: 25 },
+        { pt: 'coisas', carn: 'metois', prioridade: 20 },
+        { pt: 'levar', carn: 'Faia', prioridade: 15 },
+        { pt: 'levam', carn: 'Faia', prioridade: 15 },
+        { pt: 'levo', carn: 'Faia', prioridade: 15 },
+
         { pt: 'em', carn: 'En', prioridade: 7 },
         { pt: 'no', carn: 'En', prioridade: 7 },
         { pt: 'na', carn: 'En', prioridade: 7 },
@@ -733,7 +793,7 @@
       const lines = translated.split('\n');
       
       const block = document.createElement('div');
-      block.className = 'flex gap-8 overflow-x-auto pb-4'; // Container flexível para manter a romanização embaixo
+      block.className = 'flex gap-8 overflow-x-auto pb-4'; 
       
       lines.forEach(line => {
         if (line.trim() === '') return;
@@ -741,12 +801,10 @@
         const lineContainer = document.createElement('div');
         lineContainer.className = 'flex flex-col items-center shrink-0';
         
-        // Letras originais crescendo de cima para baixo
         const runes = document.createElement('div');
         runes.className = 'font-carnenian text-4xl text-amber-400 mb-2 tracking-wider escrita-vertical text-center break-all';
         runes.textContent = line;
         
-        // Romanização horizontal logo embaixo da coluna
         const roman = document.createElement('div');
         roman.className = 'text-sm text-stone-400 italic text-center w-full mt-2';
         roman.textContent = line;
@@ -773,7 +831,7 @@
         transSourceLabel.className = "text-amber-400";
         transTargetLabel.textContent = "Lírico Carneniano";
         transTargetLabel.className = "text-stone-300";
-        translatorInput.placeholder = "Digite sua frase...";
+        translatorInput.placeholder = "Digite sua frase (ex: Como uma deusa, você me ama)...";
       }
 
       if (lastTranslatedString && !lastTranslatedString.includes('aparecerá aqui')) {
@@ -841,7 +899,6 @@
         card.className = "bg-stone-900 border border-stone-800 hover:border-amber-500/40 rounded-xl p-5 transition flex flex-col justify-between";
 
         const temPronuncia = item.pronuncia && item.pronuncia.trim() !== "" && item.pronuncia !== "-" && item.pronuncia.toLowerCase() !== "null";
-        
         const pronunciaIcon = item.isAutoPronuncia ? ' <span title="Acentuação gerada automaticamente" class="text-[10px]">✨</span>' : '';
         
         const tagPronuncia = temPronuncia 
