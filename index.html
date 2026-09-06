@@ -17,9 +17,12 @@
       font-style: normal;
     }
     
-    /* Esta classe aplica a sua fonte nas palavras! */
-    .font-carnenian {
-      font-family: 'Carneniana', sans-serif;
+   /* 👇 ADICIONE ESTE BLOCO NOVO AQUI 👇 */
+    .escrita-vertical {
+      writing-mode: vertical-lr;
+      text-orientation: upright;
+      height: 250px; /* Define uma altura para a coluna descer antes de pular para o lado */
+      display: inline-block;
     }
   </style>
 
@@ -728,9 +731,8 @@
         const block = document.createElement('div');
         block.className = 'mb-4 last:mb-0';
         
-        const runes = document.createElement('div');
-        runes.className = 'font-carnenian text-4xl text-amber-400 break-words mb-1 tracking-wider';
-        runes.textContent = line;
+       const runes = document.createElement('div');
+runes.className = 'font-carnenian text-4xl text-amber-400 break-words mb-2 tracking-wider escrita-vertical';
         
         const roman = document.createElement('div');
         roman.className = 'text-sm text-stone-400 italic';
