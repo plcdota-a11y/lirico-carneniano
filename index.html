@@ -7,6 +7,22 @@
   
   <link rel="icon" type="image/png" href="favicon.png">
   
+  <!-- IMPORTAÇÃO DA SUA FONTE PERSONALIZADA -->
+  <style>
+    @font-face {
+      font-family: 'Carneniana';
+      /* ATENÇÃO: TROQUE 'NOME_DA_SUA_FONTE.ttf' PELO NOME DO SEU ARQUIVO NO GITHUB */
+      src: url('lirico-carneniano.ttf') format('truetype'); 
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    /* Esta classe aplica a sua fonte nas palavras! */
+    .font-carnenian {
+      font-family: 'Carneniana', sans-serif;
+    }
+  </style>
+
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-stone-950 text-stone-100 min-h-screen py-10 px-4">
@@ -15,7 +31,7 @@
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Tradutor SVO, Numerais & Motor Fonético • Organização Carneniana de Línguas (OCL)</p>
+      <p class="text-stone-400 text-sm">Tradutor SVO, Numerais, Motor Fonético & Alfabeto Original • Organização Carneniana de Línguas (OCL)</p>
     </header>
 
     <!-- Seletor de Abas -->
@@ -51,7 +67,7 @@
             </button>
             <span id="trans-target-label" class="text-stone-300">Lírico Carneniano</span>
           </div>
-          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">Motor Ativo: SVO + Verbos</span>
+          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">Motor Ativo: Alfabeto Original</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-stone-800">
@@ -59,7 +75,7 @@
             <textarea 
               id="translator-input"
               rows="6"
-              placeholder="Digite sua frase para traduzir..." 
+              placeholder="Digite sua frase. A tradução aparecerá com o alfabeto original carneniano e a romanização abaixo..." 
               class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed"
             ></textarea>
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
@@ -72,11 +88,11 @@
             <div 
               id="translator-output"
               class="w-full min-h-[144px] text-amber-200 font-medium text-base leading-relaxed break-words whitespace-pre-wrap select-all">
-              <span class="text-stone-600 font-normal italic">A tradução inteligente aparecerá aqui...</span>
+              <span class="text-stone-600 font-normal italic">A tradução aparecerá aqui...</span>
             </div>
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
               <span id="output-meta">Lírico Carneniano</span>
-              <button onclick="copyTranslation()" id="copy-btn" class="hover:text-amber-400 font-medium">Copiar</button>
+              <button onclick="copyTranslation()" id="copy-btn" class="hover:text-amber-400 font-medium">Copiar Romanização</button>
             </div>
           </div>
         </div>
@@ -177,6 +193,7 @@
     let dictSearchMode = 'ambos';
     let activeMacroCategory = 'todos';
     let translationDirection = 'pt-to-carn';
+    let lastTranslatedString = ''; // Salva o texto plano para copiar
 
     const translatorInput = document.getElementById('translator-input');
     const translatorOutput = document.getElementById('translator-output');
@@ -248,39 +265,30 @@
         let lowerP = p.toLowerCase();
         let indexTonica = 0; 
         
-        // Regra 2: Finais Fortes (Vogal Fechada no Início)
         if (lowerP.startsWith('i') || lowerP.startsWith('u')) {
           indexTonica = 1; 
         } 
-        // Regra de Conflito: Consoante Forte + Vogal Fechada
         else if (/^(p|s|r|tr|ge|q)[iu]/i.test(lowerP)) {
           indexTonica = 1; 
         } 
-        // Regra 1: Iniciais Fortes (P, S, R, TR, GE, Q) e Padrão Carneniano
         else {
           indexTonica = 0; 
         }
 
-        // Hifenização Simples Carneniana
         let silabada = p.replace(/([aeiouāēōūäëöàèìòùáéíóúy])([bcdfghjklmnpqrstvwxz]+)([aeiouāēōūäëöàèìòùáéíóúy])/gi, '$1-$2$3');
-        silabada = silabada.replace(/([iu])([aeiouāēōūäëöàèìòùáéíóúy])/gi, '$1-$2'); // Ex: Si-u
+        silabada = silabada.replace(/([iu])([aeiouāēōūäëöàèìòùáéíóúy])/gi, '$1-$2');
         
         let silabas = silabada.split('-');
-        
-        // Define a sílaba tônica alvo
         let targetIndex = (indexTonica === 0) ? 0 : (silabas.length - 1);
         if(targetIndex >= silabas.length) targetIndex = silabas.length - 1;
-        
         let silabaAlvo = silabas[targetIndex];
         
-        // Aplica o acento agudo se a sílaba ainda não tiver um diacrítico especial
         if (!/[āēōūäëöàèìòùáéíóú]/.test(silabaAlvo)) {
             silabas[targetIndex] = silabaAlvo.replace(/([aeiou])/i, (match) => {
                 const mapa = {'a':'á', 'e':'é', 'i':'í', 'o':'ó', 'u':'ú', 'A':'Á', 'E':'É', 'I':'Í', 'O':'Ó', 'U':'Ú'};
                 return mapa[match] || match;
             });
         }
-        
         return silabas.join('-');
       }).join('-');
     }
@@ -497,10 +505,17 @@
     // ==========================================
     // SVO & MAPAS DE TRADUÇÃO
     // ==========================================
+    const POSSESSIVOS_MAP = {
+      'dele': 'Pefa', 'dela': 'Pesa', 'deles': 'Pau', 'delas': 'Pau',
+      'meu': 'Pa', 'minha': 'Pa', 'meus': 'Pa', 'minhas': 'Pa',
+      'teu': 'Peka', 'tua': 'Peka', 'teus': 'Peka', 'tuas': 'Peka',
+      'seu': 'Peka', 'sua': 'Peka', 'seus': 'Peka', 'suas': 'Peka',
+      'nosso': 'Pena', 'nossa': 'Pena', 'nossos': 'Pena', 'nossas': 'Pena'
+    };
+
     function reordenarSintaxeSVO(textoPt) {
       let mod = textoPt;
       
-      // Essa modificação mantém os possessivos em português para não causar Dupla Tradução
       mod = mod.replace(/\b(o|a|os|as|um|uma)?\s*([a-zA-ZÀ-ÿ]+)\s+(dele|dela|deles|delas)\b/gi, (match, art, substantivo, posse) => {
         return `${posse} ${substantivo}`;
       });
@@ -508,7 +523,6 @@
         return `${posse} ${substantivo}`;
       });
 
-      // ORDEM SVO: Joga os pronomes oblíquos para depois da palavra (ex: "me abençoar" -> "abençoar me")
       mod = mod.replace(/\b(me|te|se|nos|vos)\s+([a-zA-ZÀ-ÿ]+)\b/gi, "$2 $1");
       
       return mod;
@@ -549,7 +563,6 @@
         { pt: 'na', carn: 'En', prioridade: 7 },
         { pt: 'para', carn: 'E', prioridade: 7 },
         
-        // Possessivos em Português (Protegidos contra o erro de Dupla Tradução)
         { pt: 'meu', carn: 'Pa', prioridade: 10 },
         { pt: 'minha', carn: 'Pa', prioridade: 10 },
         { pt: 'meus', carn: 'Pa', prioridade: 10 },
@@ -580,7 +593,6 @@
       dicionario.forEach(item => {
         const sNorm = item.sNorm;
 
-        // Carneniano -> PT
         carnList.push({ key: sNorm, target: item.traducoesArray[0] || item.traducao, len: sNorm.length, prioridade: 1 });
         if (item.plural && item.plural !== '-') {
           carnList.push({ key: item.pNorm, target: (item.traducoesArray[0] || item.traducao) + 's', len: item.pNorm.length, prioridade: 2 });
@@ -590,7 +602,6 @@
           carnList.push({ key: normalizar(item.conjugacoes.futuro), target: item.singular + ' (futuro)', len: item.conjugacoes.futuro.length, prioridade: 3 });
         }
 
-        // PT -> Carneniano
         item.traducoesArray.forEach(tr => {
           const cleanTr = normalizar(tr.replace(/^(um|uma|o|a|os|as|de|para)\s+/g, ''));
           if (cleanTr) {
@@ -698,11 +709,37 @@
 
       if (!text.trim()) {
         translatorOutput.innerHTML = '<span class="text-stone-600 font-normal italic">A tradução inteligente aparecerá aqui...</span>';
+        lastTranslatedString = '';
         return;
       }
 
       const translated = translateText(text, translationDirection);
-      translatorOutput.textContent = translated;
+      lastTranslatedString = translated;
+      
+      // Geração do "Efeito Japonês" (Fonte Original + Romanização)
+      translatorOutput.innerHTML = '';
+      const lines = translated.split('\n');
+      lines.forEach(line => {
+        if (line.trim() === '') {
+          translatorOutput.appendChild(document.createElement('br'));
+          return;
+        }
+        
+        const block = document.createElement('div');
+        block.className = 'mb-4 last:mb-0';
+        
+        const runes = document.createElement('div');
+        runes.className = 'font-carnenian text-4xl text-amber-400 break-words mb-1 tracking-wider';
+        runes.textContent = line;
+        
+        const roman = document.createElement('div');
+        roman.className = 'text-sm text-stone-400 italic';
+        roman.textContent = line;
+        
+        block.appendChild(runes);
+        block.appendChild(roman);
+        translatorOutput.appendChild(block);
+      });
     }
 
     function invertTranslationDirection() {
@@ -719,12 +756,11 @@
         transSourceLabel.className = "text-amber-400";
         transTargetLabel.textContent = "Lírico Carneniano";
         transTargetLabel.className = "text-stone-300";
-        translatorInput.placeholder = "Digite sua frase (ex: meu pé está doendo)...";
+        translatorInput.placeholder = "Digite sua frase...";
       }
 
-      const currentOut = translatorOutput.textContent;
-      if (currentOut && !currentOut.includes('aparecerá aqui')) {
-        translatorInput.value = currentOut;
+      if (lastTranslatedString && !lastTranslatedString.includes('aparecerá aqui')) {
+        translatorInput.value = lastTranslatedString;
       }
       handleTranslatorInput();
     }
@@ -735,14 +771,13 @@
     }
 
     function copyTranslation() {
-      const text = translatorOutput.textContent;
-      if (!text || text.includes('aparecerá aqui')) return;
+      if (!lastTranslatedString || lastTranslatedString.includes('aparecerá aqui')) return;
 
-      navigator.clipboard.writeText(text).then(() => {
+      navigator.clipboard.writeText(lastTranslatedString).then(() => {
         copyBtn.textContent = 'Copiado!';
         copyBtn.className = 'text-amber-400 font-bold';
         setTimeout(() => {
-          copyBtn.textContent = 'Copiar';
+          copyBtn.textContent = 'Copiar Romanização';
           copyBtn.className = 'hover:text-amber-400 font-medium';
         }, 2000);
       });
@@ -790,7 +825,6 @@
 
         const temPronuncia = item.pronuncia && item.pronuncia.trim() !== "" && item.pronuncia !== "-" && item.pronuncia.toLowerCase() !== "null";
         
-        // Ícone mágico para pronúncias geradas automaticamente
         const pronunciaIcon = item.isAutoPronuncia ? ' <span title="Acentuação gerada automaticamente" class="text-[10px]">✨</span>' : '';
         
         const tagPronuncia = temPronuncia 
@@ -831,7 +865,11 @@
               ${tagPronuncia}
             </div>
             
-            <h2 class="text-2xl font-bold text-stone-100 mb-1">${item.singular}</h2>
+            <div class="mb-3 mt-1">
+              <h2 class="font-carnenian text-4xl text-amber-400 tracking-wide">${item.singular}</h2>
+              <h3 class="text-xl font-bold text-stone-100 mt-1">${item.singular}</h3>
+            </div>
+
             <p class="text-amber-200/90 font-medium text-base mb-2">${item.traducao && item.traducao.toLowerCase() !== 'null' ? item.traducao : '—'}</p>
 
             ${secaoVerbal}
