@@ -7,22 +7,32 @@
   
   <link rel="icon" type="image/png" href="favicon.png">
   
-  <!-- IMPORTAÇÃO DA SUA FONTE PERSONALIZADA -->
+  <!-- IMPORTAÇÃO DA SUA FONTE E CSS VERTICAL -->
   <style>
     @font-face {
       font-family: 'Carneniana';
-      /* ATENÇÃO: TROQUE 'NOME_DA_SUA_FONTE.ttf' PELO NOME DO SEU ARQUIVO NO GITHUB */
       src: url('lirico-carneniano.ttf') format('truetype'); 
       font-weight: normal;
       font-style: normal;
     }
     
-   /* 👇 ADICIONE ESTE BLOCO NOVO AQUI 👇 */
+    .font-carnenian {
+      font-family: 'Carneniana', sans-serif;
+    }
+
+    /* Regra Mágica para o Alfabeto Carneniano */
     .escrita-vertical {
-      writing-mode: vertical-lr;
-      text-orientation: upright;
-      height: 250px; /* Define uma altura para a coluna descer antes de pular para o lado */
-      display: inline-block;
+      writing-mode: vertical-lr; /* De cima para baixo, da esquerda para a direita */
+      text-orientation: upright; /* Mantém as letras em pé */
+      max-height: 350px; /* Limite de altura antes de quebrar para a próxima coluna */
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 1.5rem; /* Espaço entre as colunas */
+      padding: 10px;
+      border-left: 4px solid #f59e0b; /* Uma linha dourada para dar estilo */
+      background-color: rgba(28, 25, 23, 0.5); /* Fundo escuro sutil */
+      border-radius: 8px;
+      margin-bottom: 1rem;
     }
   </style>
 
@@ -33,8 +43,8 @@
   <div class="max-w-4xl mx-auto">
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
-      <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Tradutor SVO, Numerais, Motor Fonético & Alfabeto Original • Organização Carneniana de Línguas (OCL)</p>
+      <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2 font-carnenian">Lírico Carneniano</h1>
+      <p class="text-stone-400 text-sm">Tradutor SVO, Numerais, Motor Fonético & Alfabeto Original • OCL</p>
     </header>
 
     <!-- Seletor de Abas -->
@@ -70,15 +80,15 @@
             </button>
             <span id="trans-target-label" class="text-stone-300">Lírico Carneniano</span>
           </div>
-          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">Motor Ativo: Alfabeto Original</span>
+          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">Motor Ativo: Alfabeto Vertical Original</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-stone-800">
           <div class="p-4 flex flex-col justify-between">
             <textarea 
               id="translator-input"
-              rows="6"
-              placeholder="Digite sua frase. A tradução aparecerá com o alfabeto original carneniano e a romanização abaixo..." 
+              rows="8"
+              placeholder="Digite sua frase. A tradução aparecerá com o alfabeto vertical carneniano e a romanização abaixo..." 
               class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed"
             ></textarea>
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
@@ -90,7 +100,7 @@
           <div class="p-4 bg-stone-950/40 flex flex-col justify-between">
             <div 
               id="translator-output"
-              class="w-full min-h-[144px] text-amber-200 font-medium text-base leading-relaxed break-words whitespace-pre-wrap select-all">
+              class="w-full min-h-[192px] text-amber-200 font-medium text-base leading-relaxed select-all">
               <span class="text-stone-600 font-normal italic">A tradução aparecerá aqui...</span>
             </div>
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
@@ -196,7 +206,7 @@
     let dictSearchMode = 'ambos';
     let activeMacroCategory = 'todos';
     let translationDirection = 'pt-to-carn';
-    let lastTranslatedString = ''; // Salva o texto plano para copiar
+    let lastTranslatedString = ''; 
 
     const translatorInput = document.getElementById('translator-input');
     const translatorOutput = document.getElementById('translator-output');
@@ -711,7 +721,7 @@
       inputCharCounter.textContent = `${text.length} ${text.length === 1 ? 'caractere' : 'caracteres'}`;
 
       if (!text.trim()) {
-        translatorOutput.innerHTML = '<span class="text-stone-600 font-normal italic">A tradução inteligente aparecerá aqui...</span>';
+        translatorOutput.innerHTML = '<span class="text-stone-600 font-normal italic">A tradução aparecerá aqui...</span>';
         lastTranslatedString = '';
         return;
       }
@@ -719,29 +729,34 @@
       const translated = translateText(text, translationDirection);
       lastTranslatedString = translated;
       
-      // Geração do "Efeito Japonês" (Fonte Original + Romanização)
       translatorOutput.innerHTML = '';
       const lines = translated.split('\n');
+      
+      const block = document.createElement('div');
+      block.className = 'flex gap-8 overflow-x-auto pb-4'; // Container flexível para manter a romanização embaixo
+      
       lines.forEach(line => {
-        if (line.trim() === '') {
-          translatorOutput.appendChild(document.createElement('br'));
-          return;
-        }
+        if (line.trim() === '') return;
         
-        const block = document.createElement('div');
-        block.className = 'mb-4 last:mb-0';
+        const lineContainer = document.createElement('div');
+        lineContainer.className = 'flex flex-col items-center shrink-0';
         
-        const runes = document.createElement('div'); 
-        runes.className = 'font-carnenian text-4xl text-amber-400 break-words mb-2 tracking-wider escrita-vertical';
+        // Letras originais crescendo de cima para baixo
+        const runes = document.createElement('div');
+        runes.className = 'font-carnenian text-4xl text-amber-400 mb-2 tracking-wider escrita-vertical text-center break-all';
+        runes.textContent = line;
         
+        // Romanização horizontal logo embaixo da coluna
         const roman = document.createElement('div');
-        roman.className = 'text-sm text-stone-400 italic';
+        roman.className = 'text-sm text-stone-400 italic text-center w-full mt-2';
         roman.textContent = line;
         
-        block.appendChild(runes);
-        block.appendChild(roman);
-        translatorOutput.appendChild(block);
+        lineContainer.appendChild(runes);
+        lineContainer.appendChild(roman);
+        block.appendChild(lineContainer);
       });
+      
+      translatorOutput.appendChild(block);
     }
 
     function invertTranslationDirection() {
