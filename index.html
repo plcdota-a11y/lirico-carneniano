@@ -19,18 +19,44 @@
       font-family: 'Carneniana', sans-serif;
     }
 
+    /* Estilização da Escrita Vertical */
     .escrita-vertical {
       writing-mode: vertical-lr; 
       text-orientation: upright; 
-      max-height: 300px; 
+      max-height: 350px; 
       display: inline-flex;
       flex-wrap: wrap;
-      gap: 1.0rem; 
-      padding: 08px;
+      gap: 1.5rem; 
+      padding: 10px;
       border-left: 4px solid #f59e0b; 
       background-color: rgba(28, 25, 23, 0.5); 
       border-radius: 8px;
       margin-bottom: 1rem;
+    }
+
+    /* 🚀 Melhoria de Design: Scrollbar Personalizada para o Tema Escuro */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px; /* Para a rolagem horizontal da escrita vertical */
+    }
+    ::-webkit-scrollbar-track {
+      background: #1c1917; /* stone-900 */
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d97706; /* amber-600 */
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f59e0b; /* amber-500 */
+    }
+    
+    /* Esconde a scrollbar na caixa de texto auto-expansível para ficar limpo */
+    textarea {
+      scrollbar-width: none;
+    }
+    textarea::-webkit-scrollbar {
+      display: none;
     }
   </style>
 
@@ -47,7 +73,7 @@
 
     <!-- Seletor de Abas -->
     <div class="flex justify-center mb-8">
-      <div class="inline-flex bg-stone-900 border border-stone-800 p-1 rounded-xl">
+      <div class="inline-flex bg-stone-900 border border-stone-800 p-1 rounded-xl shadow-lg">
         <button 
           id="tab-btn-translator" 
           onclick="switchTab('translator')" 
@@ -65,45 +91,47 @@
 
     <!-- ABA 1: TRADUTOR -->
     <div id="section-translator" class="space-y-6">
-      <div class="bg-stone-900 border border-stone-800 rounded-2xl shadow-xl overflow-hidden">
+      <div class="bg-stone-900 border border-stone-800 rounded-2xl shadow-xl overflow-hidden transition-all">
         
         <div class="flex items-center justify-between px-6 py-3 border-b border-stone-800 bg-stone-900/60 flex-wrap gap-2">
           <div class="flex items-center gap-3 font-semibold text-sm">
-            <span id="trans-source-label" class="text-amber-400">Português</span>
+            <span id="trans-source-label" class="text-amber-400 transition-colors">Português</span>
             <button 
               onclick="invertTranslationDirection()" 
               title="Inverter direção" 
-              class="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 transition">
+              class="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 hover:text-amber-400 text-stone-300 transition-all duration-300 ease-in-out transform hover:scale-110">
               ⇄
             </button>
-            <span id="trans-target-label" class="text-stone-300">Lírico Carneniano</span>
+            <span id="trans-target-label" class="text-stone-300 transition-colors">Lírico Carneniano</span>
           </div>
-          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">Motor Ativo: Alfabeto Vertical Original</span>
+          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded shadow-sm">Motor Ativo: Alfabeto Vertical</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-stone-800">
-          <div class="p-4 flex flex-col justify-between">
+          <div class="p-4 flex flex-col justify-between bg-stone-950/20">
+            <!-- 📝 Melhoria UX: Textarea que cresce automaticamente (oninput="autoResize(this)") -->
             <textarea 
               id="translator-input"
-              rows="8"
+              rows="6"
+              oninput="autoResize(this)"
               placeholder="Digite sua frase. A tradução aparecerá com o alfabeto vertical carneniano e a romanização abaixo..." 
-              class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed"
+              class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed transition-all"
             ></textarea>
-            <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
+            <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500 mt-2">
               <span id="input-char-counter">0 caracteres</span>
-              <button onclick="clearTranslatorInput()" class="hover:text-amber-400">Limpar</button>
+              <button onclick="clearTranslatorInput()" class="hover:text-amber-400 transition-colors">Limpar</button>
             </div>
           </div>
 
-          <div class="p-4 bg-stone-950/40 flex flex-col justify-between">
+          <div class="p-4 bg-stone-950/50 flex flex-col justify-between">
             <div 
               id="translator-output"
-              class="w-full min-h-[192px] text-amber-200 font-medium text-base leading-relaxed select-all">
-              <span class="text-stone-600 font-normal italic">A tradução aparecerá aqui...</span>
+              class="w-full min-h-[160px] text-amber-200 font-medium text-base leading-relaxed select-all">
+              <span class="text-stone-600 font-normal italic flex items-center h-full justify-center opacity-50">A tradução aparecerá aqui...</span>
             </div>
-            <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500">
+            <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500 mt-2">
               <span id="output-meta">Lírico Carneniano</span>
-              <button onclick="copyTranslation()" id="copy-btn" class="hover:text-amber-400 font-medium">Copiar Romanização</button>
+              <button onclick="copyTranslation()" id="copy-btn" class="hover:text-amber-400 font-medium transition-colors">Copiar Romanização</button>
             </div>
           </div>
         </div>
@@ -114,31 +142,31 @@
     <div id="section-dictionary" class="hidden space-y-6">
       
       <!-- Guia Fonético -->
-      <div class="bg-stone-900/90 border border-amber-500/30 rounded-2xl p-4 text-xs text-stone-300">
-        <div class="flex items-center justify-between cursor-pointer" onclick="toggleSection('grammar-content', 'grammar-toggle-icon')">
-          <div class="flex items-center gap-2 font-bold text-amber-400 text-sm">
+      <div class="bg-stone-900/90 border border-amber-500/30 rounded-2xl p-4 text-xs text-stone-300 shadow-md">
+        <div class="flex items-center justify-between cursor-pointer group" onclick="toggleSection('grammar-content', 'grammar-toggle-icon')">
+          <div class="flex items-center gap-2 font-bold text-amber-400 text-sm group-hover:text-amber-300 transition-colors">
             <span>🗣️ Guia de Pronúncia e Tonicidade</span>
-            <span class="text-[10px] uppercase tracking-wider bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-normal">Fonética</span>
+            <span class="text-[10px] uppercase tracking-wider bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-normal shadow-sm">Fonética</span>
           </div>
-          <span id="grammar-toggle-icon" class="text-stone-400 text-base font-bold">▼</span>
+          <span id="grammar-toggle-icon" class="text-stone-400 text-base font-bold transition-transform duration-300">▼</span>
         </div>
 
         <div id="grammar-content" class="hidden mt-4 pt-3 border-t border-stone-800 space-y-4">
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
-              <span class="text-amber-400 font-bold block">🟢 Iniciais Fortes</span>
-              <span class="text-stone-400 text-[11px]">Consoantes fortes (P, S, R, TR, GE, Q). A sílaba inicial "explode".</span>
-              <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Sifa &rarr; SÍ-fa</p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="bg-stone-950 p-3 rounded-lg border border-stone-800 shadow-inner">
+              <span class="text-amber-400 font-bold block mb-1">🟢 Iniciais Fortes</span>
+              <span class="text-stone-400 text-[11px] leading-relaxed">Consoantes fortes (P, S, R, TR, GE, Q). A sílaba inicial "explode".</span>
+              <p class="mt-2 text-stone-200 italic font-mono text-[11px] bg-stone-900 p-1 rounded text-center">Sifa &rarr; SÍ-fa</p>
             </div>
-            <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
-              <span class="text-amber-400 font-bold block">🔴 Finais Fortes</span>
-              <span class="text-stone-400 text-[11px]">Iniciais com vogal fechada (I, U). A palavra ganha força no final.</span>
-              <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Ujai &rarr; U-JÁI</p>
+            <div class="bg-stone-950 p-3 rounded-lg border border-stone-800 shadow-inner">
+              <span class="text-amber-400 font-bold block mb-1">🔴 Finais Fortes</span>
+              <span class="text-stone-400 text-[11px] leading-relaxed">Iniciais com vogal fechada (I, U). A palavra ganha força no final.</span>
+              <p class="mt-2 text-stone-200 italic font-mono text-[11px] bg-stone-900 p-1 rounded text-center">Ujai &rarr; U-JÁI</p>
             </div>
-            <div class="bg-stone-950 p-2.5 rounded-lg border border-stone-800">
-              <span class="text-amber-400 font-bold block">🟡 A Regra de Conflito</span>
-              <span class="text-stone-400 text-[11px]">Consoante forte seguida de I/U desloca a força para o final.</span>
-              <p class="mt-1 text-stone-200 italic font-mono text-[11px]">Pura &rarr; Pu-RÁ</p>
+            <div class="bg-stone-950 p-3 rounded-lg border border-stone-800 shadow-inner">
+              <span class="text-amber-400 font-bold block mb-1">🟡 A Regra de Conflito</span>
+              <span class="text-stone-400 text-[11px] leading-relaxed">Consoante forte seguida de I/U desloca a força para o final.</span>
+              <p class="mt-2 text-stone-200 italic font-mono text-[11px] bg-stone-900 p-1 rounded text-center">Pura &rarr; Pu-RÁ</p>
             </div>
           </div>
         </div>
@@ -147,44 +175,33 @@
       <div class="bg-stone-900 border border-stone-800 rounded-2xl p-4 shadow-xl">
         <div class="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-stone-800 flex-wrap">
           <div class="flex items-center gap-2">
-            <button 
-              id="btn-dict-both" 
-              onclick="setDictSearchMode('ambos')" 
-              class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition">
+            <button id="btn-dict-both" onclick="setDictSearchMode('ambos')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition">
               Busca Total
             </button>
-            <button 
-              id="btn-dict-carnenian" 
-              onclick="setDictSearchMode('carneniano')" 
-              class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
+            <button id="btn-dict-carnenian" onclick="setDictSearchMode('carneniano')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
               Carneniano → PT
             </button>
-            <button 
-              id="btn-dict-pt" 
-              onclick="setDictSearchMode('portugues')" 
-              class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
+            <button id="btn-dict-pt" onclick="setDictSearchMode('portugues')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
               PT → Carneniano
             </button>
           </div>
 
-          <button 
-            onclick="toggleSection('filter-box', 'filter-toggle-icon-cat')" 
-            class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-stone-800 border border-stone-700 hover:border-amber-400/60 text-stone-200 transition">
+          <button onclick="toggleSection('filter-box', 'filter-toggle-icon-cat')" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-stone-800 border border-stone-700 hover:border-amber-400/60 text-stone-200 transition">
             <span>🎛️ Categorias: <span id="current-filter-label" class="text-amber-400 font-bold">Todos</span></span>
-            <span id="filter-toggle-icon-cat" class="text-[10px] text-stone-400">▼</span>
+            <span id="filter-toggle-icon-cat" class="text-[10px] text-stone-400 transition-transform duration-300">▼</span>
           </button>
 
           <span id="counter" class="text-xs text-stone-500 font-mono w-full sm:w-auto text-right">Carregando...</span>
         </div>
 
-        <div class="relative">
+        <div class="relative group">
           <input 
             type="text" 
             id="dict-search-input"
             placeholder="Pesquisar termo exato (ex: Eu), plural, ou conjugação..." 
-            class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 pl-11 text-base text-stone-100 focus:outline-none focus:border-amber-400 transition"
+            class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 pl-11 text-base text-stone-100 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner"
           >
-          <svg class="w-5 h-5 text-stone-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 text-stone-500 absolute left-3.5 top-3.5 group-focus-within:text-amber-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
         </div>
@@ -205,6 +222,7 @@
     let activeMacroCategory = 'todos';
     let translationDirection = 'pt-to-carn';
     let lastTranslatedString = ''; 
+    let debounceTimer; // Usado para otimização de performance no Dicionário
 
     const translatorInput = document.getElementById('translator-input');
     const translatorOutput = document.getElementById('translator-output');
@@ -231,6 +249,12 @@
       { id: 'outros', label: 'Títulos, Expressões & Outros' }
     ];
 
+    // UX: Auto expandir a caixa de texto
+    function autoResize(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
     function switchTab(tab) {
       const secTranslator = document.getElementById('section-translator');
       const secDictionary = document.getElementById('section-dictionary');
@@ -240,12 +264,12 @@
       if (tab === 'translator') {
         secTranslator.classList.remove('hidden');
         secDictionary.classList.add('hidden');
-        btnTranslator.className = "px-5 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
+        btnTranslator.className = "px-5 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-stone-950 transition shadow-md";
         btnDictionary.className = "px-5 py-2 text-sm font-semibold rounded-lg text-stone-400 hover:text-stone-200 transition";
       } else {
         secTranslator.classList.add('hidden');
         secDictionary.classList.remove('hidden');
-        btnDictionary.className = "px-5 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
+        btnDictionary.className = "px-5 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-stone-950 transition shadow-md";
         btnTranslator.className = "px-5 py-2 text-sm font-semibold rounded-lg text-stone-400 hover:text-stone-200 transition";
       }
     }
@@ -255,10 +279,10 @@
       const icon = document.getElementById(iconId);
       if (content.classList.contains('hidden')) {
         content.classList.remove('hidden');
-        if (icon) icon.textContent = '▲';
+        if (icon) icon.style.transform = 'rotate(180deg)';
       } else {
         content.classList.add('hidden');
-        if (icon) icon.textContent = '▼';
+        if (icon) icon.style.transform = 'rotate(0deg)';
       }
     }
 
@@ -576,7 +600,7 @@
         return `${posse} ${substantivo}`;
       });
 
-      // Essa regra joga os pronomes oblíquos para DEPOIS do verbo
+      // Proteção contra pontuação encostada: inverte pronomes garantindo espaço correto
       mod = mod.replace(/\b(me|te|se|nos|vos)\s+([a-zA-ZÀ-ÿ]+)\b/gi, "$2 $1");
       
       return mod;
@@ -612,7 +636,6 @@
         { pt: 'eles', carn: 'Nae', prioridade: 10 },
         { pt: 'elas', carn: 'Nae', prioridade: 10 },
         
-        // REGRAS DE CONTEXTO ESPECÍFICO AQUI:
         { pt: 'alem disso', carn: 'Auha', prioridade: 25 },
         { pt: 'e tambem', carn: 'Auha', prioridade: 25 },
         { pt: 'mais longe que', carn: 'Ehro', prioridade: 25 },
@@ -781,7 +804,7 @@
       inputCharCounter.textContent = `${text.length} ${text.length === 1 ? 'caractere' : 'caracteres'}`;
 
       if (!text.trim()) {
-        translatorOutput.innerHTML = '<span class="text-stone-600 font-normal italic">A tradução aparecerá aqui...</span>';
+        translatorOutput.innerHTML = '<span class="text-stone-600 font-normal italic flex items-center h-full justify-center opacity-50">A tradução aparecerá aqui...</span>';
         lastTranslatedString = '';
         return;
       }
@@ -799,14 +822,14 @@
         if (line.trim() === '') return;
         
         const lineContainer = document.createElement('div');
-        lineContainer.className = 'flex flex-col items-center shrink-0';
+        lineContainer.className = 'flex flex-col items-center shrink-0 min-w-fit';
         
         const runes = document.createElement('div');
-        runes.className = 'font-carnenian text-4xl text-amber-400 mb-2 tracking-wider escrita-vertical text-center break-all';
+        runes.className = 'font-carnenian text-4xl text-amber-400 mb-2 tracking-wider escrita-vertical text-center break-words';
         runes.textContent = line;
         
         const roman = document.createElement('div');
-        roman.className = 'text-sm text-stone-400 italic text-center w-full mt-2';
+        roman.className = 'text-sm text-stone-400 italic text-center w-full mt-2 break-words';
         roman.textContent = line;
         
         lineContainer.appendChild(runes);
@@ -842,6 +865,7 @@
 
     function clearTranslatorInput() {
       translatorInput.value = '';
+      translatorInput.style.height = 'auto'; // Reseta a altura da caixa de texto
       handleTranslatorInput();
     }
 
@@ -853,13 +877,13 @@
         copyBtn.className = 'text-amber-400 font-bold';
         setTimeout(() => {
           copyBtn.textContent = 'Copiar Romanização';
-          copyBtn.className = 'hover:text-amber-400 font-medium';
+          copyBtn.className = 'hover:text-amber-400 font-medium transition-colors';
         }, 2000);
       });
     }
 
     // ==========================================
-    // BUSCA DE RELEVÂNCIA MÁXIMA & DICIONÁRIO
+    // BUSCA DE RELEVÂNCIA MÁXIMA & DICIONÁRIO (COM DEBOUNCE PARA PERFORMANCE)
     // ==========================================
     function renderMacroButtons() {
       macroFilterContainer.innerHTML = '';
@@ -867,7 +891,7 @@
         const btn = document.createElement('button');
         btn.textContent = cat.label;
         const isActive = (activeMacroCategory === cat.id);
-        btn.className = `px-3 py-1.5 rounded-lg font-medium transition ${
+        btn.className = `px-3 py-1.5 rounded-lg font-medium transition-colors ${
           isActive 
             ? 'bg-amber-950 text-amber-300 border border-amber-800 shadow' 
             : 'bg-stone-800/80 hover:bg-stone-800 text-stone-300 border border-stone-700/60'
@@ -888,27 +912,27 @@
 
       if (lista.length === 0) {
         resultsContainer.innerHTML = `
-          <div class="col-span-2 text-center py-16 text-stone-600">
-            Nenhum termo carneniano encontrado para esta pesquisa.
+          <div class="col-span-2 text-center py-16 text-stone-600 font-medium">
+            Nenhum termo encontrado para esta pesquisa.
           </div>`;
         return;
       }
 
       lista.forEach(item => {
         const card = document.createElement('div');
-        card.className = "bg-stone-900 border border-stone-800 hover:border-amber-500/40 rounded-xl p-5 transition flex flex-col justify-between";
+        card.className = "bg-stone-900 border border-stone-800 hover:border-amber-500/40 rounded-xl p-5 transition-colors flex flex-col justify-between shadow-lg";
 
         const temPronuncia = item.pronuncia && item.pronuncia.trim() !== "" && item.pronuncia !== "-" && item.pronuncia.toLowerCase() !== "null";
-        const pronunciaIcon = item.isAutoPronuncia ? ' <span title="Acentuação gerada automaticamente" class="text-[10px]">✨</span>' : '';
+        const pronunciaIcon = item.isAutoPronuncia ? ' <span title="Acentuação gerada automaticamente" class="text-[10px] cursor-help">✨</span>' : '';
         
         const tagPronuncia = temPronuncia 
-          ? `<span class="text-xs text-amber-400 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded">${item.pronuncia}${pronunciaIcon}</span>` 
+          ? `<span class="text-xs text-amber-400 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded shadow-sm">${item.pronuncia}${pronunciaIcon}</span>` 
           : `<span class="text-xs text-stone-600 font-mono italic">Pronúncia regular</span>`;
 
         let secaoVerbal = '';
         if (item.isVerbo && item.conjugacoes) {
           secaoVerbal = `
-            <div class="my-3 p-2.5 bg-stone-950/80 rounded-lg border border-stone-800/80">
+            <div class="my-3 p-2.5 bg-stone-950/80 rounded-lg border border-stone-800/80 shadow-inner">
               <span class="text-[10px] uppercase font-bold text-amber-400/80 tracking-wider block mb-1.5">Conjugação por Tempo</span>
               <div class="grid grid-cols-3 gap-1.5 text-center text-xs">
                 <div class="bg-stone-900/90 py-1 px-1.5 rounded border border-stone-800">
@@ -933,7 +957,7 @@
         card.innerHTML = `
           <div>
             <div class="flex items-center justify-between mb-2">
-              <span class="text-xs uppercase tracking-wider font-semibold ${item.isVerbo ? 'bg-amber-950 text-amber-300 border border-amber-800' : 'bg-stone-800 text-stone-300'} px-2 py-0.5 rounded">
+              <span class="text-xs uppercase tracking-wider font-semibold ${item.isVerbo ? 'bg-amber-950 text-amber-300 border border-amber-800' : 'bg-stone-800 text-stone-300'} px-2 py-0.5 rounded shadow-sm">
                 ${item.classe && item.classe.toLowerCase() !== 'null' ? item.classe : 'Vocábulo'}
               </span>
               ${tagPronuncia}
@@ -952,7 +976,7 @@
           <div class="pt-3 border-t border-stone-800 text-xs text-stone-400 space-y-1">
             <div class="flex justify-between items-center">
               <span><strong class="text-stone-500">Plural:</strong> ${item.isVerbo ? '<span class="italic text-stone-500">Imutável</span>' : (temPluralValido ? `<span class="text-stone-200 font-medium">${item.plural}</span>` : '—')}</span>
-              ${item.ambiente && item.ambiente !== '-' && item.ambiente !== 'AMBOS' && item.ambiente.toLowerCase() !== 'null' ? `<span class="text-[10px] text-stone-500 uppercase tracking-widest">${item.ambiente}</span>` : ''}
+              ${item.ambiente && item.ambiente !== '-' && item.ambiente !== 'AMBOS' && item.ambiente.toLowerCase() !== 'null' ? `<span class="text-[10px] text-stone-500 uppercase tracking-widest bg-stone-950 px-1 rounded">${item.ambiente}</span>` : ''}
             </div>
             ${item.uso && item.uso !== '-' && item.uso.toLowerCase() !== 'null' ? `<p class="text-stone-500 pt-1 italic">${item.uso}</p>` : ''}
           </div>
@@ -993,14 +1017,20 @@
       renderDictCards(pontuados.map(p => p.item));
     }
 
+    // Adiciona o Debounce (atraso de 300ms) para melhorar a performance da busca em celulares
+    function handleDictSearch() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(filterDictData, 300);
+    }
+
     function setDictSearchMode(mode) {
       dictSearchMode = mode;
       ['btn-dict-both', 'btn-dict-carnenian', 'btn-dict-pt'].forEach(id => {
-        document.getElementById(id).className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition";
+        document.getElementById(id).className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition-colors";
       });
-      if (mode === 'ambos') document.getElementById('btn-dict-both').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
-      if (mode === 'carneniano') document.getElementById('btn-dict-carnenian').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
-      if (mode === 'portugues') document.getElementById('btn-dict-pt').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition";
+      if (mode === 'ambos') document.getElementById('btn-dict-both').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition-colors shadow-sm";
+      if (mode === 'carneniano') document.getElementById('btn-dict-carnenian').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition-colors shadow-sm";
+      if (mode === 'portugues') document.getElementById('btn-dict-pt').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition-colors shadow-sm";
       filterDictData();
     }
 
@@ -1044,7 +1074,7 @@
       } catch (erro) {
         console.error(erro);
         resultsContainer.innerHTML = `
-          <div class="col-span-2 text-center py-12 text-amber-500 bg-stone-900 border border-amber-900/50 rounded-xl p-6">
+          <div class="col-span-2 text-center py-12 text-amber-500 bg-stone-900 border border-amber-900/50 rounded-xl p-6 shadow-lg">
             <p class="font-bold mb-2">Erro ao carregar o arquivo dicionario.json</p>
             <p class="text-xs text-stone-400">Verifique se o arquivo <code>dicionario.json</code> está salvo no repositório.</p>
           </div>`;
@@ -1052,7 +1082,9 @@
     }
 
     translatorInput.addEventListener('input', handleTranslatorInput);
-    dictInput.addEventListener('input', filterDictData);
+    
+    // Atualizado para usar o Debounce na busca
+    dictInput.addEventListener('input', handleDictSearch);
 
     carregarDicionario();
   </script>
