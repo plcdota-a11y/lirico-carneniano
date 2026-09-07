@@ -30,7 +30,7 @@
       border-left: 4px solid #f59e0b; 
       background-color: rgba(28, 25, 23, 0.5); 
       border-radius: 8px;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
 
     ::-webkit-scrollbar {
@@ -101,33 +101,43 @@
             </button>
             <span id="trans-target-label" class="text-stone-300 transition-colors">Lírico Carneniano</span>
           </div>
-          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded shadow-sm">Motor Ativo: Alfabeto Vertical</span>
+          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded shadow-sm">Alfabeto Dinâmico Ativo</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-stone-800">
+          
+          <!-- LADO ESQUERDO: INPUT -->
           <div class="p-4 flex flex-col justify-between bg-stone-950/20">
-            <textarea 
-              id="translator-input"
-              rows="6"
-              oninput="autoResize(this)"
-              placeholder="Digite sua frase. O vocativo (Ó e Ô) será traduzido corretamente para 'Ha'..." 
-              class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed transition-all"
-            ></textarea>
+            <div class="w-full flex-grow">
+              <textarea 
+                id="translator-input"
+                rows="6"
+                oninput="autoResize(this)"
+                placeholder="Digite sua frase..." 
+                class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed transition-all"
+              ></textarea>
+              
+              <!-- ESPELHO MÁGICO (Mostra as runas quando digitando EM Carneniano) -->
+              <div id="input-runes-preview" class="hidden"></div>
+            </div>
+
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500 mt-2">
               <span id="input-char-counter">0 caracteres</span>
               <button onclick="clearTranslatorInput()" class="hover:text-amber-400 transition-colors">Limpar</button>
             </div>
           </div>
 
+          <!-- LADO DIREITO: OUTPUT -->
           <div class="p-4 bg-stone-950/50 flex flex-col justify-between">
             <div 
               id="translator-output"
               class="w-full min-h-[160px] text-amber-200 font-medium text-base leading-relaxed select-all">
               <span class="text-stone-600 font-normal italic flex items-center h-full justify-center opacity-50">A tradução aparecerá aqui...</span>
             </div>
+            
             <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500 mt-2">
-              <span id="output-meta">Lírico Carneniano</span>
-              <button onclick="copyTranslation()" id="copy-btn" class="hover:text-amber-400 font-medium transition-colors">Copiar Romanização</button>
+              <span id="output-meta">Tradução Oficial</span>
+              <button onclick="copyTranslation()" id="copy-btn" class="hover:text-amber-400 font-medium transition-colors">Copiar Tradução</button>
             </div>
           </div>
         </div>
@@ -285,7 +295,6 @@
       return (texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
     }
 
-    // GERA O FEMININO DOS ADJETIVOS E SUBSTANTIVOS
     function gerarFemininoPt(palavra) {
       const p = palavra.trim();
       if (p.endsWith('o')) return p.slice(0, -1) + 'a';
@@ -294,9 +303,6 @@
       return p;
     }
 
-    // ==========================================
-    // MOTOR FONÉTICO E ACENTUAÇÃO AUTOMÁTICA
-    // ==========================================
     function gerarPronunciaAutomatica(singular) {
       if (!singular || singular === '-' || singular.includes(' ')) return singular;
       
@@ -332,9 +338,6 @@
       }).join('-');
     }
 
-    // ==========================================
-    // CÉREBRO MATEMÁTICO: GERAÇÃO DE NÚMEROS
-    // ==========================================
     function numeroParaCarneniano(numStr) {
       let n = parseInt(numStr, 10);
       if (isNaN(n)) return numStr;
@@ -373,6 +376,7 @@
       return partes.join("-");
     }
 
+    // Bug Corrigido: Não precisa mais ter hífen para traduzir números isolados
     function carnenianoParaNumero(str) {
       const map = {
         "sur": 0, "wa": 1, "snava": 2, "shomta": 3, "fotu": 4, "tiwa": 5,
@@ -409,9 +413,6 @@
       return isValid ? total.toString() : null;
     }
 
-    // ==========================================
-    // GRAMÁTICA BÁSICA & VERBOS 
-    // ==========================================
     function conjugarVerbo(raiz) {
       const r = raiz.trim();
       let passado = r.endsWith('a') ? r.slice(0, -1) + 'em' : r + 'em';
@@ -619,7 +620,7 @@
       const carnList = [];
 
       const regrasBase = [
-        { pt: '_vocativo_', carn: 'Ha', prioridade: 100 }, // PROTEÇÃO DO VOCATIVO "Ó/Ô"
+        { pt: '_vocativo_', carn: 'Ha', prioridade: 100 }, 
         { pt: 'o', carn: 'Pe', prioridade: 6 },
         { pt: 'a', carn: 'Te', prioridade: 6 },
         { pt: 'os', carn: 'Ne', prioridade: 6 },
@@ -752,7 +753,6 @@
 
       let preText = text;
       if (direction === 'pt-to-carn') {
-        // Protege Ó e Ô transformando-os numa tag secreta antes que percam o acento!
         preText = preText.replace(/\b(ó|ô|Ó|Ô)\b/g, "_vocativo_");
       }
 
@@ -785,7 +785,7 @@
           }
           if (direction === 'carn-to-pt') {
             let numParsed = carnenianoParaNumero(rawToken);
-            if (numParsed !== null && rawToken.includes('-')) {
+            if (numParsed !== null) {
               result.push(numParsed);
               i++;
               continue;
@@ -803,11 +803,10 @@
               if (found) {
                 let targetText = found.target;
                 
-                // Capitaliza apenas se a primeira letra da original estiver em maiúsculo (ignorando a tag secreta)
                 if (phraseTokens[0] && phraseTokens[0] !== "_vocativo_" && phraseTokens[0] !== "_VOCATIVO_" && phraseTokens[0][0] === phraseTokens[0][0].toUpperCase()) {
                   targetText = targetText.charAt(0).toUpperCase() + targetText.slice(1);
                 } else if (phraseTokens[0] === "_VOCATIVO_") {
-                   targetText = "Ha"; // Força maiúscula no início da frase para a tag
+                   targetText = "Ha"; 
                 }
                 
                 result.push(targetText);
@@ -819,7 +818,6 @@
           }
 
           if (!matched) {
-            // Se a tag secreta não foi traduzida por algum milagre, volta a ser o texto original
             if (rawToken === "_vocativo_" || rawToken === "_VOCATIVO_") {
                 result.push("Ha");
             } else {
@@ -839,9 +837,14 @@
       const text = translatorInput.value;
       inputCharCounter.textContent = `${text.length} ${text.length === 1 ? 'caractere' : 'caracteres'}`;
 
+      const inputPreview = document.getElementById('input-runes-preview');
+
       if (!text.trim()) {
+        translatorOutput.className = "w-full min-h-[160px] text-amber-200 font-medium text-base leading-relaxed select-all";
         translatorOutput.innerHTML = '<span class="text-stone-600 font-normal italic flex items-center h-full justify-center opacity-50">A tradução aparecerá aqui...</span>';
         lastTranslatedString = '';
+        inputPreview.innerHTML = '';
+        inputPreview.classList.add('hidden');
         return;
       }
 
@@ -849,31 +852,61 @@
       lastTranslatedString = translated;
       
       translatorOutput.innerHTML = '';
-      const lines = translated.split('\n');
+      inputPreview.innerHTML = '';
       
-      const block = document.createElement('div');
-      block.className = 'flex gap-8 overflow-x-auto pb-4'; 
-      
-      lines.forEach(line => {
-        if (line.trim() === '') return;
+      if (translationDirection === 'pt-to-carn') {
+        // PT -> CARN: O Efeito Visual Fica na Saída (Direita)
+        inputPreview.classList.add('hidden');
+        translatorOutput.className = "w-full min-h-[160px] flex gap-8 overflow-x-auto pb-4"; 
         
-        const lineContainer = document.createElement('div');
-        lineContainer.className = 'flex flex-col items-center shrink-0 min-w-fit';
+        const lines = translated.split('\n');
+        lines.forEach(line => {
+          if (line.trim() === '') {
+             translatorOutput.appendChild(document.createElement('br'));
+             return;
+          }
+          
+          const lineContainer = document.createElement('div');
+          lineContainer.className = 'flex flex-col items-center shrink-0 min-w-fit';
+          
+          const runes = document.createElement('div');
+          runes.className = 'font-carnenian text-4xl text-amber-400 mb-2 tracking-wider escrita-vertical text-center break-words';
+          runes.textContent = line;
+          
+          const roman = document.createElement('div');
+          roman.className = 'text-sm text-stone-400 italic text-center w-full mt-2 break-words';
+          roman.textContent = line;
+          
+          lineContainer.appendChild(runes);
+          lineContainer.appendChild(roman);
+          translatorOutput.appendChild(lineContainer);
+        });
+
+      } else {
+        // CARN -> PT: O Efeito Visual Fica na Entrada (Esquerda) e a Saída é Texto Simples
+        inputPreview.classList.remove('hidden');
+        inputPreview.className = "mt-4 pt-4 border-t border-stone-800/60 flex gap-6 overflow-x-auto pb-2 min-h-[120px]";
         
-        const runes = document.createElement('div');
-        runes.className = 'font-carnenian text-4xl text-amber-400 mb-2 tracking-wider escrita-vertical text-center break-words';
-        runes.textContent = line;
-        
-        const roman = document.createElement('div');
-        roman.className = 'text-sm text-stone-400 italic text-center w-full mt-2 break-words';
-        roman.textContent = line;
-        
-        lineContainer.appendChild(runes);
-        lineContainer.appendChild(roman);
-        block.appendChild(lineContainer);
-      });
-      
-      translatorOutput.appendChild(block);
+        const lines = text.split('\n');
+        lines.forEach(line => {
+          if (line.trim() === '') {
+             inputPreview.appendChild(document.createElement('br'));
+             return;
+          }
+          const runes = document.createElement('div');
+          runes.className = 'font-carnenian text-3xl text-amber-400/80 tracking-wider escrita-vertical text-center break-words shrink-0';
+          runes.textContent = line;
+          inputPreview.appendChild(runes);
+        });
+
+        translatorOutput.className = "w-full min-h-[160px] text-amber-200 font-medium text-base leading-relaxed select-all";
+        translated.split('\n').forEach((tLine, index, arr) => {
+            translatorOutput.appendChild(document.createTextNode(tLine));
+            if (index < arr.length - 1) {
+                translatorOutput.appendChild(document.createElement('br'));
+            }
+        });
+      }
     }
 
     function invertTranslationDirection() {
@@ -912,7 +945,7 @@
         copyBtn.textContent = 'Copiado!';
         copyBtn.className = 'text-amber-400 font-bold';
         setTimeout(() => {
-          copyBtn.textContent = 'Copiar Romanização';
+          copyBtn.textContent = 'Copiar Tradução';
           copyBtn.className = 'hover:text-amber-400 font-medium transition-colors';
         }, 2000);
       });
