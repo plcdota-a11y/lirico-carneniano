@@ -9310,7 +9310,7 @@
   {
     "DICIONARIO": "Sekem",
     "": "",
-    "_1": "Autoridade / Presença imponente",
+    "_1": "Autoridade / Presença",
     "_2": "",
     "_3": "Subst. Masc.",
     "_4": "",
@@ -20659,7 +20659,7 @@
   {
     "DICIONARIO": "Uobana",
     "": "",
-    "_1": "Santo / Sagrado (Adjetivo)",
+    "_1": "Santo /Santa / Sagrado (Adjetivo)",
     "_2": "",
     "_3": "Adjetivo",
     "_4": "",
@@ -20992,6 +20992,71 @@
     "_6": "",
     "_7": "",
     "_8": "Sika (Escrever) + -to (Conceito/Estado). Lê-se: Si-kà-to.",
+    "_9": ""
+  },
+  {
+    "DICIONARIO": "Nifa",
+    "": "",
+    "_1": "Ar",
+    "_2": "",
+    "_3": "Subst. Neutro",
+    "_4": "",
+    "_5": "",
+    "_6": "",
+    "_7": "",
+    "_8": "(O ar respirável, derivado da raiz Copta para vento).",
+    "_9": ""
+  },
+  {
+    "DICIONARIO": "Nayasuna",
+    "": "",
+    "_1": "Testemunha",
+    "_2": "",
+    "_3": "Subst. Fem.",
+    "_4": "",
+    "_5": "",
+    "_6": "",
+    "_7": "",
+    "_8": "(Aglutinação: Naya [Ver] + Suna [Saber]. \"Aquele que vê e sabe\").",
+    "_9": ""
+  },
+  {
+    "DICIONARIO": "Stota",
+    "": "",
+    "_1": "Vibrar",
+    "_2": "",
+    "_3": "Verbo",
+    "_4": "",
+    "_5": "",
+    "_6": "",
+    "_7": "",
+    "_8": "(Verbo derivado de Stato, que no dicionário é tremer/estremecer).",
+    "_9": ""
+  },
+  {
+    "DICIONARIO": "Faria",
+    "": "",
+    "_1": "Guiar",
+    "_2": "",
+    "_3": "Verbo",
+    "_4": "",
+    "_5": "",
+    "_6": "",
+    "_7": "",
+    "_8": "(Verbo inédito derivado de Farijia [O Guia]).",
+    "_9": ""
+  },
+  {
+    "DICIONARIO": "Ha",
+    "": "",
+    "_1": "Ó / Ô",
+    "_2": "",
+    "_3": "Vocativo",
+    "_4": "",
+    "_5": "",
+    "_6": "",
+    "_7": "",
+    "_8": "",
     "_9": ""
   }
 ]
