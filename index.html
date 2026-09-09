@@ -65,7 +65,7 @@
     <!-- Cabeçalho -->
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2 font-carnenian">Lírico Carneniano</h1>
-      <p class="text-stone-400 text-sm">Tradutor SVO, Numerais, Gênero Neutro & Alfabeto Original • OCL</p>
+      <p class="text-stone-400 text-sm">Tradutor SVO, Numerais, Gênero Neutro, Escrita & Voz Original • OCL</p>
     </header>
 
     <!-- Seletor de Abas -->
@@ -117,7 +117,7 @@
                 class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed transition-all"
               ></textarea>
               
-              <!-- ESPELHO MÁGICO (Mostra as runas quando digitando EM Carneniano) -->
+              <!-- ESPELHO MÁGICO -->
               <div id="input-runes-preview" class="hidden"></div>
             </div>
 
@@ -135,9 +135,11 @@
               <span class="text-stone-600 font-normal italic flex items-center h-full justify-center opacity-50">A tradução aparecerá aqui...</span>
             </div>
             
-            <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500 mt-2">
-              <span id="output-meta">Tradução Oficial</span>
-              <button onclick="copyTranslation()" id="copy-btn" class="hover:text-amber-400 font-medium transition-colors">Copiar Tradução</button>
+            <div class="flex justify-end items-center gap-4 pt-3 border-t border-stone-800/60 text-xs text-stone-500 mt-2">
+              <button onclick="playTranslationAudio()" id="speak-btn" class="hover:text-amber-300 text-stone-300 font-medium transition-colors bg-stone-800 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm">
+                🔊 Ouvir
+              </button>
+              <button onclick="copyTranslation()" id="copy-btn" class="hover:text-amber-400 font-medium transition-colors">Copiar Texto</button>
             </div>
           </div>
         </div>
@@ -236,6 +238,7 @@
     const transSourceLabel = document.getElementById('trans-source-label');
     const transTargetLabel = document.getElementById('trans-target-label');
     const copyBtn = document.getElementById('copy-btn');
+    const speakBtn = document.getElementById('speak-btn');
 
     const dictInput = document.getElementById('dict-search-input');
     const resultsContainer = document.getElementById('results-container');
@@ -254,6 +257,48 @@
       { id: 'numeral', label: 'Numerais' },
       { id: 'outros', label: 'Títulos, Expressões & Outros' }
     ];
+
+    // ==========================================
+    // MOTOR DE VOZ (TEXT-TO-SPEECH)
+    // ==========================================
+    function playPronunciation(text) {
+      if (!text || text.trim() === '') return;
+      
+      if (!window.speechSynthesis) {
+        alert("O seu navegador não suporta a função de voz.");
+        return;
+      }
+
+      window.speechSynthesis.cancel(); // Para qualquer fala anterior
+
+      // O motor lê melhor se tirarmos os hífens que usamos na parte escrita
+      const textoParaLer = text.replace(/-/g, '');
+      
+      const utterance = new SpeechSynthesisUtterance(textoParaLer);
+      
+      // Força a usar as regras de fala em português (melhor pra fonética carneniana)
+      utterance.lang = 'pt-BR'; 
+      
+      // Ajusta o som para ficar mais solene/fantástico
+      utterance.rate = 0.85; // Um pouco mais devagar
+      utterance.pitch = 0.8; // Tom mais grave
+      
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function playTranslationAudio() {
+      if (!lastTranslatedString || lastTranslatedString.includes('aparecerá aqui')) return;
+      
+      // Se tiver traduzido DO carneniano PARA o português, lemos em português normal
+      if (translationDirection === 'carn-to-pt') {
+        const ut = new SpeechSynthesisUtterance(lastTranslatedString);
+        ut.lang = 'pt-BR';
+        window.speechSynthesis.speak(ut);
+      } else {
+        // Se traduziu para o Carneniano, aplicamos o filtro solene
+        playPronunciation(lastTranslatedString);
+      }
+    }
 
     function autoResize(textarea) {
       textarea.style.height = 'auto';
@@ -762,7 +807,6 @@
 
       let preText = text;
       if (direction === 'pt-to-carn') {
-        // Correção Definitiva do Vocativo: Ignora falhas de regex antigas
         preText = preText.replace(/(^|[\s,.;:!?()"])(ó|ô|ò|Ó|Ô|Ò)(?=$|[\s,.;:!?()"])/g, "$1_vocativo_");
       }
 
@@ -1002,9 +1046,12 @@
         const temPronuncia = item.pronuncia && item.pronuncia.trim() !== "" && item.pronuncia !== "-" && item.pronuncia.toLowerCase() !== "null";
         const pronunciaIcon = item.isAutoPronuncia ? ' <span title="Acentuação gerada automaticamente" class="text-[10px] cursor-help">✨</span>' : '';
         
+        // Define a string de pronúncia limpa para o motor de voz (remove hífens)
+        const voz = (temPronuncia ? item.pronuncia : item.singular).replace(/-/g, '');
+
         const tagPronuncia = temPronuncia 
-          ? `<span class="text-xs text-amber-400 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded shadow-sm">${item.pronuncia}${pronunciaIcon}</span>` 
-          : `<span class="text-xs text-stone-600 font-mono italic">Pronúncia regular</span>`;
+          ? `<div class="flex items-center"><span class="text-xs text-amber-400 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded shadow-sm">${item.pronuncia}${pronunciaIcon}</span><button onclick="playPronunciation('${voz}')" title="Ouvir pronúncia" class="ml-1.5 hover:scale-125 transition-transform text-amber-500">🔊</button></div>` 
+          : `<div class="flex items-center"><span class="text-xs text-stone-600 font-mono italic">Pronúncia regular</span><button onclick="playPronunciation('${voz}')" title="Ouvir pronúncia" class="ml-1.5 hover:scale-125 transition-transform text-stone-400 hover:text-amber-500">🔊</button></div>`;
 
         let secaoVerbal = '';
         if (item.isVerbo && item.conjugacoes) {
