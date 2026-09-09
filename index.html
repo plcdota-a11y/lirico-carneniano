@@ -295,6 +295,7 @@
       return (texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
     }
 
+    // GERA O FEMININO DOS ADJETIVOS E SUBSTANTIVOS
     function gerarFemininoPt(palavra) {
       const p = palavra.trim();
       if (p.endsWith('o')) return p.slice(0, -1) + 'a';
@@ -303,6 +304,9 @@
       return p;
     }
 
+    // ==========================================
+    // MOTOR FONÉTICO E ACENTUAÇÃO AUTOMÁTICA
+    // ==========================================
     function gerarPronunciaAutomatica(singular) {
       if (!singular || singular === '-' || singular.includes(' ')) return singular;
       
@@ -338,6 +342,9 @@
       }).join('-');
     }
 
+    // ==========================================
+    // CÉREBRO MATEMÁTICO: GERAÇÃO DE NÚMEROS
+    // ==========================================
     function numeroParaCarneniano(numStr) {
       let n = parseInt(numStr, 10);
       if (isNaN(n)) return numStr;
@@ -376,7 +383,6 @@
       return partes.join("-");
     }
 
-    // Bug Corrigido: Não precisa mais ter hífen para traduzir números isolados
     function carnenianoParaNumero(str) {
       const map = {
         "sur": 0, "wa": 1, "snava": 2, "shomta": 3, "fotu": 4, "tiwa": 5,
@@ -413,6 +419,9 @@
       return isValid ? total.toString() : null;
     }
 
+    // ==========================================
+    // GRAMÁTICA BÁSICA & VERBOS 
+    // ==========================================
     function conjugarVerbo(raiz) {
       const r = raiz.trim();
       let passado = r.endsWith('a') ? r.slice(0, -1) + 'em' : r + 'em';
@@ -753,7 +762,8 @@
 
       let preText = text;
       if (direction === 'pt-to-carn') {
-        preText = preText.replace(/\b(ó|ô|Ó|Ô)\b/g, "_vocativo_");
+        // Correção Definitiva do Vocativo: Ignora falhas de regex antigas
+        preText = preText.replace(/(^|[\s,.;:!?()"])(ó|ô|ò|Ó|Ô|Ò)(?=$|[\s,.;:!?()"])/g, "$1_vocativo_");
       }
 
       const formattedInput = direction === 'pt-to-carn' ? reordenarSintaxeSVO(preText) : preText;
@@ -805,7 +815,7 @@
                 
                 if (phraseTokens[0] && phraseTokens[0] !== "_vocativo_" && phraseTokens[0] !== "_VOCATIVO_" && phraseTokens[0][0] === phraseTokens[0][0].toUpperCase()) {
                   targetText = targetText.charAt(0).toUpperCase() + targetText.slice(1);
-                } else if (phraseTokens[0] === "_VOCATIVO_") {
+                } else if (phraseTokens[0] === "_VOCATIVO_" || phraseTokens[0] === "_vocativo_") {
                    targetText = "Ha"; 
                 }
                 
@@ -855,7 +865,6 @@
       inputPreview.innerHTML = '';
       
       if (translationDirection === 'pt-to-carn') {
-        // PT -> CARN: O Efeito Visual Fica na Saída (Direita)
         inputPreview.classList.add('hidden');
         translatorOutput.className = "w-full min-h-[160px] flex gap-8 overflow-x-auto pb-4"; 
         
@@ -883,7 +892,6 @@
         });
 
       } else {
-        // CARN -> PT: O Efeito Visual Fica na Entrada (Esquerda) e a Saída é Texto Simples
         inputPreview.classList.remove('hidden');
         inputPreview.className = "mt-4 pt-4 border-t border-stone-800/60 flex gap-6 overflow-x-auto pb-2 min-h-[120px]";
         
