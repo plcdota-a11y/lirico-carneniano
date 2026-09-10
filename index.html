@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tradutor & Dicionário Lírico Carneniano</title>
-  
+
   <link rel="icon" type="image/png" href="favicon.png">
-  
+
   <style>
     @font-face {
       font-family: 'Carneniana';
@@ -58,8 +57,7 @@
     }
   </style>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+  <script src="[cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
 </head>
 <body class="bg-stone-950 text-stone-100 min-h-screen py-10 px-4">
 
@@ -182,16 +180,30 @@
     let lastTranslatedString = ''; 
     let debounceTimer; 
 
+    // FIX: estas duas variáveis eram usadas em várias funções mas nunca
+    // haviam sido declaradas. "dictSearchMode" em especial causava um
+    // ReferenceError na primeira chamada de filterDictData() (disparada
+    // assim que o dicionário terminava de carregar), o que impedia a
+    // aba "Dicionário de Termos" de exibir qualquer resultado.
+    let dicionario = [];
+    let dictSearchMode = 'ambos';
+
     // ==========================================
     // SISTEMA CAÇADOR DE VOZES PREMIUM HD
     // ==========================================
     let vozesPremiumPTBR = [];
     function carregarVozes() {
+      if (!window.speechSynthesis) return;
       const vozes = window.speechSynthesis.getVoices();
       vozesPremiumPTBR = vozes.filter(v => v.lang === 'pt-BR' || v.lang === 'pt_BR');
     }
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = carregarVozes;
+    // FIX: "speechSynthesis" era referenciado sem "window." e sem checar
+    // se a API existe. Em qualquer ambiente sem suporte a essa API isso
+    // lançava um erro logo na carga do <script>, derrubando tradutor e
+    // dicionário juntos.
+    if (window.speechSynthesis) {
+      carregarVozes();
+      window.speechSynthesis.onvoiceschanged = carregarVozes;
     }
 
     const translatorInput = document.getElementById('translator-input');
@@ -243,6 +255,7 @@
     }
 
     function playTranslationAudio() {
+      if (!window.speechSynthesis) return;
       if (!lastTranslatedString || lastTranslatedString.includes('aparecerá aqui')) return;
       if (translationDirection === 'carn-to-pt') {
         const ut = new SpeechSynthesisUtterance(lastTranslatedString);
@@ -424,7 +437,7 @@
         ter: {
           present: ['tenho','tens','tem','temos','tendes','temos','tenham','tendo'],
           past: ['tive','tiveste','teve','tivemos','tiveram','tinha','tinhas','tinhamos','tinham','tido'],
-          future: ['terei','terás','tera','teremos','tereis','terao']
+          future: ['terei','teras','tera','teremos','tereis','terao']
         },
         ir: {
           present: ['vou','vais','vai','vamos','ides','vao','va','vas','vamos','vam','indo'],
@@ -470,8 +483,8 @@
     }
 
     function tratarItem(raw, origem = 'lexico') {
-      const singular = String(raw.singular || raw.Singular || raw.DICIONARIO || raw.DICIONARIO || raw.palavra || raw.termo || '').trim();
-      const traducao = String(raw.traducao || raw.traducao || raw.significado || raw._5 || raw.FIELD2 || '').trim();
+      const singular = String(raw.singular || raw.Singular || raw.DICIONARIO || raw.palavra || raw.termo || '').trim();
+      const traducao = String(raw.traducao || raw.significado || raw._5 || raw.FIELD2 || '').trim();
       const classe = String(raw.classe || raw._6 || raw.FIELD3 || raw.CLASSE || '').trim();
       let plural = String(raw.plural || raw.Plural || raw.FIELD4 || '').trim();
       let pronuncia = String(raw.pronuncia || raw._3 || raw.FIELD5 || '').trim();
@@ -728,7 +741,13 @@
       ];
 
       regrasBase.forEach(r => {
-        ptList.push({ key: r.pt, target: r.carn, len: r.pt.length, prioridade: r.prioridade });
+        // FIX: a chave em português precisa ser normalizada (minúsculas,
+        // sem acentos) igual ao texto vindo do usuário, senão frases como
+        // "a pequena árvore sagrada" ou "o traidor desprezível" nunca
+        // batiam com o token normalizado e caíam para tradução palavra a
+        // palavra, quebrando exatamente os exemplos que o motor tenta
+        // forçar.
+        ptList.push({ key: normalizar(r.pt), target: r.carn, len: r.pt.length, prioridade: r.prioridade });
         carnList.push({ key: normalizar(r.carn), target: r.pt, len: r.carn.length, prioridade: r.prioridade });
       });
 
