@@ -55,13 +55,80 @@
     textarea::-webkit-scrollbar {
       display: none;
     }
+
+    /* ==============================
+       CAMADA VISUAL RESPONSIVA
+       ============================== */
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+    button, input, textarea { -webkit-tap-highlight-color: transparent; }
+    button { min-height: 38px; }
+
+    #section-translator > div,
+    #section-dictionary > div { backdrop-filter: blur(8px); }
+
+    #translator-output {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    #input-runes-preview,
+    #translator-output {
+      scrollbar-width: thin;
+      scrollbar-color: #d97706 #1c1917;
+    }
+
+    #results-container > div {
+      min-width: 0;
+    }
+
+    @media (max-width: 767px) {
+      body { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+      header h1 { font-size: 2.15rem; line-height: 1.1; }
+      header p { max-width: 30rem; margin-inline: auto; line-height: 1.5; }
+
+      /* Abas sem estourar a largura em telas pequenas. */
+      #tab-btn-translator,
+      #tab-btn-dictionary { flex: 1 1 50%; padding-inline: .75rem; font-size: .78rem; }
+      .inline-flex { width: 100%; max-width: 30rem; }
+
+      /* O editor e o resultado passam a ocupar a largura total. */
+      #section-translator .grid { display: block; }
+      #section-translator .grid > div { border-left: 0 !important; border-right: 0 !important; }
+      #section-translator .grid > div + div { border-top: 1px solid rgba(68,64,60,.75); }
+
+      #translator-input { min-height: 150px; font-size: 1rem; }
+      #translator-output { min-height: 180px !important; padding-top: .5rem; }
+
+      /* A escrita vertical continua disponível, mas sem limitar a área útil. */
+      .escrita-vertical {
+        max-height: 280px;
+        gap: .85rem;
+        padding: 8px;
+      }
+      .font-carnenian.text-4xl { font-size: 1.9rem; }
+
+      #results-container { grid-template-columns: minmax(0, 1fr); }
+      #results-container .col-span-2 { grid-column: auto; }
+
+      /* Conjugação em uma coluna evita cartões comprimidos. */
+      .grid.grid-cols-3 { grid-template-columns: 1fr; }
+    }
+
+    @media (min-width: 768px) {
+      #section-translator .grid > div { min-height: 280px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
   </style>
 
-  <script src="[cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-stone-950 text-stone-100 min-h-screen py-10 px-4">
 
-  <div class="max-w-4xl mx-auto">
+  <div class="max-w-6xl mx-auto">
     <header class="text-center mb-6">
       <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2 font-carnenian">Lírico Carneniano</h1>
       <p class="text-stone-400 text-sm">Motor SVO, Flexão Absoluta, Honoríficos & Gênero Biológico • OCL</p>
@@ -1220,10 +1287,9 @@
               ${tagPronuncia}
             </div>
             <div class="mb-3 mt-1">
-              <h2 class="font-carnenian text-4xl text-amber-400 tracking-wide">${item.singular}</h2>
-              <h3 class="text-xl font-bold text-stone-100 mt-1">${item.singular}</h3>
+              <h2 class="font-carnenian text-4xl text-amber-400 tracking-wide break-words">${item.singular}</h2>
+              <h3 class="text-xl font-bold text-stone-100 mt-1 break-words">${item.traducao && item.traducao.toLowerCase() !== 'null' ? item.traducao : 'Sem tradução cadastrada'}</h3>
             </div>
-            <p class="text-amber-200/90 font-medium text-base mb-2">${item.traducao && item.traducao.toLowerCase() !== 'null' ? item.traducao : '—'}</p>
             ${secaoVerbal}
           </div>
           <div class="pt-3 border-t border-stone-800 text-xs text-stone-400 space-y-1">
@@ -1281,7 +1347,11 @@
 
     async function carregarDicionario() {
       try {
-        const resposta = await fetch('dicionario.json', { cache: 'no-store' });
+        let resposta = await fetch('dicionario.json', { cache: 'no-store' });
+        if (!resposta.ok) {
+          // Compatibilidade com a nomenclatura usada em algumas versões do arquivo.
+          resposta = await fetch('dicionario.json.json', { cache: 'no-store' });
+        }
         if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
 
         const dadosBrutos = await resposta.json();
@@ -1296,6 +1366,8 @@
 
         buildTranslationMaps();
         filterDictData();
+        // Se o usuário digitou antes do JSON terminar de carregar, atualiza a tradução agora.
+        if (translatorInput.value.trim()) handleTranslatorInput();
 
         console.info(
           `[Lírico] Dicionário carregado: ${dicionario.length} entradas normalizadas.`
@@ -1306,7 +1378,7 @@
           <div class="col-span-2 text-center py-12 text-amber-500 bg-stone-900 border border-amber-900/50 rounded-xl p-6 shadow-lg">
             <p class="font-bold mb-2">Erro ao carregar o dicionário</p>
             <p class="text-xs text-stone-400">
-              ${erro.message || 'Verifique se dicionario.json é um JSON válido e está na mesma pasta do HTML.'}
+              ${erro.message || 'Verifique se dicionario.json (ou dicionario.json.json) é um JSON válido e está na mesma pasta do HTML.'}
             </p>
           </div>`;
       }
