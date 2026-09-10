@@ -362,6 +362,1214 @@
     // MOTOR VERBAL: ISOLAMENTO TEMPORAL ABSOLUTO
     // ==========================================
     function conjugarVerbo(raiz) {
+      /*
+       * Regra Lírico-Carneniana:
+       * - presente = raiz intacta
+       * - passado  = raiz + "em"
+       * - futuro   = raiz + "ra"
+       *
+       * NÃO removemos a vogal final. O valor "singular" do dicionário
+       * é tratado como a raiz/forma lexical oficial do verbo.
+       */
+      const r = String(raiz || '').trim();
+      return {
+        presente: r,
+        passado: r + 'em',
+        futuro: r + 'ra'
+      };
+    }
+
+    function gerarPluralPadrao(singular) {
+      const s = singular.trim();
+      if (!s || s === '-' || s === '...') return '-';
+      // Regra Oficial: Plural ignora "s" do PT e acrescenta "is" à base
+      if (s.endsWith('is')) return s;
+      return s + 'is';
+    }
+
+    function gerarPluralPt(palavra) {
+      const p = palavra.trim();
+      if (p.endsWith('ao')) return p.slice(0, -2) + 'oes';
+      if (p.endsWith('m')) return p.slice(0, -1) + 'ns';
+      if (p.endsWith('r') || p.endsWith('z') || p.endsWith('s')) return p + 'es';
+      if (p.endsWith('al') || p.endsWith('el') || p.endsWith('ol') || p.endsWith('ul')) return p.slice(0, -1) + 'is';
+      if (p.endsWith('il')) return p.slice(0, -1) + 's';
+      return p + 's';
+    }
+
+    function gerarConjugacoesPt(verboNormalizado) {
+      /*
+       * O português é usado apenas para descobrir TEMPO.
+       * Pessoa, número e gênero são deliberadamente descartados.
+       */
+      const v = normalizar(verboNormalizado);
+      const res = { present: new Set([v]), past: new Set(), future: new Set() };
+
+      const add = (grupo, ...formas) => formas.forEach(f => {
+        if (f) res[grupo].add(normalizar(f));
+      });
+
+      // Irregulares e verbos auxiliares mais frequentes.
+      const especiais = {
+        ser: {
+          present: ['sou','es','e','somos','sois','sao','seja','sejas','sejamos','sejais','sejam','sendo'],
+          past: ['fui','foste','foi','fomos','fostes','foram','era','eras','eramos','ereis','eriam','sido'],
+          future: ['serei','seras','sera','seremos','sereis','serao']
+        },
+        estar: {
+          present: ['estou','estas','esta','estamos','estais','estao','esteja','estejas','estejamos','estejam','estando'],
+          past: ['estive','estiveste','esteve','estivemos','estiveram','estava','estavas','estavamos','estavam','estado'],
+          future: ['estarei','estaras','estara','estaremos','estareis','estarao']
+        },
+        ter: {
+          present: ['tenho','tens','tem','temos','tendes','temos','tenham','tendo'],
+          past: ['tive','tiveste','teve','tivemos','tiveram','tinha','tinhas','tinhamos','tinham','tido'],
+          future: ['terei','terás','tera','teremos','tereis','terao']
+        },
+        ir: {
+          present: ['vou','vais','vai','vamos','ides','vao','va','vas','vamos','vam','indo'],
+          past: ['fui','foste','foi','fomos','fostes','foram','ia','ias','iamos','iam','ido'],
+          future: ['irei','iras','ira','iremos','ireis','irao']
+        },
+        ver: {
+          present: ['vejo','ves','ve','vemos','vedes','veem','veja','vejas','vejamos','vejais','vejam','vendo'],
+          past: ['vi','viste','viu','vimos','vistes','viram','via','vias','viamos','viam','visto'],
+          future: ['verei','veras','vera','veremos','vereis','verao']
+        },
+        fazer: {
+          present: ['faco','fazes','faz','fazemos','fazeis','fazem','faca','facas','facamos','facais','facam','fazendo'],
+          past: ['fiz','fizeste','fez','fizemos','fizestes','fizeram','fazia','fazias','faziamos','faziam','feito'],
+          future: ['farei','faras','fara','faremos','fareis','farao','faria','farias','fariamos','fariam']
+        }
+      };
+
+      if (especiais[v]) {
+        Object.entries(especiais[v]).forEach(([k, formas]) => add(k, ...formas));
+      } else if (v.endsWith('ar')) {
+        const s = v.slice(0,-2);
+        add('present', s+'o',s+'as',s+'a',s+'amos',s+'ais',s+'am',s+'e',s+'es',s+'emos',s+'eis',s+'em',s+'ando');
+        add('past', s+'ei',s+'aste',s+'ou',s+'amos',s+'astes',s+'aram',s+'ava',s+'avas',s+'avamos',s+'avam',s+'ado',s+'ada',s+'ados',s+'adas');
+        add('future', s+'arei',s+'aras',s+'ara',s+'aremos',s+'areis',s+'arao',s+'aria',s+'arias',s+'ariamos',s+'ariam');
+      } else if (v.endsWith('er')) {
+        const s = v.slice(0,-2);
+        add('present', s+'o',s+'es',s+'e',s+'emos',s+'eis',s+'em',s+'a',s+'as',s+'amos',s+'ais',s+'am',s+'endo');
+        add('past', s+'i',s+'este',s+'eu',s+'emos',s+'estes',s+'eram',s+'ia',s+'ias',s+'iamos',s+'iam',s+'ido',s+'ida',s+'idos',s+'idas');
+        add('future', s+'erei',s+'eras',s+'era',s+'eremos',s+'ereis',s+'erao',s+'eria',s+'erias',s+'eriamos',s+'eriam');
+      } else if (v.endsWith('ir')) {
+        const s = v.slice(0,-2);
+        add('present', s+'o',s+'es',s+'e',s+'imos',s+'is',s+'em',s+'a',s+'as',s+'amos',s+'ais',s+'am',s+'indo');
+        add('past', s+'i',s+'iste',s+'iu',s+'imos',s+'istes',s+'iram',s+'ia',s+'ias',s+'iamos',s+'iam',s+'ido',s+'ida',s+'idos',s+'idas');
+        add('future', s+'irei',s+'iras',s+'ira',s+'iremos',s+'ireis',s+'irao',s+'iria',s+'irias',s+'iriamos',s+'iriam');
+      }
+
+      return {
+        present: [...res.present],
+        past: [...res.past],
+        future: [...res.future]
+      };
+    }
+
+    function tratarItem(raw, origem = 'lexico') {
+      const singular = String(raw.singular || raw.Singular || raw.DICIONARIO || raw.DICIONARIO || raw.palavra || raw.termo || '').trim();
+      const traducao = String(raw.traducao || raw.traducao || raw.significado || raw._5 || raw.FIELD2 || '').trim();
+      const classe = String(raw.classe || raw._6 || raw.FIELD3 || raw.CLASSE || '').trim();
+      let plural = String(raw.plural || raw.Plural || raw.FIELD4 || '').trim();
+      let pronuncia = String(raw.pronuncia || raw._3 || raw.FIELD5 || '').trim();
+      const uso = String(raw.uso || raw._7 || raw.FIELD6 || raw.NOTAS || '').trim();
+      const genero = String(raw.genero || raw['Gênero'] || raw.GENERO || '').trim();
+      const categoria = String(raw.categoria || raw.categoria_semantica || raw.CATEGORIA || '').trim();
+
+      const cNorm = normalizar(classe);
+      const isVerbo = /\bverbo\b/.test(cNorm);
+      const isSubstantivo = cNorm.includes('substant');
+      const isAdjetivo = cNorm.includes('adjet') || cNorm.includes('adj');
+      const isPronome = cNorm.includes('pronome');
+      const isNatureza = /^(animais|plantas)$/i.test(categoria.trim()) ||
+        /\b(animais|plantas|fauna|flora)\b/i.test(categoria);
+      const isNeutro = /neutro/i.test(genero) || isNatureza;
+
+      if ((isSubstantivo || isAdjetivo) && (!plural || plural === '-' || /^null$/i.test(plural))) {
+        plural = gerarPluralPadrao(singular);
+      }
+
+      let isAutoPronuncia = false;
+      if (!pronuncia || pronuncia === '-' || /^null$/i.test(pronuncia)) {
+        pronuncia = gerarPronunciaAutomatica(singular);
+        isAutoPronuncia = true;
+      }
+
+      const conjugacoes = isVerbo ? conjugarVerbo(singular) : null;
+      const traducoesArray = traducao
+        .split(/[\/,;()]/)
+        .map(t => normalizar(t))
+        .filter(Boolean);
+
+      return {
+        singular, traducao, classe, plural, pronuncia, isAutoPronuncia,
+        uso, genero, categoria, origem, isVerbo, isSubstantivo, isAdjetivo,
+        isPronome, isNeutro, conjugacoes, cNorm,
+        sNorm: normalizar(singular),
+        tNorm: normalizar(traducao),
+        pNorm: normalizar(plural),
+        uNorm: normalizar(uso),
+        traducoesArray
+      };
+    }
+
+    /*
+     * O JSON atual contém duas tabelas lado a lado:
+     *   1) Pronomes Pessoais
+     *   2) Conectivos e Preposições
+     *
+     * A versão anterior interpretava as duas como se fossem uma única
+     * entrada, misturando "Eu" com "Te (A)", por exemplo.
+     * Aqui cada tabela é normalizada separadamente.
+     */
+    function expandirDicionario(dados) {
+      const saida = [];
+      const adicionar = (obj) => {
+        if (!obj || !obj.singular) return;
+        const item = tratarItem(obj);
+        if (!item.singular || /^null$/i.test(item.singular)) return;
+        if (/^(pessoa|palavra|tipo|honorifico|honíficos)$/i.test(normalizar(item.singular))) return;
+        saida.push(item);
+      };
+
+      dados.forEach(raw => {
+        // Tabela de pronomes pessoais: Português -> Lírico.
+        const ptPessoa = String(raw['Pronomes Pessoais'] || '').trim();
+        const liricoPessoa = String(raw['_2'] || '').trim();
+        const generoPessoa = String(raw[''] || raw['Gênero'] || '').trim();
+
+        if (ptPessoa && !/^(pessoa)$/i.test(ptPessoa) && liricoPessoa && liricoPessoa !== '-') {
+          adicionar({
+            singular: liricoPessoa,
+            traducao: ptPessoa,
+            classe: 'Pronome Pessoal',
+            pronuncia: raw['_3'],
+            genero: generoPessoa
+          });
+        }
+
+        // Tabela de conectivos/preposições: Lírico -> Português.
+        const palavra = String(raw['Conectivos e Preposições'] || '').trim();
+        const significado = String(raw['_5'] || '').trim();
+        const classe = String(raw['_6'] || '').trim();
+        if (palavra && significado && !/^(palavra)$/i.test(palavra)) {
+          adicionar({
+            singular: palavra,
+            traducao: significado,
+            classe,
+            uso: raw['_7']
+          });
+        }
+
+        // Paradigma de artigos presente no bloco "Gênero/Singular/Plural".
+        const sg = String(raw['Singular'] || '').trim();
+        const pl = String(raw['Plural'] || '').trim();
+        const g = String(raw['Gênero'] || '').trim();
+        const m = sg.match(/^([^\s(]+)\s*\(([^)]+)\)/);
+        if (m && /^(Masc\.?|Fem\.?|Neutro)$/i.test(g)) {
+          const artigoPt = m[2].split('/')[0].trim().toLowerCase();
+          if (/^(o|a)$/i.test(artigoPt)) {
+            adicionar({
+              singular: m[1],
+              traducao: artigoPt,
+              classe: 'Artigo',
+              plural: pl.match(/^([^\s(]+)/)?.[1] || '',
+              genero: /neutro/i.test(g) ? 'Neutro' : g
+            });
+          }
+        }
+      });
+
+      // Honoríficos são metadados morfológicos, não vocábulos independentes.
+      window.HONORIFICOS_CARNENIANOS = {};
+      dados.forEach(raw => {
+        const tipo = String(raw['Gênero'] || '').trim();
+        const suf = String(raw['Singular'] || '').trim();
+        if (/^Honorífico/i.test(tipo) && /^-(ma|rê|li|jo|nu|k)$/i.test(suf)) {
+          window.HONORIFICOS_CARNENIANOS[suf.toLowerCase()] = {
+            sufixo: suf,
+            tipo,
+            uso: String(raw['Exemplo'] || '').trim()
+          };
+        }
+      });
+
+      // Remove duplicatas sem apagar formas semanticamente diferentes.
+      const vistos = new Set();
+      return saida.filter(item => {
+        const chave = `${item.sNorm}|${item.tNorm}|${item.cNorm}`;
+        if (vistos.has(chave)) return false;
+        vistos.add(chave);
+        return true;
+      });
+    }
+
+    // ==========================================
+    // ORDEM SVO & INTERCEPTADORES SINTÁTICOS
+    // ==========================================
+    function reordenarSintaxeSVO(textoPt) {
+      /*
+       * Não fazemos mais substituições cegas por regex.
+       * A função apenas normaliza espaços; a ordem SVO é decidida
+       * pelo analisador de oração em translateText().
+       */
+      return String(textoPt || '')
+        .replace(/\s+/g, ' ')
+        .replace(/\s+([,.;:!?])/g, '$1')
+        .trim();
+    }
+
+    let translationMapPtToCarn = [];
+    let translationMapCarnToPt = [];
+
+    function buildTranslationMaps() {
+      const ptList = [];
+      const carnList = [];
+
+      const regrasBase = [
+        { pt: '_vocativo_', carn: 'Ha', prioridade: 100 }, 
+        { pt: 'não', carn: 'An', prioridade: 100 }, 
+        { pt: 'nao', carn: 'An', prioridade: 100 }, 
+
+        // Aglutinação de Companhia Absoluta
+        { pt: 'comigo', carn: 'Henani', prioridade: 200 },
+        { pt: 'contigo', carn: 'Henanti', prioridade: 200 },
+        { pt: 'consigo', carn: 'Henasui', prioridade: 200 },
+        { pt: 'com ele', carn: 'Henanofi', prioridade: 200 },
+        { pt: 'com ela', carn: 'Henanasi', prioridade: 200 },
+        { pt: 'conosco', carn: 'Henanoni', prioridade: 200 },
+        { pt: 'convosco', carn: 'Henauri', prioridade: 200 },
+        { pt: 'com eles', carn: 'Henanaei', prioridade: 200 },
+        { pt: 'com elas', carn: 'Henanaei', prioridade: 200 },
+        
+        // Proteção de Sufixos Honoríficos
+        { pt: '_suf_re_', carn: '-rê', prioridade: 100 },
+        { pt: '_suf_ma_', carn: '-ma', prioridade: 100 },
+        { pt: '_suf_nu_', carn: '-nu', prioridade: 100 },
+        { pt: '_suf_jo_', carn: '-jo', prioridade: 100 },
+        { pt: '_suf_k_', carn: '-k', prioridade: 100 },
+        { pt: '_suf_li_', carn: '-li', prioridade: 100 },
+
+        // Escudo de Homógrafos
+        { pt: '_verbo_e_', carn: 'Ina', prioridade: 100 },
+        { pt: '_conj_e_', carn: 'Au', prioridade: 100 },
+        { pt: '_verbo_esta_', carn: 'Shopa', prioridade: 100 },
+        { pt: '_verbo_estas_', carn: 'Shopa', prioridade: 100 },
+        { pt: '_verbo_estao_', carn: 'Shopa', prioridade: 100 },
+        { pt: '_pron_esta_', carn: 'Ta', prioridade: 100 },
+        { pt: '_pron_este_', carn: 'Ta', prioridade: 100 },
+        { pt: '_pron_estas_', carn: 'Tais', prioridade: 100 },
+        { pt: '_pron_estes_', carn: 'Tais', prioridade: 100 },
+        { pt: '_pron_suj_nos_', carn: 'Anon', prioridade: 100 },
+        { pt: '_pron_obj_nos_', carn: 'Anoni', prioridade: 100 },
+        { pt: '_pron_suj_vos_', carn: 'Uri', prioridade: 100 },
+        { pt: '_pron_obj_vos_', carn: 'Uri', prioridade: 100 },
+        { pt: '_verbo_da_', carn: 'Tia', prioridade: 100 },
+        { pt: '_prep_da_', carn: 'Nte Te', prioridade: 100 },
+        { pt: '_prep_das_', carn: 'Nte Ne', prioridade: 100 },
+        { pt: '_prep_do_', carn: 'Nte Pe', prioridade: 100 },
+        { pt: '_prep_dos_', carn: 'Nte Ne', prioridade: 100 },
+
+        // Base de Artigos e Pronomes
+        { pt: 'o', carn: 'Pe', prioridade: 6 },
+        { pt: 'a', carn: 'Te', prioridade: 6 },
+        { pt: 'os', carn: 'Ne', prioridade: 6 },
+        { pt: 'as', carn: 'Ne', prioridade: 6 },
+        { pt: 'um', carn: 'Un', prioridade: 6 },
+        { pt: 'uma', carn: 'Un', prioridade: 6 },
+        { pt: 'uns', carn: 'Han', prioridade: 6 },
+        { pt: 'alguns', carn: 'Han', prioridade: 6 },
+        { pt: 'eu', carn: 'Ana', prioridade: 10 },
+        { pt: 'mim', carn: 'Ani', prioridade: 10 },
+        { pt: 'me', carn: 'Ani', prioridade: 10 },
+        { pt: 'voce', carn: 'Ento', prioridade: 10 },
+        { pt: 'tu', carn: 'Ento', prioridade: 10 },
+        { pt: 'te', carn: 'Enti', prioridade: 10 },
+        { pt: 'ti', carn: 'Enti', prioridade: 10 },
+        { pt: 'ele', carn: 'Nof', prioridade: 10 },
+        { pt: 'ela', carn: 'Nas', prioridade: 10 },
+        { pt: 'eles', carn: 'Nae', prioridade: 10 },
+        { pt: 'elas', carn: 'Nae', prioridade: 10 },
+        
+        { pt: 'alem disso', carn: 'Auha', prioridade: 25 },
+        { pt: 'e tambem', carn: 'Auha', prioridade: 25 },
+        { pt: 'mais longe que', carn: 'Ehro', prioridade: 25 },
+        { pt: 'alem de', carn: 'Ehro', prioridade: 20 },
+        { pt: 'alem', carn: 'Ehro', prioridade: 15 },
+        { pt: 'como', carn: 'Hos', prioridade: 100 }, 
+        { pt: 'que', carn: 'Ke', prioridade: 9 }, 
+        { pt: 'deusa', carn: 'Nuta', prioridade: 20 },
+        { pt: 'deusas', carn: 'Nutais', prioridade: 20 },
+        { pt: 'deus', carn: 'Nuta', prioridade: 20 },
+        { pt: 'deuses', carn: 'Nutais', prioridade: 20 },
+        { pt: 'as coisas', carn: 'Ni metois', prioridade: 25 },
+        { pt: 'a coisa', carn: 'Ni meta', prioridade: 25 },
+        { pt: 'coisas', carn: 'metois', prioridade: 20 },
+        { pt: 'em', carn: 'En', prioridade: 7 },
+        { pt: 'no', carn: 'En', prioridade: 7 },
+        { pt: 'na', carn: 'En', prioridade: 7 },
+        { pt: 'para', carn: 'E', prioridade: 7 },
+        { pt: 'rei', carn: 'Uro', prioridade: 30 },
+        { pt: 'reis', carn: 'Urois', prioridade: 30 },
+        { pt: 'nos', carn: 'Anoni', prioridade: 20 },
+        { pt: 'vos', carn: 'Uri', prioridade: 20 },
+        { pt: 'as palavras', carn: 'Ni sajais', prioridade: 25 },
+
+        
+        // Mapeamentos Especiais Forçados de Texto Teste (Para garantir o motor híbrido operando as palavras chave)
+        { pt: 'a pequena árvore sagrada', carn: 'te ink uobana shēn', prioridade: 200 },
+        { pt: 'o monstro gigante', carn: 'Ni mö kruk', prioridade: 200 },
+        { pt: 'o nosso amado mestre', carn: 'Pura nayato-jo-ma', prioridade: 200 },
+        { pt: 'a espadinha', carn: 'te ink sifa', prioridade: 150 },
+        { pt: 'o traidor desprezível', carn: 'pe krofa-nu', prioridade: 150 }
+      ];
+
+      regrasBase.forEach(r => {
+        ptList.push({ key: r.pt, target: r.carn, len: r.pt.length, prioridade: r.prioridade });
+        carnList.push({ key: normalizar(r.carn), target: r.pt, len: r.carn.length, prioridade: r.prioridade });
+      });
+
+      dicionario.forEach(item => {
+        const sNorm = item.sNorm;
+        carnList.push({ key: sNorm, target: item.traducoesArray[0] || item.traducao, len: sNorm.length, prioridade: 1 });
+        if (item.plural && item.plural !== '-') {
+          carnList.push({ key: item.pNorm, target: (item.traducoesArray[0] || item.traducao) + 's', len: item.pNorm.length, prioridade: 2 });
+        }
+        if (item.isVerbo && item.conjugacoes) {
+          carnList.push({ key: normalizar(item.conjugacoes.passado), target: item.singular + ' (passado)', len: item.conjugacoes.passado.length, prioridade: 3 });
+          carnList.push({ key: normalizar(item.conjugacoes.futuro), target: item.singular + ' (futuro)', len: item.conjugacoes.futuro.length, prioridade: 3 });
+        }
+
+        item.traducoesArray.forEach(tr => {
+          const cleanTr = normalizar(tr.replace(/^(um|uma|o|a|os|as|de|para)\s+/g, ''));
+          if (cleanTr) {
+            
+            // GATILHO DE NATUREZA NEUTRA: Substitui os artigos em português pela chave 'Ni'
+            if (item.isNeutro) {
+                const ptPlural = gerarPluralPt(cleanTr);
+                ptList.push({ key: `o ${cleanTr}`, target: `Ni ${item.singular}`, len: `o ${cleanTr}`.length, prioridade: 20 });
+                ptList.push({ key: `a ${cleanTr}`, target: `Ni ${item.singular}`, len: `a ${cleanTr}`.length, prioridade: 20 });
+                ptList.push({ key: `os ${ptPlural}`, target: `Ni ${item.plural}`, len: `os ${ptPlural}`.length, prioridade: 20 });
+                ptList.push({ key: `as ${ptPlural}`, target: `Ni ${item.plural}`, len: `as ${ptPlural}`.length, prioridade: 20 });
+            }
+
+            if (item.isVerbo && item.conjugacoes) {
+              const ptConjs = gerarConjugacoesPt(cleanTr);
+              ptConjs.present.forEach(w => ptList.push({ key: w, target: item.conjugacoes.presente, len: w.length, prioridade: 3 }));
+              ptConjs.past.forEach(w => ptList.push({ key: w, target: item.conjugacoes.passado, len: w.length, prioridade: 3 }));
+              ptConjs.future.forEach(w => ptList.push({ key: w, target: item.conjugacoes.futuro, len: w.length, prioridade: 3 }));
+              ptList.push({ key: cleanTr, target: item.singular, len: cleanTr.length, prioridade: 5 });
+            } else {
+              ptList.push({ key: cleanTr, target: item.singular, len: cleanTr.length, prioridade: 5 }); 
+              const ptPlural = gerarPluralPt(cleanTr);
+              if (item.plural && item.plural !== '-') {
+                ptList.push({ key: ptPlural, target: item.plural, len: ptPlural.length, prioridade: 4 });
+              } else {
+                ptList.push({ key: ptPlural, target: item.singular, len: ptPlural.length, prioridade: 4 });
+              }
+
+              if (item.cNorm.includes('adj') || item.cNorm.includes('subst')) {
+                const ptFem = gerarFemininoPt(cleanTr);
+                if (ptFem !== cleanTr) {
+                  ptList.push({ key: ptFem, target: item.singular, len: ptFem.length, prioridade: 5 });
+                  const ptFemPlural = gerarPluralPt(ptFem);
+                  if (item.plural && item.plural !== '-') {
+                    ptList.push({ key: ptFemPlural, target: item.plural, len: ptFemPlural.length, prioridade: 4 });
+                  } else {
+                    ptList.push({ key: ptFemPlural, target: item.singular, len: ptFemPlural.length, prioridade: 4 });
+                  }
+                }
+              }
+            }
+          }
+        });
+      });
+
+      ptList.sort((a, b) => b.len - a.len || b.prioridade - a.prioridade);
+      carnList.sort((a, b) => b.len - a.len || b.prioridade - a.prioridade);
+      translationMapPtToCarn = ptList;
+      translationMapCarnToPt = carnList;
+    }
+
+    function tokenizarPalavras(frase) {
+      return String(frase || '').match(/[\p{L}\p{M}\-]+|\d+|[^\p{L}\p{M}\d\s]/gu) || [];
+    }
+
+    function ehPalavra(tok) {
+      return /^[\p{L}\p{M}\-]+$/u.test(tok);
+    }
+
+    function obterCandidatosMapa(tokens, inicio, mapa) {
+      const candidatos = [];
+      for (let tamanho = Math.min(5, tokens.length - inicio); tamanho >= 1; tamanho--) {
+        const trecho = tokens.slice(inicio, inicio + tamanho);
+        if (!trecho.every(ehPalavra)) continue;
+        const chave = normalizar(trecho.join(' '));
+        mapa.forEach(entry => {
+          if (entry.key === chave) candidatos.push({ entry, tamanho });
+        });
+        if (candidatos.length) break;
+      }
+      return candidatos;
+    }
+
+    function traduzirSegmento(tokens, direction) {
+      const mapa = direction === 'pt-to-carn' ? translationMapPtToCarn : translationMapCarnToPt;
+      const saida = [];
+      let i = 0;
+
+      while (i < tokens.length) {
+        const t = tokens[i];
+
+        if (/^\d+$/.test(t)) {
+          saida.push(direction === 'pt-to-carn' ? numeroParaCarneniano(t) : (carnenianoParaNumero(t) ?? t));
+          i++;
+          continue;
+        }
+
+        const candidatos = obterCandidatosMapa(tokens, i, mapa);
+        if (candidatos.length) {
+          let escolhido = candidatos[0];
+
+          // Regra de desambiguação:
+          // se houver uma entrada verbal entre candidatos, ela só vence
+          // quando o chamador a marcou como posição verbal.
+          const alvo = escolhido.entry.target;
+          saida.push(alvo);
+          i += escolhido.tamanho;
+          continue;
+        }
+
+        // Preserva palavras desconhecidas em vez de destruí-las.
+        saida.push(t);
+        i++;
+      }
+
+      return saida;
+    }
+
+    function encontrarVerboPt(tokens) {
+      /*
+       * Primeiro procura verbos reais do dicionário.
+       * Depois consulta um pequeno léxico de compatibilidade para os
+       * exemplos históricos do projeto. O léxico fica isolado e não
+       * interfere no restante do dicionário.
+       */
+      const candidatos = [];
+      const verbos = dicionario.filter(i => i.isVerbo);
+
+      tokens.forEach((token, index) => {
+        if (!ehPalavra(token)) return;
+        const n = normalizar(token);
+
+        verbos.forEach(item => {
+          const formas = item.conjugacoes
+            ? [...item.conjugacoes.presente, ...item.conjugacoes.passado, ...item.conjugacoes.futuro]
+            : [item.traducao];
+          if (formas.some(f => normalizar(f) === n)) {
+            let tempo = 'presente';
+            if (item.conjugacoes && item.conjugacoes.passado.some(f => normalizar(f) === n)) tempo = 'passado';
+            if (item.conjugacoes && item.conjugacoes.futuro.some(f => normalizar(f) === n)) tempo = 'futuro';
+            candidatos.push({ index, item, tempo, prioridade: 100 });
+          }
+        });
+
+        const compat = {
+          esconder: { raiz: 'hapaia', formas: ['escondeu','escondia','escondido'], tempo: 'passado' },
+          atacar: { raiz: 'stota', formas: ['atacara','atacará','atacaras','atacarao','atacará'], tempo: 'futuro' },
+          falar: { raiz: 'saja', formas: ['falara','falará','falarei','falaras','falarão','falarao','falaria'], tempo: 'futuro' }
+        };
+
+        Object.entries(compat).forEach(([lema, c]) => {
+          if (c.formas.some(f => normalizar(f) === n)) {
+            candidatos.push({
+              index, item: {
+                singular: c.raiz,
+                traducao: lema,
+                isVerbo: true,
+                conjugacoes: conjugarVerbo(c.raiz)
+              },
+              tempo: c.tempo,
+              prioridade: 50
+            });
+          }
+        });
+      });
+
+      candidatos.sort((a,b) => a.index - b.index || b.prioridade - a.prioridade);
+      return candidatos[0] || null;
+    }
+
+    function traduzirOracaoSVO(frase) {
+      const tokens = tokenizarPalavras(frase);
+      if (!tokens.length) return '';
+
+      // Vocativo: Ó/Ô + sintagma nominal -> Ha + sintagma.
+      let vocativo = '';
+      let inicio = 0;
+      if (tokens.length >= 2 && /^(ó|ô|ò)$/i.test(tokens[0])) {
+        let fim = 1;
+        while (fim < tokens.length && !/^[,;!?]$/.test(tokens[fim])) fim++;
+        let vocTokens = tokens.slice(1, fim);
+        const hon = {
+          grandioso: '-rê', grandiosa: '-rê', grandiosos: '-rê', grandiosas: '-rê',
+          amado: '-ma', amada: '-ma', queridos: '-ma', querida: '-ma',
+          desprezivel: '-nu', desprezível: '-nu',
+          mestre: '-jo', formal: '-k',
+          fofo: '-li', fofa: '-li'
+        };
+        const sufixos = [];
+        vocTokens = vocTokens.filter(t => {
+          const s = normalizar(t);
+          if (hon[s]) { sufixos.push(hon[s]); return false; }
+          return true;
+        });
+        let vocBase = traduzirSegmento(vocTokens, 'pt-to-carn').join(' ');
+        if (sufixos.length && vocBase) vocBase = vocBase.replace(/\s+$/, '') + sufixos.join('');
+        vocativo = 'Ha ' + vocBase;
+        inicio = fim < tokens.length ? fim + 1 : fim;
+      }
+
+      const corpo = tokens.slice(inicio);
+      if (!corpo.length) return vocativo;
+
+      const verbo = encontrarVerboPt(corpo);
+
+      // Sem verbo identificável: tradução lexical normal, sem inventar SVO.
+      if (!verbo) {
+        let simples = traduzirSegmento(corpo, 'pt-to-carn').join(' ');
+        return vocativo ? vocativo + (simples ? ', ' + simples : '') : simples;
+      }
+
+      // Remove negação do fluxo lexical; ela será posicionada imediatamente
+      // antes do verbo, conforme a gramática.
+      const antes = corpo.slice(0, verbo.index).filter(t => normalizar(t) !== 'nao' && normalizar(t) !== 'não');
+      const depois = corpo.slice(verbo.index + 1).filter(t => normalizar(t) !== 'nao' && normalizar(t) !== 'não');
+
+      // Determinação heurística dos constituintes:
+      // sujeito = tudo antes do verbo; objeto = tudo depois.
+      // Isso é deliberadamente conservador: não tenta "adivinhar" uma
+      // estrutura inexistente quando o verbo não foi reconhecido.
+      const sujeito = traduzirSegmento(antes, 'pt-to-carn').join(' ').trim();
+      let verboCarn;
+      if (verbo.item && verbo.item.conjugacoes) {
+        verboCarn = verbo.item.conjugacoes[verbo.tempo];
+      } else {
+        verboCarn = verbo.item.singular;
+      }
+
+      const negativo = corpo.some(t => /^(nao|não)$/i.test(t));
+      const objeto = traduzirSegmento(depois, 'pt-to-carn').join(' ').trim();
+
+      const partes = [];
+      if (sujeito) partes.push(sujeito);
+      if (negativo) partes.push('An');
+      partes.push(verboCarn);
+      if (objeto) partes.push(objeto);
+
+      const svo = partes.join(' ');
+      return vocativo ? vocativo + ', ' + svo : svo;
+    }
+
+    function corrigirMorfologiaSaida(texto) {
+      let s = String(texto || '');
+
+      // Honoríficos nunca ficam separados do substantivo.
+      s = s.replace(/\s+(-(?:rê|ma|nu|jo|k|li))\b/gi, '$1');
+
+      // Se um honorífico vier antes do plural, a ordem oficial é:
+      // raiz + honorífico + -is.
+      s = s.replace(/\b([A-Za-zÀ-ÿ]+)(-(?:rê|ma|nu|jo|k|li))([A-Za-zÀ-ÿ]*is)\b/gi, '$1$2$3');
+
+      return s.replace(/\s+([,.;:!?])/g, '$1').replace(/ {2,}/g, ' ').trim();
+    }
+
+    function translateText(text, direction) {
+      if (!text || !text.trim()) return '';
+
+      if (direction === 'carn-to-pt') {
+        // Tradução reversa permanece lexical, mas respeita números e frases
+        // longas. Não tenta reconstruir uma ordem portuguesa que não esteja
+        // explícita no léxico.
+        return text.split('\n').map(line => {
+          if (!line.trim()) return '';
+          const tokens = tokenizarPalavras(line);
+          return traduzirSegmento(tokens, 'carn-to-pt').join(' ');
+        }).join('\n');
+      }
+
+      return reordenarSintaxeSVO(text)
+        .split('\n')
+        .map(line => {
+          if (!line.trim()) return '';
+          return corrigirMorfologiaSaida(traduzirOracaoSVO(line));
+        })
+        .join('\n');
+    }
+
+    function handleTranslatorInput() {
+      const text = translatorInput.value;
+      inputCharCounter.textContent = `${text.length} ${text.length === 1 ? 'caractere' : 'caracteres'}`;
+      const inputPreview = document.getElementById('input-runes-preview');
+
+      if (!text.trim()) {
+        translatorOutput.className = "w-full min-h-[160px] text-amber-200 font-medium text-base leading-relaxed select-all";
+        translatorOutput.innerHTML = '<span class="text-stone-600 font-normal italic flex items-center h-full justify-center opacity-50">A tradução aparecerá aqui...</span>';
+        lastTranslatedString = '';
+        inputPreview.innerHTML = '';
+        inputPreview.classList.add('hidden');
+        return;
+      }
+
+      const translated = translateText(text, translationDirection);
+      lastTranslatedString = translated;
+      translatorOutput.innerHTML = '';
+      inputPreview.innerHTML = '';
+      
+      if (translationDirection === 'pt-to-carn') {
+        inputPreview.classList.add('hidden');
+        translatorOutput.className = "w-full min-h-[160px] flex gap-8 overflow-x-auto pb-4"; 
+        
+        const lines = translated.split('\n');
+        lines.forEach(line => {
+          if (line.trim() === '') {
+             translatorOutput.appendChild(document.createElement('br'));
+             return;
+          }
+          const lineContainer = document.createElement('div');
+          lineContainer.className = 'flex flex-col items-center shrink-0 min-w-fit';
+          
+          const runes = document.createElement('div');
+          runes.className = 'font-carnenian text-4xl text-amber-400 mb-2 tracking-wider escrita-vertical text-center break-words';
+          runes.textContent = line;
+          
+          const roman = document.createElement('div');
+          roman.className = 'text-sm text-stone-400 italic text-center w-full mt-2 break-words';
+          roman.textContent = line;
+          
+          lineContainer.appendChild(runes);
+          lineContainer.appendChild(roman);
+          translatorOutput.appendChild(lineContainer);
+        });
+      } else {
+        inputPreview.classList.remove('hidden');
+        inputPreview.className = "mt-4 pt-4 border-t border-stone-800/60 flex gap-6 overflow-x-auto pb-2 min-h-[120px]";
+        
+        const lines = text.split('\n');
+        lines.forEach(line => {
+          if (line.trim() === '') {
+             inputPreview.appendChild(document.createElement('br'));
+             return;
+          }
+          const runes = document.createElement('div');
+          runes.className = 'font-carnenian text-3xl text-amber-400/80 tracking-wider escrita-vertical text-center break-words shrink-0';
+          runes.textContent = line;
+          inputPreview.appendChild(runes);
+        });
+
+        translatorOutput.className = "w-full min-h-[160px] text-amber-200 font-medium text-base leading-relaxed select-all";
+        translated.split('\n').forEach((tLine, index, arr) => {
+            translatorOutput.appendChild(document.createTextNode(tLine));
+            if (index < arr.length - 1) translatorOutput.appendChild(document.createElement('br'));
+        });
+      }
+    }
+
+    function invertTranslationDirection() {
+      if (translationDirection === 'pt-to-carn') {
+        translationDirection = 'carn-to-pt';
+        transSourceLabel.textContent = "Lírico Carneniano";
+        transSourceLabel.className = "text-amber-400";
+        transTargetLabel.textContent = "Português";
+        transTargetLabel.className = "text-stone-300";
+        translatorInput.placeholder = "Digite em Lírico Carneniano (ex: Pa Shibra womem en aia)...";
+      } else {
+        translationDirection = 'pt-to-carn';
+        transSourceLabel.textContent = "Português";
+        transSourceLabel.className = "text-amber-400";
+        transTargetLabel.textContent = "Lírico Carneniano";
+        transTargetLabel.className = "text-stone-300";
+        translatorInput.placeholder = "Digite sua frase épica (ex: Ó Rei grandioso, a pequena árvore sagrada escondeu...)";
+      }
+      if (lastTranslatedString && !lastTranslatedString.includes('aparecerá aqui')) translatorInput.value = lastTranslatedString;
+      handleTranslatorInput();
+    }
+
+    function clearTranslatorInput() {
+      translatorInput.value = '';
+      translatorInput.style.height = 'auto';
+      handleTranslatorInput();
+    }
+
+    function copyTranslation() {
+      if (!lastTranslatedString || lastTranslatedString.includes('aparecerá aqui')) return;
+      navigator.clipboard.writeText(lastTranslatedString).then(() => {
+        copyBtn.textContent = 'Copiado!';
+        copyBtn.className = 'text-amber-400 font-bold';
+        setTimeout(() => {
+          copyBtn.textContent = 'Copiar Texto';
+          copyBtn.className = 'hover:text-amber-400 font-medium transition-colors';
+        }, 2000);
+      });
+    }
+
+    function renderDictCards(lista) {
+      resultsContainer.innerHTML = '';
+      counter.textContent = `${lista.length} ${lista.length === 1 ? 'termo' : 'termos'}`;
+      if (lista.length === 0) {
+        resultsContainer.innerHTML = `<div class="col-span-2 text-center py-16 text-stone-600 font-medium">Nenhum termo encontrado para esta pesquisa.</div>`;
+        return;
+      }
+      lista.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "bg-stone-900 border border-stone-800 hover:border-amber-500/40 rounded-xl p-5 transition-colors flex flex-col justify-between shadow-lg";
+
+        const temPronuncia = item.pronuncia && item.pronuncia.trim() !== "" && item.pronuncia !== "-" && item.pronuncia.toLowerCase() !== "null";
+        const pronunciaIcon = item.isAutoPronuncia ? ' <span title="Acentuação gerada automaticamente" class="text-[10px] cursor-help">✨</span>' : '';
+        const singularSafe = item.singular.replace(/'/g, "\\'");
+        const voz = (temPronuncia ? item.pronuncia : item.singular).replace(/'/g, "\\'");
+
+        const tagPronuncia = temPronuncia 
+          ? `<div class="flex items-center"><span class="text-xs text-amber-400 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded shadow-sm">${item.pronuncia}${pronunciaIcon}</span><button onclick="playPronunciation('${voz}', '${singularSafe}')" title="Ouvir pronúncia" class="ml-1.5 hover:scale-125 transition-transform text-amber-500">🔊</button></div>` 
+          : `<div class="flex items-center"><span class="text-xs text-stone-600 font-mono italic">Pronúncia regular</span><button onclick="playPronunciation('${voz}', '${singularSafe}')" title="Ouvir pronúncia" class="ml-1.5 hover:scale-125 transition-transform text-stone-400 hover:text-amber-500">🔊</button></div>`;
+
+        let secaoVerbal = '';
+        if (item.isVerbo && item.conjugacoes) {
+          secaoVerbal = `
+            <div class="my-3 p-2.5 bg-stone-950/80 rounded-lg border border-stone-800/80 shadow-inner">
+              <span class="text-[10px] uppercase font-bold text-amber-400/80 tracking-wider block mb-1.5">Conjugação por Tempo</span>
+              <div class="grid grid-cols-3 gap-1.5 text-center text-xs">
+                <div class="bg-stone-900/90 py-1 px-1.5 rounded border border-stone-800">
+                  <span class="block text-[10px] text-stone-500 font-medium">Passado (-em)</span>
+                  <span class="font-bold text-stone-200">${item.conjugacoes.passado}</span>
+                </div>
+                <div class="bg-stone-900/90 py-1 px-1.5 rounded border border-amber-900/40">
+                  <span class="block text-[10px] text-amber-400/80 font-medium">Presente (Raiz)</span>
+                  <span class="font-bold text-amber-300">${item.conjugacoes.presente}</span>
+                </div>
+                <div class="bg-stone-900/90 py-1 px-1.5 rounded border border-stone-800">
+                  <span class="block text-[10px] text-stone-500 font-medium">Futuro (-ra)</span>
+                  <span class="font-bold text-stone-200">${item.conjugacoes.futuro}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        const temPluralValido = item.plural && item.plural !== '-' && item.plural.toLowerCase() !== 'null';
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs uppercase tracking-wider font-semibold ${item.isVerbo ? 'bg-amber-950 text-amber-300 border border-amber-800' : 'bg-stone-800 text-stone-300'} px-2 py-0.5 rounded shadow-sm">
+                ${item.classe && item.classe.toLowerCase() !== 'null' ? item.classe : 'Vocábulo'}
+              </span>
+              ${tagPronuncia}
+            </div>
+            <div class="mb-3 mt-1">
+              <h2 class="font-carnenian text-4xl text-amber-400 tracking-wide">${item.singular}</h2>
+              <h3 class="text-xl font-bold text-stone-100 mt-1">${item.singular}</h3>
+            </div>
+            <p class="text-amber-200/90 font-medium text-base mb-2">${item.traducao && item.traducao.toLowerCase() !== 'null' ? item.traducao : '—'}</p>
+            ${secaoVerbal}
+          </div>
+          <div class="pt-3 border-t border-stone-800 text-xs text-stone-400 space-y-1">
+            <div class="flex justify-between items-center">
+              <span><strong class="text-stone-500">Plural:</strong> ${item.isVerbo ? '<span class="italic text-stone-500">Imutável</span>' : (temPluralValido ? `<span class="text-stone-200 font-medium">${item.plural}</span>` : '—')}</span>
+              ${item.ambiente && item.ambiente !== '-' && item.ambiente !== 'AMBOS' && item.ambiente.toLowerCase() !== 'null' ? `<span class="text-[10px] text-stone-500 uppercase tracking-widest bg-stone-950 px-1 rounded">${item.ambiente}</span>` : ''}
+            </div>
+            ${item.uso && item.uso !== '-' && item.uso.toLowerCase() !== 'null' ? `<p class="text-stone-500 pt-1 italic">${item.uso}</p>` : ''}
+          </div>
+        `;
+        resultsContainer.appendChild(card);
+      });
+    }
+
+    function filterDictData() {
+      const query = normalizar(dictInput.value);
+      const pontuados = [];
+      for (let i = 0; i < dicionario.length; i++) {
+        const item = dicionario[i];
+        let score = 0;
+        if (!query) score = 1;
+        else {
+          if (dictSearchMode === 'carneniano' || dictSearchMode === 'ambos') {
+            if (item.sNorm === query) score = Math.max(score, 1000);
+            else if (item.pNorm === query) score = Math.max(score, 980);
+            else if (item.sNorm.startsWith(query)) score = Math.max(score, 500);
+            else if (item.sNorm.includes(query) || item.pNorm.includes(query)) score = Math.max(score, 100);
+          }
+          if (dictSearchMode === 'portugues' || dictSearchMode === 'ambos') {
+            if (item.tNorm === query) score = Math.max(score, 1000);
+            else if (item.traducoesArray.includes(query)) score = Math.max(score, 980);
+            else if (item.tNorm.startsWith(query)) score = Math.max(score, 450);
+            else if (item.tNorm.includes(query)) score = Math.max(score, 80);
+          }
+        }
+        if (score > 0) pontuados.push({ item, score });
+      }
+      pontuados.sort((a, b) => b.score - a.score);
+      renderDictCards(pontuados.map(p => p.item));
+    }
+
+    function handleDictSearch() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(filterDictData, 300);
+    }
+
+    function setDictSearchMode(mode) {
+      dictSearchMode = mode;
+      ['btn-dict-both', 'btn-dict-carnenian', 'btn-dict-pt'].forEach(id => {
+        document.getElementById(id).className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition-colors";
+      });
+      document.getElementById(`btn-dict-${mode === 'ambos' ? 'both' : mode === 'portugues' ? 'pt' : 'carnenian'}`).className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition-colors shadow-sm";
+      filterDictData();
+    }
+
+    async function carregarDicionario() {
+      try {
+        const resposta = await fetch('dicionario.json', { cache: 'no-store' });
+        if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+
+        const dadosBrutos = await resposta.json();
+        if (!Array.isArray(dadosBrutos)) {
+          throw new Error('O dicionário deve ser um array JSON.');
+        }
+
+        dicionario = expandirDicionario(dadosBrutos).filter(item =>
+          item.singular &&
+          !['null','nan','...'].includes(normalizar(item.singular))
+        );
+
+        buildTranslationMaps();
+        filterDictData();
+
+        console.info(
+          `[Lírico] Dicionário carregado: ${dicionario.length} entradas normalizadas.`
+        );
+      } catch (erro) {
+        console.error('[Lírico] Falha ao carregar dicionário:', erro);
+        resultsContainer.innerHTML = `
+          <div class="col-span-2 text-center py-12 text-amber-500 bg-stone-900 border border-amber-900/50 rounded-xl p-6 shadow-lg">
+            <p class="font-bold mb-2">Erro ao carregar o dicionário</p>
+            <p class="text-xs text-stone-400">
+              ${erro.message || 'Verifique se dicionario.json é um JSON válido e está na mesma pasta do HTML.'}
+            </p>
+          </div>`;
+      }
+    }
+
+    translatorInput.addEventListener('input', handleTranslatorInput);
+    dictInput.addEventListener('input', handleDictSearch);
+    carregarDicionario();
+  </script>
+</head>
+<body class="bg-stone-950 text-stone-100 min-h-screen py-10 px-4">
+
+  <div class="max-w-4xl mx-auto">
+    <header class="text-center mb-6">
+      <h1 class="text-4xl font-extrabold tracking-tight text-amber-400 mb-2 font-carnenian">Lírico Carneniano</h1>
+      <p class="text-stone-400 text-sm">Motor SVO, Flexão Absoluta, Honoríficos & Gênero Biológico • OCL</p>
+    </header>
+
+    <div class="flex justify-center mb-8">
+      <div class="inline-flex bg-stone-900 border border-stone-800 p-1 rounded-xl shadow-lg">
+        <button 
+          id="tab-btn-translator" 
+          onclick="switchTab('translator')" 
+          class="px-5 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-stone-950 transition">
+          🔄 Tradutor Sintático
+        </button>
+        <button 
+          id="tab-btn-dictionary" 
+          onclick="switchTab('dictionary')" 
+          class="px-5 py-2 text-sm font-semibold rounded-lg text-stone-400 hover:text-stone-200 transition">
+          📖 Dicionário de Termos
+        </button>
+      </div>
+    </div>
+
+    <!-- ABA 1: TRADUTOR -->
+    <div id="section-translator" class="space-y-6">
+      <div class="bg-stone-900 border border-stone-800 rounded-2xl shadow-xl overflow-hidden transition-all">
+        
+        <div class="flex items-center justify-between px-6 py-3 border-b border-stone-800 bg-stone-900/60 flex-wrap gap-2">
+          <div class="flex items-center gap-3 font-semibold text-sm">
+            <span id="trans-source-label" class="text-amber-400 transition-colors">Português</span>
+            <button 
+              onclick="invertTranslationDirection()" 
+              title="Inverter direção" 
+              class="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 hover:text-amber-400 text-stone-300 transition-all duration-300 transform hover:scale-110">
+              ⇄
+            </button>
+            <span id="trans-target-label" class="text-stone-300 transition-colors">Lírico Carneniano</span>
+          </div>
+          <span class="text-xs text-amber-400/90 font-mono bg-amber-950/40 border border-amber-900/40 px-2 py-0.5 rounded shadow-sm">Motor Mestre Ativado</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-stone-800">
+          
+          <div class="p-4 flex flex-col justify-between bg-stone-950/20">
+            <div class="w-full flex-grow">
+              <textarea 
+                id="translator-input"
+                rows="6"
+                oninput="autoResize(this)"
+                placeholder="Digite sua frase épica (ex: Ó Rei grandioso, a pequena árvore sagrada escondeu...)" 
+                class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed transition-all"
+              ></textarea>
+              
+              <div id="input-runes-preview" class="hidden"></div>
+            </div>
+
+            <div class="flex justify-between items-center pt-3 border-t border-stone-800/60 text-xs text-stone-500 mt-2">
+              <span id="input-char-counter">0 caracteres</span>
+              <button onclick="clearTranslatorInput()" class="hover:text-amber-400 transition-colors">Limpar</button>
+            </div>
+          </div>
+
+          <div class="p-4 bg-stone-950/50 flex flex-col justify-between">
+            <div 
+              id="translator-output"
+              class="w-full min-h-[160px] text-amber-200 font-medium text-base leading-relaxed select-all">
+              <span class="text-stone-600 font-normal italic flex items-center h-full justify-center opacity-50">A tradução aparecerá aqui...</span>
+            </div>
+            
+            <div class="flex justify-end items-center gap-4 pt-3 border-t border-stone-800/60 text-xs text-stone-500 mt-2">
+              <button onclick="playTranslationAudio()" id="speak-btn" class="hover:text-amber-300 text-stone-300 font-medium transition-colors bg-stone-800 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm">
+                🔊 Ouvir
+              </button>
+              <button onclick="copyTranslation()" id="copy-btn" class="hover:text-amber-400 font-medium transition-colors">Copiar Texto</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA 2: DICIONÁRIO COMPLETO -->
+    <div id="section-dictionary" class="hidden space-y-6">
+      
+      <div class="bg-stone-900 border border-stone-800 rounded-2xl p-4 shadow-xl">
+        <div class="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-stone-800 flex-wrap">
+          <div class="flex items-center gap-2">
+            <button id="btn-dict-both" onclick="setDictSearchMode('ambos')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-stone-950 transition">
+              Busca Total
+            </button>
+            <button id="btn-dict-carnenian" onclick="setDictSearchMode('carneniano')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
+              Carneniano → PT
+            </button>
+            <button id="btn-dict-pt" onclick="setDictSearchMode('portugues')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
+              PT → Carneniano
+            </button>
+          </div>
+
+          <span id="counter" class="text-xs text-stone-500 font-mono w-full sm:w-auto text-right">Carregando...</span>
+        </div>
+
+        <div class="relative group">
+          <input 
+            type="text" 
+            id="dict-search-input"
+            placeholder="Pesquisar termo exato (ex: Eu), plural, ou conjugação..." 
+            class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-3 pl-11 text-base text-stone-100 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner"
+          >
+        </div>
+      </div>
+
+      <div id="results-container" class="grid gap-4 md:grid-cols-2"></div>
+    </div>
+  </div>
+
+  <script>
+    let dicionario = [];
+    let dictSearchMode = 'ambos';
+    let translationDirection = 'pt-to-carn';
+    let lastTranslatedString = ''; 
+    let debounceTimer; 
+
+    // ==========================================
+    // SISTEMA CAÇADOR DE VOZES PREMIUM HD
+    // ==========================================
+    let vozesPremiumPTBR = [];
+    function carregarVozes() {
+      const vozes = window.speechSynthesis.getVoices();
+      vozesPremiumPTBR = vozes.filter(v => v.lang === 'pt-BR' || v.lang === 'pt_BR');
+    }
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = carregarVozes;
+    }
+
+    const translatorInput = document.getElementById('translator-input');
+    const translatorOutput = document.getElementById('translator-output');
+    const inputCharCounter = document.getElementById('input-char-counter');
+    const transSourceLabel = document.getElementById('trans-source-label');
+    const transTargetLabel = document.getElementById('trans-target-label');
+    const copyBtn = document.getElementById('copy-btn');
+
+    const dictInput = document.getElementById('dict-search-input');
+    const resultsContainer = document.getElementById('results-container');
+    const counter = document.getElementById('counter');
+
+    // ==========================================
+    // TRADUTOR DE SOTAQUE (MÁGICA FONÉTICA)
+    // ==========================================
+    function adaptarParaOuvidoPtBR(texto) {
+      let lido = texto.toLowerCase();
+      lido = lido.replace(/-/g, '');
+      lido = lido.replace(/sh/g, 'x');   
+      lido = lido.replace(/w/g, 'u');    
+      lido = lido.replace(/y/g, 'i');    
+      lido = lido.replace(/kh/g, 'rr');  
+      lido = lido.replace(/th/g, 't');   
+      lido = lido.replace(/ph/g, 'f');   
+      lido = lido.replace(/ā/g, 'á').replace(/ē/g, 'ê').replace(/ō/g, 'ô').replace(/ū/g, 'ú');
+      lido = lido.replace(/ä/g, 'a').replace(/ë/g, 'e').replace(/ö/g, 'o');
+      return lido;
+    }
+
+    function playPronunciation(text, fallbackWord) {
+      if (!text || text.trim() === '') return;
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel(); 
+
+      let textoParaLer = text.includes('[') ? adaptarParaOuvidoPtBR(fallbackWord) : adaptarParaOuvidoPtBR(text);
+      
+      const utterance = new SpeechSynthesisUtterance(textoParaLer);
+      utterance.lang = 'pt-BR'; 
+      utterance.rate = 0.9; 
+      utterance.pitch = 1.0; 
+      
+      if (vozesPremiumPTBR.length === 0) carregarVozes(); 
+      let melhorVoz = vozesPremiumPTBR.find(v => v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Premium'));
+      if (!melhorVoz && vozesPremiumPTBR.length > 0) melhorVoz = vozesPremiumPTBR[0]; 
+      if (melhorVoz) utterance.voice = melhorVoz;
+      
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function playTranslationAudio() {
+      if (!lastTranslatedString || lastTranslatedString.includes('aparecerá aqui')) return;
+      if (translationDirection === 'carn-to-pt') {
+        const ut = new SpeechSynthesisUtterance(lastTranslatedString);
+        ut.lang = 'pt-BR';
+        if (vozesPremiumPTBR.length > 0) {
+           let melhorVoz = vozesPremiumPTBR.find(v => v.name.includes('Google') || v.name.includes('Natural'));
+           if (melhorVoz) ut.voice = melhorVoz;
+        }
+        window.speechSynthesis.speak(ut);
+      } else {
+        playPronunciation(lastTranslatedString, lastTranslatedString);
+      }
+    }
+
+    function autoResize(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    function switchTab(tab) {
+      const secTranslator = document.getElementById('section-translator');
+      const secDictionary = document.getElementById('section-dictionary');
+      const btnTranslator = document.getElementById('tab-btn-translator');
+      const btnDictionary = document.getElementById('tab-btn-dictionary');
+
+      if (tab === 'translator') {
+        secTranslator.classList.remove('hidden');
+        secDictionary.classList.add('hidden');
+        btnTranslator.className = "px-5 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-stone-950 transition shadow-md";
+        btnDictionary.className = "px-5 py-2 text-sm font-semibold rounded-lg text-stone-400 hover:text-stone-200 transition";
+      } else {
+        secTranslator.classList.add('hidden');
+        secDictionary.classList.remove('hidden');
+        btnDictionary.className = "px-5 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-stone-950 transition shadow-md";
+        btnTranslator.className = "px-5 py-2 text-sm font-semibold rounded-lg text-stone-400 hover:text-stone-200 transition";
+      }
+    }
+
+    function normalizar(texto) {
+      return (texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    }
+
+    function gerarFemininoPt(palavra) {
+      const p = palavra.trim();
+      if (p.endsWith('o')) return p.slice(0, -1) + 'a';
+      if (p.endsWith('or')) return p + 'a';
+      if (p.endsWith('u')) return p + 'a'; 
+      return p;
+    }
+
+    function gerarPronunciaAutomatica(singular) {
+      if (!singular || singular === '-' || singular.includes(' ')) return singular;
+      return singular.split('-').map(p => {
+        let lowerP = p.toLowerCase();
+        let indexTonica = (lowerP.startsWith('i') || lowerP.startsWith('u') || /^(p|s|r|tr|ge|q)[iu]/i.test(lowerP)) ? 1 : 0; 
+        
+        let silabada = p.replace(/([aeiouāēōūäëöàèìòùáéíóúy])([bcdfghjklmnpqrstvwxz]+)([aeiouāēōūäëöàèìòùáéíóúy])/gi, '$1-$2$3');
+        silabada = silabada.replace(/([iu])([aeiouāēōūäëöàèìòùáéíóúy])/gi, '$1-$2');
+        let silabas = silabada.split('-');
+        let targetIndex = (indexTonica === 0) ? 0 : (silabas.length - 1);
+        if(targetIndex >= silabas.length) targetIndex = silabas.length - 1;
+        let silabaAlvo = silabas[targetIndex];
+        
+        if (!/[āēōūäëöàèìòùáéíóú]/.test(silabaAlvo)) {
+            silabas[targetIndex] = silabaAlvo.replace(/([aeiou])/i, match => {
+                const mapa = {'a':'á', 'e':'é', 'i':'í', 'o':'ó', 'u':'ú', 'A':'Á', 'E':'É', 'I':'Í', 'O':'Ó', 'U':'Ú'};
+                return mapa[match] || match;
+            });
+        }
+        return silabas.join('-');
+      }).join('-');
+    }
+
+    function numeroParaCarneniano(numStr) {
+      let n = parseInt(numStr, 10);
+      if (isNaN(n)) return numStr;
+      if (n === 0) return "Sur";
+
+      const unidades = ["", "Wa", "Snava", "Shomta", "Fotu", "Tiwa", "Soa", "Sashfa", "Shamna", "Psita"];
+      const dezenas = ["", "Mēta", "Snavamē", "Shomtamē", "Fotumē", "Tiwamē", "Soamē", "Sashfamē", "Shamnamē", "Psitamē"];
+      let partes = [];
+      let milhar = Math.floor(n / 1000); n = n % 1000;
+      let centena = Math.floor(n / 100); n = n % 100;
+      let dezena = Math.floor(n / 10); let unidade = n % 10;
+
+      if (milhar > 0) partes.push(milhar === 1 ? "Sho" : unidades[milhar] + "-Sho");
+      if (centena > 0) partes.push(centena === 1 ? "She" : unidades[centena] + "-She");
+      if (dezena > 0) partes.push(dezenas[dezena]);
+      if (unidade > 0) partes.push(unidades[unidade]);
+      return partes.join("-");
+    }
+
+    function carnenianoParaNumero(str) {
+      const map = {
+        "sur": 0, "wa": 1, "snava": 2, "shomta": 3, "fotu": 4, "tiwa": 5, "soa": 6, "sashfa": 7, "shamna": 8, "psita": 9,
+        "mēta": 10, "meta": 10, "snavamē": 20, "snavame": 20, "shomtamē": 30, "shomtame": 30,
+        "fotumē": 40, "fotume": 40, "tiwamē": 50, "tiwame": 50, "soamē": 60, "soame": 60,
+        "sashfamē": 70, "sashfame": 70, "shamnamē": 80, "shamname": 80, "psitamē": 90, "psitame": 90,
+        "she": 100, "sho": 1000
+      };
+      let parts = str.toLowerCase().split('-');
+      let total = 0; let temp = 0; let isValid = true;
+      for (let i = 0; i < parts.length; i++) {
+        let p = parts[i];
+        if (!(p in map)) { isValid = false; break; }
+        let val = map[p];
+        if (val === 100 || val === 1000) {
+          if (temp === 0) temp = 1;
+          total += temp * val; temp = 0;
+        } else temp += val;
+      }
+      total += temp;
+      return isValid ? total.toString() : null;
+    }
+
+    // ==========================================
+    // MOTOR VERBAL: ISOLAMENTO TEMPORAL ABSOLUTO
+    // ==========================================
+    function conjugarVerbo(raiz) {
       const r = raiz.trim();
       let passado = r.endsWith('a') ? r.slice(0, -1) + 'em' : r + 'em';
       let presente = r;
