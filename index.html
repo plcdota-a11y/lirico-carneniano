@@ -494,14 +494,13 @@
       return { present: [...res.present], past: [...res.past], future: [...res.future] };
     }
 
-    // Leitor Universal: Vasculha qualquer JSON, independente dos nomes das colunas
     function processarJSONOmnivoro(dados) {
       const saida = [];
       const vistos = new Set();
 
       const adicionar = (item) => {
         if (!item || !item.singular || /^null$/i.test(item.singular)) return;
-        if (/^(pessoa|palavra|tipo|honorifico|honíficos|dicionario)$/i.test(normalizar(item.singular))) return;
+        if (/^(pessoa|palavra|tipo|honorifico|honíficos|dicionario|palavra\/singular)$/i.test(normalizar(item.singular))) return;
         
         const chave = `${item.sNorm}|${item.tNorm}|${item.cNorm}`;
         if (!vistos.has(chave)) {
@@ -511,36 +510,62 @@
       };
 
       dados.forEach(raw => {
-        const keys = Object.keys(raw);
-        const vals = Object.values(raw);
+        let singular, traducao, classe, plural, pronuncia, uso, ambiente, categoria, genero;
 
-        // Busca Inteligente por Palavras Chaves ou Posições (Fallback)
-        const getVal = (nomes, posFallback) => {
-          for (let name of nomes) {
-            const foundKey = keys.find(k => k.toLowerCase() === name.toLowerCase());
-            if (foundKey && raw[foundKey]) return String(raw[foundKey]).trim();
-          }
-          if (vals[posFallback]) return String(vals[posFallback]).trim();
-          return '';
-        };
+        if (Array.isArray(raw)) {
+            // Remove espaços vazios ou nulos (gerados por conversores de CSV)
+            const limpos = raw.filter(item => item !== null && item !== undefined && String(item).trim() !== '');
+            // Extrai na ordem cravada que o usuário relatou
+            singular = limpos[0] || '';
+            traducao = limpos[1] || '';
+            classe   = limpos[2] || '';
+            plural   = limpos[3] || '';
+            pronuncia= limpos[4] || '';
+            uso      = limpos[5] || '';
+            ambiente = limpos[6] || '';
+        } else if (typeof raw === 'object' && raw !== null) {
+            const keys = Object.keys(raw);
+            const getVal = (palavrasChave) => {
+                for (let p of palavrasChave) {
+                    const pNorm = normalizar(p);
+                    const foundKey = keys.find(k => normalizar(k).includes(pNorm));
+                    if (foundKey && raw[foundKey] && String(raw[foundKey]).trim() !== '') {
+                        return String(raw[foundKey]).trim();
+                    }
+                }
+                return '';
+            };
 
-        const singular = getVal(['DICIONARIO', 'PALAVRA/SINGULAR', 'singular', 'palavra', 'termo', '0'], 0);
-        const traducao = getVal(['SIGNIFICADO/TRADUÇÃO', 'traducao', 'significado', '2'], 2);
-        const classe = getVal(['CLASE', 'CLASSE', 'classe', '4'], 4);
-        let plural = getVal(['PLURAL', 'plural', '6'], 6);
-        let pronuncia = getVal(['PRONÚNCIA', 'PRONUNCIA', 'pronuncia', '8'], 8);
-        const uso = getVal(['USO', 'NOTAS', 'NOTAS / ORIGEM', '9'], 9);
-        const ambiente = getVal(['AMBIENTE', 'ambiente', '10'], 10);
-        const categoria = getVal(['CATEGORIA', 'categoria_semantica', '1'], 1);
-        const genero = getVal(['GÊNERO', 'GENERO', 'genero', '3'], 3);
+            singular = getVal(['singular', 'palavra', 'dicionario']);
+            traducao = getVal(['traducao', 'significado']);
+            classe   = getVal(['classe', 'clase']);
+            plural   = getVal(['plural']);
+            pronuncia = getVal(['pronuncia']);
+            uso      = getVal(['notas', 'uso', 'origem']);
+            ambiente = getVal(['ambiente']);
+            categoria = getVal(['categoria']);
+            genero   = getVal(['genero']);
+
+            // Fallback genérico caso as colunas tenham nomes do tipo "Column1", "FIELD2", etc
+            if (!singular && !traducao && keys.length >= 2) {
+                const vals = Object.values(raw).filter(v => v !== null && v !== undefined && String(v).trim() !== '');
+                singular = vals[0] || '';
+                traducao = vals[1] || '';
+                classe   = vals[2] || '';
+                plural   = vals[3] || '';
+                pronuncia = vals[4] || '';
+                uso      = vals[5] || '';
+                ambiente = vals[6] || '';
+            }
+        }
 
         if (singular && traducao) {
           const cNorm = normalizar(classe);
           const isVerbo = /\bverbo\b/.test(cNorm);
-          const isSubstantivo = cNorm.includes('substant');
+          const isSubstantivo = cNorm.includes('substant') || cNorm.includes('subst');
           const isAdjetivo = cNorm.includes('adjet') || cNorm.includes('adj');
           const isPronome = cNorm.includes('pronome');
-          const isNatureza = /^(animais|plantas)$/i.test(categoria.trim()) || /\b(animais|plantas|fauna|flora|ave|pássaro|peixe|lobo|cão|cavalo|monstro|flor|fruta|mato)\b/i.test((uso + " " + traducao + " " + ambiente).toLowerCase());
+          const isNatureza = /^(animais|plantas)$/i.test(String(categoria).trim()) || /\b(animais|plantas|fauna|flora|ave|pássaro|peixe|lobo|cão|cavalo|monstro|flor|fruta|mato|inseto)\b/i.test((uso + " " + traducao + " " + ambiente).toLowerCase());
           const isNeutro = /neutro/i.test(genero) || isNatureza || cNorm.includes('neutro');
 
           if ((isSubstantivo || isAdjetivo) && (!plural || plural === '-' || /^null$/i.test(plural))) {
@@ -664,7 +689,7 @@
               ptConjs.past.forEach(w => ptList.push({ key: w, target: item.conjugacoes.passado, len: w.length, prioridade: 3 }));
               ptConjs.future.forEach(w => ptList.push({ key: w, target: item.conjugacoes.futuro, len: w.length, prioridade: 3 }));
               
-              // Se for um verbo que também é substantivo ("O servo" vs "Eu servo"), damos prioridade menor pro verbo puro
+              // Se for um verbo que também é substantivo (como servo), ele perde prioridade para o substantivo puro
               let verboPriority = item.isSubstantivo ? 2 : 5;
               ptList.push({ key: cleanTr, target: item.singular, len: cleanTr.length, prioridade: verboPriority });
             } else {
@@ -787,10 +812,10 @@
             if (item.conjugacoes && item.conjugacoes.passado.some(f => normalizar(f) === n)) tempo = 'passado';
             if (item.conjugacoes && item.conjugacoes.futuro.some(f => normalizar(f) === n)) tempo = 'futuro';
             
-            // Desambiguação Agressiva: Impede de pegar "servo" como verbo se tiver artigo antes
+            // Rebaixa verbo se ele tiver um artigo antes (Desambiguação)
             let prioridade = 100;
             if (index > 0 && /^(o|a|os|as|um|uma|uns|umas)$/i.test(normalizar(tokens[index-1]))) {
-                prioridade = 5; // Rebaixa para perder da busca do substantivo
+                prioridade = 5; 
             }
             candidatos.push({ index, item, tempo, prioridade });
           }
@@ -813,7 +838,6 @@
       });
 
       candidatos.sort((a,b) => a.index - b.index || b.prioridade - a.prioridade);
-      // Retorna apenas se tiver prioridade decente (ignora os falsos positivos de substantivo)
       return candidatos[0] && candidatos[0].prioridade > 10 ? candidatos[0] : null;
     }
 
@@ -1154,7 +1178,7 @@
     }
 
     // ==========================================
-    // 8. INICIALIZAÇÃO OMNÍVORA
+    // 8. INICIALIZAÇÃO OMNÍVORA (CORRIGIDA)
     // ==========================================
     async function carregarDicionario() {
       try {
@@ -1169,7 +1193,7 @@
           throw new Error('O dicionário deve ser um array JSON.');
         }
 
-        // Leitor Omnívoro: extrai sem depender do nome da coluna!
+        // Passa o array bruto gerado pelo Vercel. O extrator lida com as posições cravadas.
         State.dicionario = processarJSONOmnivoro(dadosBrutos);
 
         buildTranslationMaps();
@@ -1195,7 +1219,7 @@
 
       const adicionar = (item) => {
         if (!item || !item.singular || /^null$/i.test(item.singular)) return;
-        if (/^(pessoa|palavra|tipo|honorifico|honíficos|dicionario)$/i.test(normalizar(item.singular))) return;
+        if (/^(pessoa|palavra|tipo|honorifico|honíficos|dicionario|palavra\/singular)$/i.test(normalizar(item.singular))) return;
         
         const chave = `${item.sNorm}|${item.tNorm}|${item.cNorm}`;
         if (!vistos.has(chave)) {
@@ -1205,38 +1229,65 @@
       };
 
       dados.forEach(raw => {
-        const keys = Object.keys(raw);
-        const vals = Object.values(raw);
+        let singular, traducao, classe, plural, pronuncia, uso, ambiente;
 
-        // Busca Inteligente por Palavras Chaves ou Posições (Fallback)
-        const getVal = (nomes, posFallback) => {
-          for (let name of nomes) {
-            const foundKey = keys.find(k => k.toLowerCase() === name.toLowerCase());
-            if (foundKey && raw[foundKey]) return String(raw[foundKey]).trim();
-          }
-          if (vals[posFallback]) return String(vals[posFallback]).trim();
-          return '';
-        };
+        if (Array.isArray(raw)) {
+            // Ignora células completamente vazias do CSV
+            const limpos = raw.filter(item => item !== null && item !== undefined && String(item).trim() !== '');
+            
+            // Atrela exatamente às 7 colunas que você enviou na estrutura
+            singular  = limpos[0] || '';
+            traducao  = limpos[1] || '';
+            classe    = limpos[2] || '';
+            plural    = limpos[3] || '';
+            pronuncia = limpos[4] || '';
+            uso       = limpos[5] || '';
+            ambiente  = limpos[6] || '';
+            
+        } else if (typeof raw === 'object' && raw !== null) {
+            const keys = Object.keys(raw);
+            const getVal = (palavrasChave) => {
+                for (let p of palavrasChave) {
+                    const pNorm = normalizar(p);
+                    const foundKey = keys.find(k => normalizar(k).includes(pNorm));
+                    if (foundKey && raw[foundKey] && String(raw[foundKey]).trim() !== '') {
+                        return String(raw[foundKey]).trim();
+                    }
+                }
+                return '';
+            };
 
-        // Encontra o singular e a tradução custe o que custar
-        const singular = getVal(['DICIONARIO', 'PALAVRA/SINGULAR', 'singular', 'palavra', 'termo', '0'], 0);
-        const traducao = getVal(['SIGNIFICADO/TRADUÇÃO', 'traducao', 'significado', '2'], 2);
-        const classe = getVal(['CLASE', 'CLASSE', 'classe', '4'], 4);
-        let plural = getVal(['PLURAL', 'plural', '6'], 6);
-        let pronuncia = getVal(['PRONÚNCIA', 'PRONUNCIA', 'pronuncia', '8'], 8);
-        const uso = getVal(['USO', 'NOTAS', 'NOTAS / ORIGEM', '9'], 9);
-        const ambiente = getVal(['AMBIENTE', 'ambiente', '10'], 10);
-        const categoria = getVal(['CATEGORIA', 'categoria_semantica', '1'], 1);
-        const genero = getVal(['GÊNERO', 'GENERO', 'genero', '3'], 3);
+            singular = getVal(['singular', 'palavra', 'dicionario', 'field1', 'column1']);
+            traducao = getVal(['traducao', 'significado', 'field2', 'column2']);
+            classe   = getVal(['classe', 'clase', 'field3', 'column3']);
+            plural   = getVal(['plural', 'field4', 'column4']);
+            pronuncia = getVal(['pronuncia', 'field5', 'column5']);
+            uso      = getVal(['notas', 'uso', 'origem', 'field6', 'column6']);
+            ambiente = getVal(['ambiente', 'field7', 'column7']);
+
+            // Fallback Genérico: se a ferramenta transformou tudo em { "0": "Kota", "1": "Fogo", ... }
+            if (!singular && !traducao && keys.length >= 2) {
+                const vals = Object.values(raw).filter(v => v !== null && v !== undefined && String(v).trim() !== '');
+                singular  = vals[0] || '';
+                traducao  = vals[1] || '';
+                classe    = vals[2] || '';
+                plural    = vals[3] || '';
+                pronuncia = vals[4] || '';
+                uso       = vals[5] || '';
+                ambiente  = vals[6] || '';
+            }
+        }
 
         if (singular && traducao) {
           const cNorm = normalizar(classe);
           const isVerbo = /\bverbo\b/.test(cNorm);
-          const isSubstantivo = cNorm.includes('substant');
+          const isSubstantivo = cNorm.includes('substant') || cNorm.includes('subst');
           const isAdjetivo = cNorm.includes('adjet') || cNorm.includes('adj');
           const isPronome = cNorm.includes('pronome');
-          const isNatureza = /^(animais|plantas)$/i.test(categoria.trim()) || /\b(animais|plantas|fauna|flora|ave|pássaro|peixe|lobo|cão|cavalo|monstro|flor|fruta|mato)\b/i.test((uso + " " + traducao + " " + ambiente).toLowerCase());
-          const isNeutro = /neutro/i.test(genero) || isNatureza || cNorm.includes('neutro');
+          
+          // Como as colunas extras (categoria/genero) foram removidas no Vercel, deduzimos pela tradução/ambiente
+          const isNatureza = /\b(animais|plantas|fauna|flora|ave|pássaro|peixe|lobo|cão|cavalo|monstro|flor|fruta|mato|inseto)\b/i.test((uso + " " + traducao + " " + ambiente).toLowerCase());
+          const isNeutro = cNorm.includes('neutro') || isNatureza;
 
           if ((isSubstantivo || isAdjetivo) && (!plural || plural === '-' || /^null$/i.test(plural))) {
             plural = gerarPluralPadrao(singular);
@@ -1253,7 +1304,7 @@
 
           adicionar({
             singular, traducao, classe, plural, pronuncia, isAutoPronuncia,
-            uso, genero, categoria, isVerbo, isSubstantivo, isAdjetivo,
+            uso, genero: '', categoria: '', isVerbo, isSubstantivo, isAdjetivo,
             isPronome, isNeutro, conjugacoes, cNorm,
             sNorm: normalizar(singular), tNorm: normalizar(traducao), pNorm: normalizar(plural), uNorm: normalizar(uso),
             traducoesArray
