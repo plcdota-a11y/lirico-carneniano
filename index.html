@@ -176,7 +176,7 @@
                 id="translator-input"
                 rows="6"
                 oninput="autoResize(this); handleTranslatorInput()"
-                placeholder="Digite sua frase (Ex: SERVO DOS CEUS)" 
+                placeholder="Digite sua frase épica..." 
                 class="w-full bg-transparent text-stone-100 placeholder-stone-600 focus:outline-none resize-none text-base font-normal leading-relaxed transition-all"
               ></textarea>
               
@@ -332,6 +332,7 @@
 
       const textoParaLer = text.includes('[') ? adaptarParaOuvidoPtBR(fallbackWord) : adaptarParaOuvidoPtBR(text);
       const utterance = new SpeechSynthesisUtterance(textoParaLer);
+      
       utterance.lang = 'pt-BR'; 
       utterance.rate = 0.9; 
       utterance.pitch = 1.0; 
@@ -346,6 +347,7 @@
 
     function playTranslationAudio() {
       if (!window.speechSynthesis || !State.lastTranslatedString || State.lastTranslatedString.includes('aparecerá aqui')) return;
+      
       if (State.translationDirection === 'carn-to-pt') {
         const ut = new SpeechSynthesisUtterance(State.lastTranslatedString);
         ut.lang = 'pt-BR';
@@ -418,6 +420,7 @@
       };
       let parts = str.toLowerCase().split('-');
       let total = 0; let temp = 0; let isValid = true;
+      
       for (let i = 0; i < parts.length; i++) {
         let p = parts[i];
         if (!(p in map)) { isValid = false; break; }
@@ -432,7 +435,7 @@
     }
 
     // ==========================================
-    // 5. MOTOR VERBAL E DICIONÁRIO
+    // 5. MOTOR VERBAL E OMNÍVORO DE JSON
     // ==========================================
     function conjugarVerbo(raiz) {
       const r = String(raiz || '').trim();
@@ -492,16 +495,28 @@
     }
 
     function tratarItem(raw) {
-      // Coleta inteligente, independente de qual coluna o CSV exportou
-      const singular = String(raw.singular || raw.Singular || raw.DICIONARIO || raw['PALAVRA/SINGULAR'] || raw.palavra || raw.termo || '').trim();
-      const traducao = String(raw.traducao || raw.significado || raw['SIGNIFICADO/TRADUÇÃO'] || raw.FIELD2 || raw._1 || '').trim();
-      const classe = String(raw.classe || raw.CLASSE || raw.CLASE || raw.FIELD3 || raw._3 || '').trim();
-      let plural = String(raw.plural || raw.Plural || raw.PLURAL || raw.FIELD4 || raw._5 || '').trim();
-      let pronuncia = String(raw.pronuncia || raw.PRONUNCIA || raw['PRONÚNCIA'] || raw.FIELD5 || raw._7 || '').trim();
-      const uso = String(raw.uso || raw.USO || raw.NOTAS || raw['NOTAS / ORIGEM'] || raw.FIELD6 || raw._8 || '').trim();
-      const ambiente = String(raw.ambiente || raw.AMBIENTE || raw.FIELD7 || raw._9 || '').trim();
-      const categoria = String(raw.categoria || raw.categoria_semantica || raw.CATEGORIA || '').trim();
-      const genero = String(raw.genero || raw['Gênero'] || raw.GENERO || '').trim();
+      const isArray = Array.isArray(raw);
+      
+      // Mapeamento Omnívoro para driblar a mudança de chaves do conversor Vercel
+      const vSingular = isArray ? raw[0] : (raw.singular || raw.Singular || raw.DICIONARIO || raw['PALAVRA/SINGULAR'] || raw.palavra || raw.termo || raw.FIELD1 || raw.Column1 || raw['0']);
+      const vTraducao = isArray ? raw[2] : (raw.traducao || raw.significado || raw['SIGNIFICADO/TRADUÇÃO'] || raw.FIELD3 || raw.Column3 || raw.FIELD2 || raw._1 || raw['2']);
+      const vClasse = isArray ? raw[4] : (raw.classe || raw.CLASSE || raw.CLASE || raw.FIELD5 || raw.Column5 || raw.FIELD3 || raw._3 || raw['4']);
+      const vPlural = isArray ? raw[6] : (raw.plural || raw.Plural || raw.PLURAL || raw.FIELD7 || raw.Column7 || raw.FIELD4 || raw._5 || raw['6']);
+      const vPronuncia = isArray ? raw[8] : (raw.pronuncia || raw.PRONUNCIA || raw['PRONÚNCIA'] || raw.FIELD9 || raw.Column9 || raw.FIELD5 || raw._7 || raw['8']);
+      const vUso = isArray ? raw[9] : (raw.uso || raw.USO || raw.NOTAS || raw['NOTAS / ORIGEM'] || raw.FIELD10 || raw.Column10 || raw.FIELD6 || raw._8 || raw['9']);
+      const vAmbiente = isArray ? raw[10] : (raw.ambiente || raw.AMBIENTE || raw.FIELD11 || raw.Column11 || raw.FIELD7 || raw._9 || raw['10']);
+      const vCategoria = isArray ? raw[1] : (raw.categoria || raw.categoria_semantica || raw.CATEGORIA || '');
+      const vGenero = isArray ? raw[3] : (raw.genero || raw['Gênero'] || raw.GENERO || '');
+
+      const singular = String(vSingular || '').trim();
+      const traducao = String(vTraducao || '').trim();
+      const classe = String(vClasse || '').trim();
+      let plural = String(vPlural || '').trim();
+      let pronuncia = String(vPronuncia || '').trim();
+      const uso = String(vUso || '').trim();
+      const ambiente = String(vAmbiente || '').trim();
+      const categoria = String(vCategoria || '').trim();
+      const genero = String(vGenero || '').trim();
 
       const cNorm = normalizar(classe);
       const isVerbo = /\bverbo\b/.test(cNorm);
@@ -750,7 +765,7 @@
             if (item.conjugacoes && item.conjugacoes.passado.some(f => normalizar(f) === n)) tempo = 'passado';
             if (item.conjugacoes && item.conjugacoes.futuro.some(f => normalizar(f) === n)) tempo = 'futuro';
             
-            // Lógica de Desambiguação: Se antes do possível verbo tiver um artigo, tira prioridade (Ex: O servo)
+            // Lógica de Desambiguação Avançada
             let prioridade = 100;
             if (index > 0 && /^(o|a|os|as|um|uma|uns|umas)$/i.test(normalizar(tokens[index-1]))) {
                 prioridade = 10;
@@ -852,7 +867,7 @@
       }
 
       let mod = text;
-      // Escudo Gramatical Insensível a Maiúsculas e Minúsculas (/gi)
+      // Escudo Gramatical Avançado Insensível a Caixa
       mod = mod.replace(/(^|[\s,.;:!?()"])(ó|ô|ò)(?=$|[\s,.;:!?()"])/gi, "$1_vocativo_");
       mod = mod.replace(/(^|[\s,.;:!?()"])(é)(?=$|[\s,.;:!?()"])/gi, "$1_verbo_e_");
       mod = mod.replace(/(^|[\s,.;:!?()"])(e)(?=$|[\s,.;:!?()"])/gi, "$1_conj_e_");
@@ -871,7 +886,6 @@
           if (!line.trim()) return '';
           let result = corrigirMorfologiaSaida(traduzirOracaoSVO(line));
           
-          // Re-capitaliza o começo da frase, ignorando tags secretas
           let firstWord = result.split(' ')[0];
           if(firstWord && !firstWord.startsWith('_')) {
              result = result.charAt(0).toUpperCase() + result.slice(1);
@@ -965,7 +979,7 @@
         DOM.transSourceLabel.className = "text-amber-400";
         DOM.transTargetLabel.textContent = "Lírico Carneniano";
         DOM.transTargetLabel.className = "text-stone-300";
-        DOM.translatorInput.placeholder = "Digite sua frase (Ex: SERVO DOS CEUS)";
+        DOM.translatorInput.placeholder = "Digite sua frase épica (ex: Ó Rei grandioso...)";
       }
       if (State.lastTranslatedString && !State.lastTranslatedString.includes('aparecerá aqui')) {
           DOM.translatorInput.value = State.lastTranslatedString;
@@ -1117,7 +1131,7 @@
     }
 
     // ==========================================
-    // 8. INICIALIZAÇÃO
+    // 8. INICIALIZAÇÃO OMNÍVORA
     // ==========================================
     async function carregarDicionario() {
       try {
@@ -1135,20 +1149,23 @@
         State.dicionario = dadosBrutos
           .map(raw => tratarItem(raw))
           .filter(item => item.singular && !['null','nan','...'].includes(normalizar(item.singular)));
+          
+        if (State.dicionario.length === 0) {
+            console.warn("[Lírico] O arquivo JSON foi carregado, mas os nomes das colunas não correspondem ao esperado.", dadosBrutos[0]);
+        }
 
         buildTranslationMaps();
         filterDictData();
         
         if (DOM.translatorInput.value.trim()) handleTranslatorInput();
 
-        console.info(`[Lírico] Dicionário carregado: ${State.dicionario.length} entradas normais.`);
       } catch (erro) {
         console.error('[Lírico] Falha ao carregar dicionário:', erro);
         DOM.resultsContainer.innerHTML = `
           <div class="col-span-2 text-center py-12 text-amber-500 bg-stone-900 border border-amber-900/50 rounded-xl p-6 shadow-lg">
             <p class="font-bold mb-2">Erro ao carregar o dicionário</p>
             <p class="text-xs text-stone-400">
-              ${erro.message || 'Verifique se dicionario.json é um JSON válido e está na mesma pasta do HTML.'}
+              ${erro.message || 'Verifique se o seu dicionario.json está correto e se o nome está minúsculo.'}
             </p>
           </div>`;
       }
